@@ -52,6 +52,7 @@ model BacktestCase {
   actualMultiple Float            // athPrice / signalPrice
   split          String           // "calibration" | "validation" | "verification"
   blinded        Boolean          @default(false)
+  isControl      Boolean          @default(false) // true = negative control case
   createdAt      DateTime         @default(now())
 
   results        BacktestResult[]

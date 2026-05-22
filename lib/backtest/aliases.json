@@ -142,5 +142,41 @@
       "0xMaki": "Dev_35",
       "Joseph Delong": "Dev_36"
     }
+  },
+  "COMP": {
+    "alias": "Project_Nu",
+    "tokenAlias": "$TOKEN_M",
+    "projectNames": ["Compound", "compound", "COMP", "comp", "compound-finance", "cToken", "cTokens"],
+    "domains": ["compound.finance", "app.compound.finance", "v2-app.compound.finance"],
+    "githubOrgs": ["compound-finance"],
+    "actorAliases": {
+      "Robert Leshner": "Dev_37",
+      "Geoffrey Hayes": "Dev_38",
+      "Calvin Liu": "Dev_39"
+    }
+  },
+  "SAFE": {
+    "alias": "Project_Xi",
+    "tokenAlias": "$TOKEN_N",
+    "projectNames": ["Gnosis Safe", "gnosis-safe", "safe", "Safe", "SAFE", "gnosis", "Gnosis"],
+    "domains": ["gnosis-safe.io", "safe.global", "app.safe.global", "gnosis.io"],
+    "githubOrgs": ["gnosis", "safe-global"],
+    "actorAliases": {
+      "Lukas Schor": "Dev_40",
+      "Richard Meissner": "Dev_41",
+      "Stefan George": "Dev_42"
+    }
+  },
+  "YFIL": {
+    "alias": "Project_Omicron",
+    "tokenAlias": "$TOKEN_O",
+    "projectNames": ["yearn", "yearn.finance", "YFIL", "yfil", "YFI", "yfi", "iearn", "yearn-finance", "Yearn Finance"],
+    "domains": ["yearn.finance", "yearn.fi", "gov.yearn.finance"],
+    "githubOrgs": ["yearn-finance"],
+    "actorAliases": {
+      "Andre Cronje": "Dev_43",
+      "banteg": "Dev_44",
+      "Klim K": "Dev_45"
+    }
   }
 }

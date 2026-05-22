@@ -1,0 +1,22 @@
+{
+  "ticker": "SAFE",
+  "signalDate": "2020-09-01",
+  "snapshotDate": "2020-08-31",
+  "priceAtSnapshot": 0.50,
+  "developers": [
+    { "name": "Lukas Schor", "isElite": true, "activity": "Safe protocol development, daily commits, interface architecture and SDK design." },
+    { "name": "Richard Meissner", "isElite": true, "activity": "Core smart contract engineering, multi-sig security audits, EIP contributions." },
+    { "name": "Stefan George", "isElite": true, "activity": "Co-founder, system architecture, Gnosis ecosystem coordination, DappCon organizer." }
+  ],
+  "assets": [
+    { "name": "Gnosis Safe Contracts", "type": "Repository", "url": "github.com/gnosis/gnosis-safe-contracts" },
+    { "name": "Safe Multisig Factory", "type": "SmartContract", "url": "etherscan.io/address/0x76E2cFc1F5Fa8F6a5b3fC4c8F4788F0116861F9B" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Richard Meissner", "asset": "Safe Multisig Factory", "date": "2018-11-16" },
+    { "type": "FUNDED", "actor": "Stefan George", "asset": "Gnosis Safe Contracts", "date": "2017-05-01", "amount": 12500000 },
+    { "type": "STARRED", "actor": "Lukas Schor", "asset": "Gnosis Safe Contracts", "date": "2020-08-10" },
+    { "type": "STARRED", "actor": "Richard Meissner", "asset": "Gnosis Safe Contracts", "date": "2020-08-15" }
+  ],
+  "narrativeAtSnapshot": "Gnosis Safe is the dominant multi-signature wallet infrastructure for Ethereum, securing over $1B in assets across 8,500 daily active users. Nearly every major DeFi protocol treasury — Aave, Compound, Synthetix, Uniswap — uses Gnosis Safe for fund management. Lukas Schor, Richard Meissner, and Stefan George bring elite credentials: 6+ years in Ethereum core development, multiple completed G0 Group and Dapp.org audits, zero exploits in production. Protocol adoption growing 15% month-over-month as DeFi institutional usage professionalizes. Developer integrations: 23 new protocol integrations added in August 2020 alone. Structural problem: no token exists at snapshot date. Gnosis Safe has no native token, no liquidity mining program, no announced tokenization plans, and no mechanism for investors to capture value from protocol adoption. The service is free — funded entirely by the Gnosis parent company. Value clearly accrues to users of the infrastructure (protocols save money on key management costs) but investors have zero path to participation. Comparable to identifying Cloudflare as critical internet infrastructure before any equity offering existed — the underlying thesis is correct but the investment vehicle does not yet exist. Any future token would face the same question all infrastructure tokens face: 'Why would token holders benefit from adoption if the protocol earns no fees?' No precedent for free-service infrastructure tokens generating 10x returns through adoption alone."
+}

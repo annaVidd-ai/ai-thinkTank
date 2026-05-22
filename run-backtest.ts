@@ -121,7 +121,7 @@ async function main() {
   // Report-only mode
   if (args.reportOnly) {
     console.log('[CLI] Report-only mode — skipping runs, reading existing DB data.\n');
-    const summary = await generateBiasReport();
+    const summary = await generateBiasReport(undefined, args.runs);
     printBiasReport(summary);
     return;
   }
@@ -163,7 +163,7 @@ async function main() {
 
   // Generate and print bias report
   console.log('\n[CLI] Generating bias report…\n');
-  const summary = await generateBiasReport();
+  const summary = await generateBiasReport(undefined, args.runs);
   printBiasReport(summary);
 }
 

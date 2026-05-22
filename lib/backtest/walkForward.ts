@@ -83,10 +83,16 @@ export async function runWalkForwardValidation(options: WalkForwardConfig = {}):
     );
   }
 
-  const totalRuns = cases.length * runTypes.length * numRuns;
+  const positiveCount = cases.filter((c) => !c.isControl).length;
+  const controlCount  = cases.filter((c) =>  c.isControl).length;
+  const totalRuns     = cases.length * runTypes.length * numRuns;
+  const caseLabel     = tickerFilter
+    ? tickerFilter.join(', ')
+    : `${positiveCount} positive, ${controlCount} control`;
+
   console.log(
     `\n[WalkForward] Starting validation:`,
-    `\n  Cases    : ${cases.length} (${tickerFilter ? tickerFilter.join(', ') : 'all'})`,
+    `\n  Cases    : ${cases.length} (${caseLabel})`,
     `\n  Run types: ${runTypes.join(', ')}`,
     `\n  Runs each: ${numRuns}`,
     `\n  Total    : ${totalRuns} pipeline runs`,

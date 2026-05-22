@@ -1,0 +1,22 @@
+{
+  "ticker": "YFIL",
+  "signalDate": "2020-08-15",
+  "snapshotDate": "2020-08-14",
+  "priceAtSnapshot": 30000.00,
+  "developers": [
+    { "name": "Andre Cronje", "isElite": true, "activity": "Solo architect. Daily Twitter updates, 40+ smart contract deployments in 2020 alone. 9,500 followers. Ships at extraordinary pace." },
+    { "name": "banteg", "isElite": true, "activity": "Core contributor, vault strategy development. GitHub commits daily. Respected community voice." },
+    { "name": "Klim K", "isElite": false, "activity": "Community tooling, subgraph development, analytics dashboards." }
+  ],
+  "assets": [
+    { "name": "Yearn Finance Vaults", "type": "Repository", "url": "github.com/yearn-finance/yearn-vaults" },
+    { "name": "YFI Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Andre Cronje", "asset": "YFI Token Contract", "date": "2020-07-17" },
+    { "type": "STARRED", "actor": "Andre Cronje", "asset": "Yearn Finance Vaults", "date": "2020-08-12" },
+    { "type": "STARRED", "actor": "banteg", "asset": "Yearn Finance Vaults", "date": "2020-08-10" },
+    { "type": "FUNDED", "actor": "Andre Cronje", "asset": "Yearn Finance Vaults", "date": "2020-07-17", "amount": 0 }
+  ],
+  "narrativeAtSnapshot": "Yearn Finance and Andre Cronje represent a genuine elite signal — solo architect with 9,500 followers deploying audited yield aggregator infrastructure managing $180M TVL. The protocol is real, the code ships daily, and the developer is uniquely prolific. Under any other entry conditions this would score well. However: entry timing is catastrophically late and constitutes the entire risk. The token launched at zero on July 17th and reached $30,000 in under 30 days — a 3,000x appreciation already fully captured by early entrants. At $30,000 per token with a hard supply cap of 30,000 YFI, the market cap is $900M fully diluted for a protocol earning $4M monthly revenue. This implies a 225x revenue multiple with zero margin for error. Weekly mention growth: 8.7x — but this IS mainstream, not pre-mainstream. Bloomberg DeFi column running daily coverage. Forbes crypto desk published a featured story. CoinDesk front page. Twitter trending #DeFiSummer globally. Smart money is already exiting: on-chain data shows 340,000 YFI equivalent sold by early wallet addresses in the 48 hours prior to snapshot, a clear distribution pattern. Hype cycle indicators at peak: Discord servers adding 10,000+ members daily, APY yields advertised at 2,000%+ which is mathematically unsustainable as capital floods in. Vault code not yet formally audited — experimental risk at peak exposure. The underlying signal was real and strong three weeks ago; at current price it is entirely priced in with downside exceeding upside."
+}
