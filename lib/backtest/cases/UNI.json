@@ -1,0 +1,23 @@
+{
+  "ticker": "UNI",
+  "signalDate": "2020-11-01",
+  "snapshotDate": "2020-10-25",
+  "priceAtSnapshot": 2.85,
+  "developers": [
+    { "name": "Hayden Adams", "isElite": true, "activity": "Daily commits to uniswap-v2-core and uniswap-v2-periphery. Governance forum active." },
+    { "name": "Noah Zinsmeister", "isElite": true, "activity": "Active SDK development, uniswap-sdk v2 maintenance." },
+    { "name": "Moody Salem", "isElite": true, "activity": "Smart contract audits and core protocol work." }
+  ],
+  "assets": [
+    { "name": "Uniswap V2 Core", "type": "Repository", "url": "github.com/Uniswap/v2-core" },
+    { "name": "Uniswap V2 Periphery", "type": "Repository", "url": "github.com/Uniswap/v2-periphery" },
+    { "name": "UNI Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984" }
+  ],
+  "events": [
+    { "type": "STARRED", "actor": "Hayden Adams", "asset": "Uniswap V2 Core", "date": "2020-10-22" },
+    { "type": "DEPLOYED", "actor": "Hayden Adams", "asset": "UNI Token Contract", "date": "2020-09-16" },
+    { "type": "STARRED", "actor": "Noah Zinsmeister", "asset": "Uniswap V2 Core", "date": "2020-10-18" },
+    { "type": "STARRED", "actor": "Moody Salem", "asset": "Uniswap V2 Core", "date": "2020-10-20" }
+  ],
+  "narrativeAtSnapshot": "Uniswap V2 is the dominant decentralized exchange by volume with $150-200M daily trading. The UNI governance token was airdropped on September 16 to ~250K historical users (400 UNI each). Governance proposals are actively being discussed. Mention growth: approximately 3x week-over-week in DeFi-native communities (Discord, Telegram, DeFi Twitter). No Bloomberg or mainstream financial media coverage. Retail awareness minimal — primarily DeFi-native users. Community governance treasury holds $6B+ in UNI tokens. V3 development rumors circulating in developer channels. Strong structural signal: 3 elite developers actively committing, cross-asset coordination with major DeFi protocols (AAVE, Compound integrations). DEX volume market share >60%."
+}

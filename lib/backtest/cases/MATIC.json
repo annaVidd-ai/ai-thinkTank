@@ -1,0 +1,22 @@
+{
+  "ticker": "MATIC",
+  "signalDate": "2021-01-01",
+  "snapshotDate": "2020-12-25",
+  "priceAtSnapshot": 0.016,
+  "developers": [
+    { "name": "Jaynti Kanani", "isElite": true, "activity": "Core protocol commits daily, Plasma framework development." },
+    { "name": "Sandeep Nailwal", "isElite": true, "activity": "Business development, DeFi protocol partnerships, daily Twitter presence." },
+    { "name": "Anurag Arjun", "isElite": true, "activity": "Product architecture, Ethereum compatibility layer." }
+  ],
+  "assets": [
+    { "name": "Matic Network Core", "type": "Repository", "url": "github.com/maticnetwork/bor" },
+    { "name": "Matic Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0" }
+  ],
+  "events": [
+    { "type": "STARRED", "actor": "Jaynti Kanani", "asset": "Matic Network Core", "date": "2020-12-22" },
+    { "type": "DEPLOYED", "actor": "Jaynti Kanani", "asset": "Matic Token Contract", "date": "2019-04-24" },
+    { "type": "STARRED", "actor": "Sandeep Nailwal", "asset": "Matic Network Core", "date": "2020-12-20" },
+    { "type": "FUNDED", "actor": "Sandeep Nailwal", "asset": "Matic Network Core", "date": "2019-04-01", "amount": 5000000 }
+  ],
+  "narrativeAtSnapshot": "Matic Network (soon to rebrand as Polygon) is an Ethereum sidechain/Layer 2 scaling solution. Launched mainnet April 2020. Ethereum gas fees at historic highs driving developer interest in L2 solutions. Matic provides fast, cheap transactions with Ethereum security via checkpointing. Developer adoption growing: Aave, Curve, and SushiSwap integrations in discussions. Weekly mention growth: ~2.5x among Ethereum developer communities frustrated by gas costs. Price at historic lows despite growing technical adoption — micro-cap with $0.016 price. No mainstream crypto press coverage. Structural signal: 3 elite developers, multiple Binance Launchpad backing, ETH ecosystem alignment. QuickSwap DEX gaining traction. Full Ethereum tooling compatibility (MetaMask, Truffle) lowering developer migration costs significantly."
+}

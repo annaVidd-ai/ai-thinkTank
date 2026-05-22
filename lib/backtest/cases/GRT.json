@@ -1,0 +1,22 @@
+{
+  "ticker": "GRT",
+  "signalDate": "2020-12-01",
+  "snapshotDate": "2020-11-24",
+  "priceAtSnapshot": 0.025,
+  "developers": [
+    { "name": "Yaniv Tal", "isElite": true, "activity": "Protocol design, testnet curator coordination, bi-weekly ecosystem updates." },
+    { "name": "Jannis Pohlmann", "isElite": true, "activity": "Core graph-node implementation, indexing protocol engineering." },
+    { "name": "Brandon Ramirez", "isElite": true, "activity": "Research protocol economics, tokenomics design, GraphQL subgraph standards." }
+  ],
+  "assets": [
+    { "name": "graph-node", "type": "Repository", "url": "github.com/graphprotocol/graph-node" },
+    { "name": "The Graph Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0xc944E90C64B2c07662A292be6244BDf05Cda44a7" }
+  ],
+  "events": [
+    { "type": "STARRED", "actor": "Yaniv Tal", "asset": "graph-node", "date": "2020-11-20" },
+    { "type": "DEPLOYED", "actor": "Jannis Pohlmann", "asset": "graph-node", "date": "2018-07-26" },
+    { "type": "STARRED", "actor": "Brandon Ramirez", "asset": "graph-node", "date": "2020-11-18" },
+    { "type": "FUNDED", "actor": "Yaniv Tal", "asset": "graph-node", "date": "2020-02-01", "amount": 5000000 }
+  ],
+  "narrativeAtSnapshot": "The Graph Protocol mainnet launching December 17, 2020 (16 days away at snapshot). Indexing protocol already used on testnet by Uniswap, Aave, Synthetix, Compound, and Balancer — the backbone of DeFi data infrastructure. Often called 'the Google of blockchain data'. Token generation event imminent. Backers include Multicoin Capital, Coinbase Ventures, Framework Ventures. Indexer and curator community already active on testnet. Weekly mention growth: ~4x in DeFi developer communities ahead of mainnet launch. Pre-mainstream — no retail awareness, only DeFi builders and sophisticated crypto investors aware. Structural signal: 3 elite developers, blue-chip DeFi protocol integrations already in production, imminent mainnet catalyst."
+}

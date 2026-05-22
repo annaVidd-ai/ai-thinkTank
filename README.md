@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ThinkTank AI
 
-## Getting Started
+Blockchain intelligence pipeline that detects elite-developer activity clusters, runs a bull/bear debate via reasoning models, scores the signal, and maps it to a tradable ticker.
 
-First, run the development server:
+---
+
+## Pipeline
+
+```
+WEAVER_SWEEP → SCOUT_NARRATIVE → DEBATE (3 rounds) → SCORE → MAP → Alert
+```
+
+| Step | Model | Role |
+|------|-------|------|
+| SCOUT_NARRATIVE | GLM `glm-4-plus` | Narrative context from on-chain/GitHub activity |
+| DEBATE_ANALYST | DeepSeek `deepseek-reasoner` | Bull case (3 rounds) |
+| DEBATE_SKEPTIC | DeepSeek `deepseek-reasoner` | Bear case (3 rounds) |
+| SCORE | DeepSeek `deepseek-reasoner` | Quantitative scoring (signalStrength / timing / upside) |
+| MAP | Anthropic `claude-haiku-4-5-20251001` | Maps asset → tradable ticker → Alert |
+
+---
+
+## Worker Commands
+
+The pipeline is processed by a background worker. Run all commands from the project root.
+
+```bash
+npm run worker:start    # start worker in background (logs → worker.log)
+npm run worker:stop     # stop worker
+npm run worker:status   # check if worker is running
+npm run worker:logs     # tail live log output (Ctrl+C to exit)
+```
+
+---
+
+## Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+Copy `.env.example` to `.env` and fill in your keys:
 
-To learn more about Next.js, take a look at the following resources:
+```
+GLM_API_KEY=          # ZhipuAI
+GLM_API_BASE=         # default: https://open.bigmodel.cn/api/paas/v4
+DEEPSEEK_API_KEY=     # DeepSeek
+DEEPSEEK_API_BASE=    # default: https://api.deepseek.com
+ANTHROPIC_API_KEY=    # Anthropic
+NEO4J_URI=            # e.g. bolt://localhost:7687
+NEO4J_USERNAME=
+NEO4J_PASSWORD=
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Testing
 
-## Deploy on Vercel
+```bash
+# Unit tests — LLM validation layer (no worker needed)
+npx tsx test_llm_retry.ts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# End-to-end pipeline test (worker must be running)
+npm run worker:start
+npx tsx test_pipeline.ts
+npm run worker:stop
+```

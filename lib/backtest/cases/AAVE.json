@@ -1,0 +1,22 @@
+{
+  "ticker": "AAVE",
+  "signalDate": "2020-10-01",
+  "snapshotDate": "2020-09-24",
+  "priceAtSnapshot": 25.50,
+  "developers": [
+    { "name": "Stani Kulechov", "isElite": true, "activity": "Daily Twitter presence, weekly governance forum posts, active protocol design decisions." },
+    { "name": "David Truong", "isElite": true, "activity": "Smart contract development, V2 architecture work." },
+    { "name": "Jordan Lazaro Gustave", "isElite": true, "activity": "Protocol engineering, flash loan module development." }
+  ],
+  "assets": [
+    { "name": "Aave Protocol V1", "type": "Repository", "url": "github.com/aave/aave-protocol" },
+    { "name": "AAVE Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9" }
+  ],
+  "events": [
+    { "type": "STARRED", "actor": "Stani Kulechov", "asset": "Aave Protocol V1", "date": "2020-09-20" },
+    { "type": "DEPLOYED", "actor": "David Truong", "asset": "AAVE Token Contract", "date": "2020-07-22" },
+    { "type": "STARRED", "actor": "Jordan Lazaro Gustave", "asset": "Aave Protocol V1", "date": "2020-09-18" },
+    { "type": "FUNDED", "actor": "Stani Kulechov", "asset": "Aave Protocol V1", "date": "2020-08-10", "amount": 2500000 }
+  ],
+  "narrativeAtSnapshot": "Aave V1 launched January 2020, introduced flash loans in February — a groundbreaking primitive. TVL at $1.5B and growing steadily post-DeFi summer. The AAVE token migration (from LEND) completed July 2020 at 100:1 ratio. Governance now active with safety module staking live. Weekly mention growth: ~2x in DeFi-native communities. V2 development underway with collateral swap, gas optimizations, and credit delegation features. No mainstream financial press coverage — exclusively DeFi-native audience. Structural signal: 3 elite developers active, $1.5B TVL with real fee revenue, cross-protocol integrations with Uniswap and Curve. Safety module provides protocol backstop — institutional-grade risk management."
+}

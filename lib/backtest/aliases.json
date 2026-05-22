@@ -1,0 +1,146 @@
+{
+  "UNI": {
+    "alias": "Project_Alpha",
+    "tokenAlias": "$TOKEN_A",
+    "projectNames": ["Uniswap", "uniswap", "UNI", "uni", "v2-core", "uniswap-v2"],
+    "domains": ["uniswap.org", "uniswap.exchange", "app.uniswap.org"],
+    "githubOrgs": ["Uniswap"],
+    "actorAliases": {
+      "Hayden Adams": "Dev_01",
+      "Noah Zinsmeister": "Dev_02",
+      "Moody Salem": "Dev_03"
+    }
+  },
+  "LINK": {
+    "alias": "Project_Beta",
+    "tokenAlias": "$TOKEN_B",
+    "projectNames": ["Chainlink", "chainlink", "LINK", "chain.link"],
+    "domains": ["chain.link", "chainlink.com", "chainlinkcommunity.com"],
+    "githubOrgs": ["smartcontractkit"],
+    "actorAliases": {
+      "Sergey Nazarov": "Dev_04",
+      "Steve Ellis": "Dev_05",
+      "Ari Juels": "Dev_06"
+    }
+  },
+  "AAVE": {
+    "alias": "Project_Gamma",
+    "tokenAlias": "$TOKEN_C",
+    "projectNames": ["Aave", "aave", "AAVE", "ETHLend", "ethlend", "aave-protocol"],
+    "domains": ["aave.com", "app.aave.com", "ethlend.io"],
+    "githubOrgs": ["aave"],
+    "actorAliases": {
+      "Stani Kulechov": "Dev_07",
+      "David Truong": "Dev_08",
+      "Jordan Lazaro Gustave": "Dev_09"
+    }
+  },
+  "SOL": {
+    "alias": "Project_Delta",
+    "tokenAlias": "$TOKEN_D",
+    "projectNames": ["Solana", "solana", "SOL", "solana-labs"],
+    "domains": ["solana.com", "explorer.solana.com", "solscan.io"],
+    "githubOrgs": ["solana-labs"],
+    "actorAliases": {
+      "Anatoly Yakovenko": "Dev_10",
+      "Raj Gokal": "Dev_11",
+      "Greg Fitzgerald": "Dev_12"
+    }
+  },
+  "AVAX": {
+    "alias": "Project_Epsilon",
+    "tokenAlias": "$TOKEN_E",
+    "projectNames": ["Avalanche", "avalanche", "AVAX", "avax", "ava-labs"],
+    "domains": ["avax.network", "snowtrace.io", "avascan.info"],
+    "githubOrgs": ["ava-labs"],
+    "actorAliases": {
+      "Emin Gun Sirer": "Dev_13",
+      "Kevin Sekniqi": "Dev_14",
+      "Maofan Ted Yin": "Dev_15"
+    }
+  },
+  "MATIC": {
+    "alias": "Project_Zeta",
+    "tokenAlias": "$TOKEN_F",
+    "projectNames": ["Polygon", "polygon", "MATIC", "matic", "Matic Network", "maticnetwork"],
+    "domains": ["polygon.technology", "polygonscan.com", "matic.network"],
+    "githubOrgs": ["maticnetwork", "0xPolygon"],
+    "actorAliases": {
+      "Jaynti Kanani": "Dev_16",
+      "Sandeep Nailwal": "Dev_17",
+      "Anurag Arjun": "Dev_18"
+    }
+  },
+  "YFI": {
+    "alias": "Project_Eta",
+    "tokenAlias": "$TOKEN_G",
+    "projectNames": ["yearn", "yearn.finance", "YFI", "yfi", "iearn", "yearn-finance"],
+    "domains": ["yearn.finance", "yearn.fi", "gov.yearn.finance"],
+    "githubOrgs": ["yearn-finance"],
+    "actorAliases": {
+      "Andre Cronje": "Dev_19",
+      "banteg": "Dev_20",
+      "Klim K": "Dev_21"
+    }
+  },
+  "GRT": {
+    "alias": "Project_Theta",
+    "tokenAlias": "$TOKEN_H",
+    "projectNames": ["The Graph", "the graph", "GRT", "grt", "thegraph"],
+    "domains": ["thegraph.com", "graphprotocol.github.io", "graphscan.io"],
+    "githubOrgs": ["graphprotocol"],
+    "actorAliases": {
+      "Yaniv Tal": "Dev_22",
+      "Jannis Pohlmann": "Dev_23",
+      "Brandon Ramirez": "Dev_24"
+    }
+  },
+  "AXS": {
+    "alias": "Project_Iota",
+    "tokenAlias": "$TOKEN_I",
+    "projectNames": ["Axie Infinity", "Axie", "axie", "AXS", "axs", "Sky Mavis", "skymavis"],
+    "domains": ["axieinfinity.com", "marketplace.axieinfinity.com"],
+    "githubOrgs": ["axieinfinity"],
+    "actorAliases": {
+      "Trung Nguyen": "Dev_25",
+      "Aleksander Larsen": "Dev_26",
+      "Jeffrey Zirlin": "Dev_27"
+    }
+  },
+  "MKR": {
+    "alias": "Project_Kappa",
+    "tokenAlias": "$TOKEN_J",
+    "projectNames": ["MakerDAO", "Maker", "maker", "MKR", "mkr", "DAI", "dai", "makerdao"],
+    "domains": ["makerdao.com", "oasis.app", "vote.makerdao.com"],
+    "githubOrgs": ["makerdao"],
+    "actorAliases": {
+      "Rune Christensen": "Dev_28",
+      "Mariano Conti": "Dev_29",
+      "Derek Flossman": "Dev_30"
+    }
+  },
+  "SNX": {
+    "alias": "Project_Lambda",
+    "tokenAlias": "$TOKEN_K",
+    "projectNames": ["Synthetix", "synthetix", "SNX", "snx", "Havven", "havven"],
+    "domains": ["synthetix.io", "kwenta.io", "stats.synthetix.io"],
+    "githubOrgs": ["Synthetixio"],
+    "actorAliases": {
+      "Kain Warwick": "Dev_31",
+      "Justin Moses": "Dev_32",
+      "Clinton Ennis": "Dev_33"
+    }
+  },
+  "SUSHI": {
+    "alias": "Project_Mu",
+    "tokenAlias": "$TOKEN_L",
+    "projectNames": ["SushiSwap", "Sushi", "sushi", "SUSHI", "sushiswap", "Chef Nomi", "0xMaki"],
+    "domains": ["sushi.com", "app.sushi.com", "sushiswap.fi"],
+    "githubOrgs": ["sushiswap"],
+    "actorAliases": {
+      "Chef Nomi": "Dev_34",
+      "0xMaki": "Dev_35",
+      "Joseph Delong": "Dev_36"
+    }
+  }
+}
