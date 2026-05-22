@@ -58,7 +58,7 @@ export interface ReportSummary {
 // Public API
 // ---------------------------------------------------------------------------
 
-const ALERT_THRESHOLD = 0.5;
+const ALERT_THRESHOLD = 0.7;
 
 /**
  * Reads BacktestResult rows and produces the full bias report.

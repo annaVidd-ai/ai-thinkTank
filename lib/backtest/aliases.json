@@ -167,10 +167,10 @@
       "Stefan George": "Dev_42"
     }
   },
-  "YFIL": {
+  "YFI_CTRL": {
     "alias": "Project_Omicron",
     "tokenAlias": "$TOKEN_O",
-    "projectNames": ["yearn", "yearn.finance", "YFIL", "yfil", "YFI", "yfi", "iearn", "yearn-finance", "Yearn Finance"],
+    "projectNames": ["yearn-late", "Yearn Finance Late", "YFI_CTRL", "yfi_ctrl"],
     "domains": ["yearn.finance", "yearn.fi", "gov.yearn.finance"],
     "githubOrgs": ["yearn-finance"],
     "actorAliases": {

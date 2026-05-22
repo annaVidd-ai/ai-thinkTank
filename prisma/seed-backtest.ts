@@ -148,7 +148,7 @@ const CASES = [
     isControl:      false,
   },
   {
-    ticker:         'YFIL',
+    ticker:         'YFI_CTRL',
     projectAlias:   'Project_Omicron',
     sector:         'DeFi',
     signalDate:     new Date('2020-08-15'),
@@ -185,6 +185,13 @@ const CASES = [
 
 async function main() {
   console.log('[Seed] Seeding BacktestCase table…');
+
+  // Remove stale YFIL row left over from the rename to YFI_CTRL.
+  const stale = await prisma.backtestCase.findUnique({ where: { ticker: 'YFIL' } });
+  if (stale) {
+    await prisma.backtestCase.delete({ where: { ticker: 'YFIL' } });
+    console.log('  ✓  Removed stale YFIL row (renamed to YFI_CTRL)');
+  }
 
   for (const c of CASES) {
     await prisma.backtestCase.upsert({
