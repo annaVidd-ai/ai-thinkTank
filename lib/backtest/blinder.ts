@@ -110,8 +110,9 @@ function relativeLabel(targetDate: Date, snapshot: Date): string {
 /**
  * Replaces date references in `text` with relative labels from `snapshot`.
  * Processes patterns most-specific first to avoid double-replacement:
- *   1. ISO dates (YYYY-MM-DD)
- *   2. Full month + year  ("August 2020")
+ *   1a. ISO dates with dashes   (YYYY-MM-DD)
+ *   1b. Slash-delimited dates   (YYYY/MM/DD, MM/DD/YYYY)
+ *   2.  Full month + year  ("August 2020")
  *   3. Abbreviated month + year  ("Aug 2020")
  *   4. Quarter + year  ("Q3 2020")
  *   5. Season + year  ("Summer 2020")
@@ -121,8 +122,18 @@ function relativeLabel(targetDate: Date, snapshot: Date): string {
 function blindDates(text: string, snapshot: Date): string {
   let result = text;
 
-  // 1. ISO dates
+  // 1a. ISO dates with dashes  (YYYY-MM-DD)
   result = result.replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, (_m, y, mo, d) => {
+    const date = new Date(Date.UTC(Number(y), Number(mo) - 1, Number(d)));
+    return relativeLabel(date, snapshot);
+  });
+
+  // 1b. Slash-delimited dates  (YYYY/MM/DD or MM/DD/YYYY)
+  result = result.replace(/\b(\d{4})\/(\d{2})\/(\d{2})\b/g, (_m, y, mo, d) => {
+    const date = new Date(Date.UTC(Number(y), Number(mo) - 1, Number(d)));
+    return relativeLabel(date, snapshot);
+  });
+  result = result.replace(/\b(\d{2})\/(\d{2})\/(\d{4})\b/g, (_m, mo, d, y) => {
     const date = new Date(Date.UTC(Number(y), Number(mo) - 1, Number(d)));
     return relativeLabel(date, snapshot);
   });

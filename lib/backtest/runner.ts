@@ -77,14 +77,15 @@ async function pollForScore(clusterId: string): Promise<{
     });
 
     if (score) {
-      // C3: guard against malformed breakdown JSON (e.g. from a failed SCORE run)
-      let breakdown: Record<string, { raw: number; weight: number; weighted: number }>;
+      // C3: guard against malformed breakdown JSON — warn and fall back to zeros
+      //     rather than throwing, so the run's totalScore is still recorded.
+      let breakdown: Record<string, { raw: number; weight: number; weighted: number }> = {};
       try {
         breakdown = JSON.parse(score.breakdown);
       } catch {
-        throw new Error(
-          `[Runner] ClusterScore breakdown is not valid JSON for cluster ${clusterId}: ` +
-          score.breakdown.slice(0, 120),
+        console.warn(
+          `[Runner] ClusterScore breakdown is not valid JSON for cluster ${clusterId} — ` +
+          `using zeros for sub-scores. Raw: ${score.breakdown.slice(0, 120)}`,
         );
       }
       return {

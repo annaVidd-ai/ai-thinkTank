@@ -30,7 +30,7 @@ export interface LLMConfig {
   model:      string;
   baseURL?:   string;      // required for openai-compatible
   apiKey:     string;
-  maxTokens?: number;      // Anthropic only; defaults to 8192 when not set
+  maxTokens?: number;      // Anthropic only; defaults to 1024 when not set
 }
 
 // ---------------------------------------------------------------------------
