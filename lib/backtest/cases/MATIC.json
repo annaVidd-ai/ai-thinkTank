@@ -3,6 +3,7 @@
   "signalDate": "2021-01-01",
   "snapshotDate": "2020-12-25",
   "priceAtSnapshot": 0.016,
+  "isControl": false,
   "developers": [
     { "name": "Jaynti Kanani", "isElite": true, "activity": "Core protocol commits daily, Plasma framework development." },
     { "name": "Sandeep Nailwal", "isElite": true, "activity": "Business development, DeFi protocol partnerships, daily Twitter presence." },

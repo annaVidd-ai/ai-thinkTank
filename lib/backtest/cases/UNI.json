@@ -3,6 +3,7 @@
   "signalDate": "2020-11-01",
   "snapshotDate": "2020-10-25",
   "priceAtSnapshot": 2.85,
+  "isControl": false,
   "developers": [
     { "name": "Hayden Adams", "isElite": true, "activity": "Daily commits to uniswap-v2-core and uniswap-v2-periphery. Governance forum active." },
     { "name": "Noah Zinsmeister", "isElite": true, "activity": "Active SDK development, uniswap-sdk v2 maintenance." },

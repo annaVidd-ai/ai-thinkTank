@@ -38,7 +38,7 @@ export interface BacktestRunResult {
   runType:      string;
   scores:       number[];     // totalScore per run
   medianScore:  number;
-  variance:     number;       // standard deviation across runs
+  stdDev:       number;       // standard deviation across runs
   verdicts:     string[];
   breakdowns:   BreakdownEntry[];
 }
@@ -77,9 +77,16 @@ async function pollForScore(clusterId: string): Promise<{
     });
 
     if (score) {
-      const breakdown = JSON.parse(score.breakdown) as Record<string, {
-        raw: number; weight: number; weighted: number;
-      }>;
+      // C3: guard against malformed breakdown JSON (e.g. from a failed SCORE run)
+      let breakdown: Record<string, { raw: number; weight: number; weighted: number }>;
+      try {
+        breakdown = JSON.parse(score.breakdown);
+      } catch {
+        throw new Error(
+          `[Runner] ClusterScore breakdown is not valid JSON for cluster ${clusterId}: ` +
+          score.breakdown.slice(0, 120),
+        );
+      }
       return {
         totalScore:     score.totalScore,
         signalStrength: breakdown.signalStrength?.raw ?? 0,
@@ -155,15 +162,17 @@ async function runSingle(
   await cleanupPriorRun(assetId);
 
   // Load historical state
-  const state = await harvestCase(ticker);
+  const state        = await harvestCase(ticker);
+  const snapshotDate = new Date(state.snapshotDate); // A1: for date anonymisation
 
   // Optionally blind
   let narrativeContext: string;
   let displayName:      string;
 
   if (runType === 'blinded') {
-    const blinded    = blindPayload(state.payload, aliasEntry);
-    narrativeContext = blindNarrativeContext(blinded.narrativeAtSnapshot, aliasEntry);
+    // A1: thread snapshotDate so dates are replaced with relative offsets
+    const blinded    = blindPayload(state.payload, aliasEntry, snapshotDate);
+    narrativeContext = blindNarrativeContext(blinded.narrativeAtSnapshot, aliasEntry, snapshotDate);
     displayName      = aliasEntry.alias;
   } else {
     narrativeContext = state.payload.narrativeAtSnapshot;
@@ -245,7 +254,7 @@ export async function runBacktest(config: BacktestRunConfig): Promise<BacktestRu
     verdicts.push(verdict);
     breakdowns.push(result);
 
-    // Persist individual BacktestResult (variance = null until all runs done)
+    // Persist individual BacktestResult (stdDev = null until all runs done)
     const persisted = await prisma.backtestResult.create({
       data: {
         caseId,
@@ -257,7 +266,7 @@ export async function runBacktest(config: BacktestRunConfig): Promise<BacktestRu
         upside:         result.upside,
         totalScore,
         verdict,
-        variance:       null,
+        stdDev:         null,
       },
     });
     resultIds.push(persisted.id);
@@ -274,20 +283,20 @@ export async function runBacktest(config: BacktestRunConfig): Promise<BacktestRu
     ? sortedScores[midIndex]
     : (sortedScores[midIndex - 1] + sortedScores[midIndex]) / 2;
 
-  const mean     = scores.reduce((a, b) => a + b, 0) / scores.length;
-  const variance = Math.sqrt(
+  const mean   = scores.reduce((a, b) => a + b, 0) / scores.length;
+  const stdDev = Math.sqrt(
     scores.reduce((sum, s) => sum + Math.pow(s - mean, 2), 0) / scores.length,
   );
 
-  // Back-fill variance on all BacktestResult rows for this batch
+  // C1: Back-fill stdDev on all BacktestResult rows for this batch
   await prisma.backtestResult.updateMany({
     where: { id: { in: resultIds } },
-    data:  { variance },
+    data:  { stdDev },
   });
 
   console.log(
     `[Runner] ══ ${ticker} ${runType.toUpperCase()} complete — ` +
-    `median=${medianScore.toFixed(3)}, σ=${variance.toFixed(3)} ══\n`,
+    `median=${medianScore.toFixed(3)}, σ=${stdDev.toFixed(3)} ══\n`,
   );
 
   return {
@@ -296,7 +305,7 @@ export async function runBacktest(config: BacktestRunConfig): Promise<BacktestRu
     runType,
     scores,
     medianScore,
-    variance,
+    stdDev,
     verdicts,
     breakdowns,
   };

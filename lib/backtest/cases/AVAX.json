@@ -3,6 +3,7 @@
   "signalDate": "2021-06-01",
   "snapshotDate": "2021-05-25",
   "priceAtSnapshot": 10.80,
+  "isControl": false,
   "developers": [
     { "name": "Emin Gun Sirer", "isElite": true, "activity": "Multiple GitHub commits weekly to avalanchego. Academic papers on consensus. Active Twitter." },
     { "name": "Kevin Sekniqi", "isElite": true, "activity": "Protocol engineering, cross-chain bridge development." },

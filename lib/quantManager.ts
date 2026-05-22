@@ -54,6 +54,15 @@ export async function processScore(clusterId: string): Promise<void> {
 
   const weights: Record<string, number> = JSON.parse(config.weights);
 
+  // C4: Validate weight sum — must be within ±0.01 of 1.0 to avoid silent scoring drift
+  const weightSum = Object.values(weights).reduce((s, w) => s + w, 0);
+  if (Math.abs(weightSum - 1.0) > 0.01) {
+    throw new Error(
+      `[Quant] Weight sum ${weightSum.toFixed(4)} deviates from 1.0 by more than 0.01 — ` +
+      `check ScoringConfig "${config.name}".`,
+    );
+  }
+
   // 2. Fetch cluster and its most recent completed debate.
   const cluster = await prisma.cluster.findUniqueOrThrow({ where: { id: clusterId } });
 
@@ -141,6 +150,10 @@ export async function processScore(clusterId: string): Promise<void> {
 export async function processMap(clusterId: string): Promise<void> {
   const cluster = await prisma.cluster.findUniqueOrThrow({ where: { id: clusterId } });
 
+  // C5: Fetch active ScoringConfig for alertThreshold — default 0.70 if none configured
+  const scoringConfig    = await prisma.scoringConfig.findFirst({ where: { isActive: true } });
+  const alertThreshold   = scoringConfig?.alertThreshold ?? 0.70;
+
   // Fetch completed debate for thesis.
   const debate = await prisma.debate.findFirst({
     where:   { clusterId, status: { in: ['COMPLETED', 'ESCALATED'] } },
@@ -170,6 +183,15 @@ export async function processMap(clusterId: string): Promise<void> {
 
   if (!clusterScore) {
     throw new Error(`[Mapper] No ClusterScore found for cluster ${clusterId}`);
+  }
+
+  // C5: Gate on alertThreshold — skip alert if score is too low to be actionable
+  if (clusterScore.totalScore < alertThreshold) {
+    console.log(
+      `[Mapper] Score ${clusterScore.totalScore.toFixed(3)} is below alert threshold ` +
+      `${alertThreshold} — no alert generated for cluster ${clusterId}.`,
+    );
+    return;
   }
 
   // Upsert Alert — idempotent if MAP runs more than once.

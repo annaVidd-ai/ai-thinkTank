@@ -41,12 +41,12 @@ export const NARRATIVE_CONFIG: LLMConfig = {
   apiKey:   env('GLM_API_KEY'),
 };
 
-/** DeepSeek-R1 — Debate analyst (BULL) */
+/** Claude Sonnet — Debate analyst (BULL) — model diversity: different provider from SKEPTIC */
 export const ANALYST_CONFIG: LLMConfig = {
-  provider: 'openai-compatible',
-  model:    'deepseek-reasoner',
-  baseURL:  env('DEEPSEEK_API_BASE') || 'https://api.deepseek.com',
-  apiKey:   env('DEEPSEEK_API_KEY'),
+  provider:  'anthropic',
+  model:     'claude-sonnet-4-6',
+  apiKey:    env('ANTHROPIC_API_KEY'),
+  maxTokens: 4096,
 };
 
 /** DeepSeek-R1 — Debate sceptic (BEAR) */
@@ -65,9 +65,10 @@ export const SCORE_CONFIG: LLMConfig = {
   apiKey:   env('DEEPSEEK_API_KEY'),
 };
 
-/** Claude Haiku — Asset mapper */
+/** Claude Haiku — Asset mapper (short JSON output, 1024 tokens sufficient) */
 export const MAPPER_CONFIG: LLMConfig = {
-  provider: 'anthropic',
-  model:    'claude-haiku-4-5-20251001',
-  apiKey:   env('ANTHROPIC_API_KEY'),
+  provider:  'anthropic',
+  model:     'claude-haiku-4-5-20251001',
+  apiKey:    env('ANTHROPIC_API_KEY'),
+  maxTokens: 1024,
 };

@@ -170,7 +170,7 @@
   "YFI_CTRL": {
     "alias": "Project_Omicron",
     "tokenAlias": "$TOKEN_O",
-    "projectNames": ["yearn-late", "Yearn Finance Late", "YFI_CTRL", "yfi_ctrl"],
+    "projectNames": ["Yearn Finance Late", "yearn finance", "Yearn Finance", "yearn-late", "YFI_CTRL", "yfi_ctrl", "yearn"],
     "domains": ["yearn.finance", "yearn.fi", "gov.yearn.finance"],
     "githubOrgs": ["yearn-finance"],
     "actorAliases": {

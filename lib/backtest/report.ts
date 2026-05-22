@@ -31,10 +31,10 @@ export interface BiasReport {
   actualMultiple:     number;
   blindedMedian:      number;
   unblindedMedian:    number;
-  biasRatio:          number;      // unblindedMedian / blindedMedian (or 0 if no data)
+  biasRatio:          number;      // unblindedMedian / blindedMedian; 99.0 = ∞ sentinel; 0 = no data
   biasDetected:       boolean;     // biasRatio > 1.5
-  varianceBlinded:    number;
-  varianceUnblinded:  number;
+  stdDevBlinded:      number;
+  stdDevUnblinded:    number;
   blindedRuns:        number;      // how many blinded runs used (≤ numRuns)
   unblindedRuns:      number;
 }
@@ -90,32 +90,43 @@ export async function generateBiasReport(
       take:    numRuns,
     });
 
-    const blindedMedian     = median(blindedResults.map((r) => r.totalScore));
-    const unblindedMedian   = median(unblindedResults.map((r) => r.totalScore));
-    const varianceBlinded   = avgVariance(blindedResults);
-    const varianceUnblinded = avgVariance(unblindedResults);
+    const blindedMedian   = median(blindedResults.map((r) => r.totalScore));
+    const unblindedMedian = median(unblindedResults.map((r) => r.totalScore));
+    const stdDevBlinded   = avgStdDev(blindedResults);
+    const stdDevUnblinded = avgStdDev(unblindedResults);
 
     const hasBothSides = blindedResults.length > 0 && unblindedResults.length > 0;
-    const biasRatio    = hasBothSides && blindedMedian > 0
-      ? unblindedMedian / blindedMedian
-      : 0;
+
+    // C2: biasRatio sentinel — 99.0 represents ∞ (blinded=0 but unblinded>0)
+    let biasRatio: number;
+    if (hasBothSides) {
+      if (blindedMedian > 0) {
+        biasRatio = unblindedMedian / blindedMedian;
+      } else if (unblindedMedian > 0) {
+        biasRatio = 99.0; // ∞ sentinel: LLM scored 0 blinded but non-zero unblinded
+      } else {
+        biasRatio = 0;    // both zero — no signal in either condition
+      }
+    } else {
+      biasRatio = 0;      // insufficient data
+    }
     const biasDetected = hasBothSides && biasRatio > 1.5;
 
     reports.push({
-      ticker:            c.ticker,
-      projectAlias:      c.projectAlias,
-      sector:            c.sector,
-      split:             c.split,
-      isControl:         c.isControl,
-      actualMultiple:    c.actualMultiple,
-      blindedMedian:     round4(blindedMedian),
-      unblindedMedian:   round4(unblindedMedian),
-      biasRatio:         round4(biasRatio),
+      ticker:          c.ticker,
+      projectAlias:    c.projectAlias,
+      sector:          c.sector,
+      split:           c.split,
+      isControl:       c.isControl,
+      actualMultiple:  c.actualMultiple,
+      blindedMedian:   round4(blindedMedian),
+      unblindedMedian: round4(unblindedMedian),
+      biasRatio:       round4(biasRatio),
       biasDetected,
-      varianceBlinded:   round4(varianceBlinded),
-      varianceUnblinded: round4(varianceUnblinded),
-      blindedRuns:       blindedResults.length,
-      unblindedRuns:     unblindedResults.length,
+      stdDevBlinded:   round4(stdDevBlinded),
+      stdDevUnblinded: round4(stdDevUnblinded),
+      blindedRuns:     blindedResults.length,
+      unblindedRuns:   unblindedResults.length,
     });
   }
 
@@ -132,9 +143,9 @@ export async function generateBiasReport(
     return withData.filter((r) => r.blindedMedian >= alertThreshold).length / withData.length;
   };
 
-  // Only average bias ratios for cases that have BOTH sides tested and a positive ratio.
+  // Only average bias ratios for cases with BOTH sides tested, positive ratio, and not the ∞ sentinel.
   const testedBothSides = reports.filter(
-    (r) => r.blindedRuns > 0 && r.unblindedRuns > 0 && r.biasRatio > 0,
+    (r) => r.blindedRuns > 0 && r.unblindedRuns > 0 && r.biasRatio > 0 && r.biasRatio < 99.0,
   );
   const avgBiasRatio: number | null = testedBothSides.length > 0
     ? round4(testedBothSides.reduce((s, r) => s + r.biasRatio, 0) / testedBothSides.length)
@@ -233,7 +244,8 @@ export function printBiasReport(summary: ReportSummary): void {
     const blindedStr  = r.blindedRuns   > 0 ? r.blindedMedian.toFixed(3)   : 'N/A';
     const unblindStr  = r.unblindedRuns > 0 ? r.unblindedMedian.toFixed(3) : 'N/A';
     const biasStr     = (r.blindedRuns > 0 && r.unblindedRuns > 0)
-      ? r.biasRatio.toFixed(2) : 'N/A';
+      ? (r.biasRatio >= 99.0 ? '∞' : r.biasRatio.toFixed(2))
+      : 'N/A';
     const typeStr     = r.isControl ? 'Ctrl' : 'Pos';
     const alias       = r.split === 'calibration' ? r.projectAlias : r.ticker;
 
@@ -299,9 +311,12 @@ function median(values: number[]): number {
     : (sorted[mid - 1] + sorted[mid]) / 2;
 }
 
-function avgVariance(results: { variance: number | null }[]): number {
-  const vals = results.map((r) => r.variance ?? 0);
-  return vals.length === 0 ? 0 : vals.reduce((a, b) => a + b, 0) / vals.length;
+// C1: pooled standard deviation — sqrt(mean(σ²)) from stored per-batch stdDev values
+function avgStdDev(results: { stdDev: number | null }[]): number {
+  const vals = results.map((r) => r.stdDev ?? 0);
+  if (vals.length === 0) return 0;
+  const meanSquare = vals.reduce((s, σ) => s + σ * σ, 0) / vals.length;
+  return Math.sqrt(meanSquare);
 }
 
 function pct(n: number): string {

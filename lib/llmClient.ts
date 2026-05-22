@@ -26,10 +26,11 @@ import { z, ZodError } from 'zod';
 // ---------------------------------------------------------------------------
 
 export interface LLMConfig {
-  provider: 'openai-compatible' | 'anthropic';
-  model: string;
-  baseURL?: string;  // required for openai-compatible
-  apiKey: string;
+  provider:   'openai-compatible' | 'anthropic';
+  model:      string;
+  baseURL?:   string;      // required for openai-compatible
+  apiKey:     string;
+  maxTokens?: number;      // Anthropic only; defaults to 8192 when not set
 }
 
 // ---------------------------------------------------------------------------
@@ -104,7 +105,7 @@ async function callAnthropic(
 
   const response = await client.messages.create({
     model:      config.model,
-    max_tokens: 1024,
+    max_tokens: config.maxTokens ?? 1024,
     system,
     messages: [{ role: 'user', content: user }],
   });

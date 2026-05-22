@@ -96,8 +96,8 @@ const CASES = [
     projectAlias:   'Project_Nu',
     sector:         'DeFi',
     signalDate:     new Date('2020-07-01'),
-    signalPrice:    64.00,
-    athPrice:       911.20,
+    signalPrice:    185.00,  // B3: corrected to price at time of peak DeFi summer hype
+    athPrice:       277.50,  // B3: 185 × 1.5 — consistent with actualMultiple: 1.5
     actualMultiple: 1.5,    // peaked early, returned to near launch price within 6 months
     split:          'calibration',
     isControl:      true,

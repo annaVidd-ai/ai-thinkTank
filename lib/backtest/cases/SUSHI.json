@@ -3,6 +3,7 @@
   "signalDate": "2020-10-01",
   "snapshotDate": "2020-09-24",
   "priceAtSnapshot": 0.50,
+  "isControl": false,
   "developers": [
     { "name": "0xMaki", "isElite": true, "activity": "Day-to-day protocol leadership after Chef Nomi exit, governance coordination, partnership development." },
     { "name": "Chef Nomi", "isElite": true, "activity": "Original protocol creator — returned $14M dev fund after community pressure. Stepped back from leadership." },

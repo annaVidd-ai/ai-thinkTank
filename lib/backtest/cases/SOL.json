@@ -3,6 +3,7 @@
   "signalDate": "2021-01-01",
   "snapshotDate": "2020-12-25",
   "priceAtSnapshot": 1.35,
+  "isControl": false,
   "developers": [
     { "name": "Anatoly Yakovenko", "isElite": true, "activity": "Daily GitHub commits to solana-labs/solana, frequent Twitter engagement with developers." },
     { "name": "Raj Gokal", "isElite": true, "activity": "Ecosystem partnerships, investor relations, Serum DEX coordination with FTX." },

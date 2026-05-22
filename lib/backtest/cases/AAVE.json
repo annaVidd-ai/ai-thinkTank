@@ -3,6 +3,7 @@
   "signalDate": "2020-10-01",
   "snapshotDate": "2020-09-24",
   "priceAtSnapshot": 25.50,
+  "isControl": false,
   "developers": [
     { "name": "Stani Kulechov", "isElite": true, "activity": "Daily Twitter presence, weekly governance forum posts, active protocol design decisions." },
     { "name": "David Truong", "isElite": true, "activity": "Smart contract development, V2 architecture work." },

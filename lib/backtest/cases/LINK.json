@@ -3,6 +3,7 @@
   "signalDate": "2019-05-01",
   "snapshotDate": "2019-04-24",
   "priceAtSnapshot": 0.42,
+  "isControl": false,
   "developers": [
     { "name": "Sergey Nazarov", "isElite": true, "activity": "Weekly blog posts, conference appearances, active GitHub commits to chainlink node." },
     { "name": "Steve Ellis", "isElite": true, "activity": "Core node software development, oracle network architecture." },

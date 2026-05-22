@@ -3,6 +3,7 @@
   "signalDate": "2020-07-01",
   "snapshotDate": "2020-06-24",
   "priceAtSnapshot": 2.55,
+  "isControl": false,
   "developers": [
     { "name": "Kain Warwick", "isElite": true, "activity": "Daily Twitter, SIP (Synthetix Improvement Proposals) authorship, staking mechanism design." },
     { "name": "Justin Moses", "isElite": true, "activity": "Smart contract engineering, binary options development, Kwenta frontend." },

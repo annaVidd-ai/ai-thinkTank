@@ -3,6 +3,7 @@
   "signalDate": "2020-10-01",
   "snapshotDate": "2020-09-24",
   "priceAtSnapshot": 475.00,
+  "isControl": false,
   "developers": [
     { "name": "Rune Christensen", "isElite": true, "activity": "Governance forum leadership, Maker Foundation coordination, bi-weekly community calls." },
     { "name": "Mariano Conti", "isElite": true, "activity": "Smart contract engineering, oracle price feed maintenance, Multi-Collateral DAI." },

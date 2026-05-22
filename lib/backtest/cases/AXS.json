@@ -3,6 +3,7 @@
   "signalDate": "2021-01-01",
   "snapshotDate": "2020-12-25",
   "priceAtSnapshot": 0.48,
+  "isControl": false,
   "developers": [
     { "name": "Trung Nguyen", "isElite": true, "activity": "Product direction, game economy design, weekly community updates." },
     { "name": "Aleksander Larsen", "isElite": true, "activity": "COO, NFT marketplace development, breeding mechanic design." },

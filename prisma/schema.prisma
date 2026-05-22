@@ -36,6 +36,7 @@ model ScoringConfig {
   id              String          @id @default(uuid())
   name            String
   weights         String                   // JSON: {"signalStrength": 0.40, "timing": 0.35, "upside": 0.25}
+  alertThreshold  Float           @default(0.70)
   isActive        Boolean         @default(false)
   scores          ClusterScore[]
   backtestResults BacktestResult[]
@@ -69,7 +70,7 @@ model BacktestResult {
   upside        Float
   totalScore    Float
   verdict       String?       // debate verdict
-  variance      Float?        // populated after N=3 runs complete
+  stdDev        Float?        // pooled standard deviation across runs in this batch
   createdAt     DateTime      @default(now())
 
   case          BacktestCase  @relation(fields: [caseId], references: [id])

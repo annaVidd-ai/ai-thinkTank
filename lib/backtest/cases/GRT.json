@@ -3,6 +3,7 @@
   "signalDate": "2020-12-01",
   "snapshotDate": "2020-11-24",
   "priceAtSnapshot": 0.025,
+  "isControl": false,
   "developers": [
     { "name": "Yaniv Tal", "isElite": true, "activity": "Protocol design, testnet curator coordination, bi-weekly ecosystem updates." },
     { "name": "Jannis Pohlmann", "isElite": true, "activity": "Core graph-node implementation, indexing protocol engineering." },

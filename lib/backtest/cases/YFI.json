@@ -3,6 +3,7 @@
   "signalDate": "2020-08-01",
   "snapshotDate": "2020-07-25",
   "priceAtSnapshot": 2200.00,
+  "isControl": false,
   "developers": [
     { "name": "Andre Cronje", "isElite": true, "activity": "Solo developer, daily commits, published Medium posts explaining protocol mechanics. No marketing." },
     { "name": "banteg", "isElite": true, "activity": "Core contributor, vault strategy development, community coordination." },

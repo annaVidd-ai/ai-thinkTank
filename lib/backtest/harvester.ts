@@ -21,10 +21,12 @@ import { CasePayload } from './blinder';
 // ---------------------------------------------------------------------------
 
 export interface HistoricalState {
-  ticker:       string;
-  snapshotDate: string;      // ISO date string
-  priceAtT7:    number;      // price 7 days before signal
-  payload:      CasePayload; // full curated graph state (unblinded)
+  ticker:        string;
+  snapshotDate:  string;      // ISO date string
+  priceAtT7:     number;      // price 7 days before signal
+  payload:       CasePayload; // full curated graph state (unblinded)
+  isControl:     boolean;     // true = negative control case
+  parentTicker?: string;      // Binance price symbol when ticker differs (e.g. YFI_CTRL → YFI)
 }
 
 // Raw JSON file structure
@@ -33,6 +35,8 @@ interface RawCaseFile {
   signalDate:          string;
   snapshotDate:        string;
   priceAtSnapshot:     number;
+  isControl:           boolean;   // A3: required — true for negative control cases
+  parentTicker?:       string;    // B4: optional — used for Binance price lookup when ticker is synthetic
   developers: Array<{
     name:     string;
     isElite:  boolean;
@@ -69,11 +73,13 @@ export async function harvestCase(
   let priceAtT7 = raw.priceAtSnapshot;
 
   if (fetchLivePrice) {
+    // B4: use parentTicker for Binance lookup when the case ticker is synthetic (e.g. YFI_CTRL → YFI)
+    const priceSymbol = raw.parentTicker ?? ticker;
     try {
-      priceAtT7 = await fetchHistoricalPrice(ticker, raw.snapshotDate);
+      priceAtT7 = await fetchHistoricalPrice(priceSymbol, raw.snapshotDate);
     } catch (err) {
       console.warn(
-        `[Harvester] Binance price fetch failed for ${ticker} at ${raw.snapshotDate} — ` +
+        `[Harvester] Binance price fetch failed for ${priceSymbol} at ${raw.snapshotDate} — ` +
         `using embedded price ${raw.priceAtSnapshot}. Error: ${(err as Error).message}`,
       );
     }
@@ -87,10 +93,12 @@ export async function harvestCase(
   };
 
   return {
-    ticker:       raw.ticker,
-    snapshotDate: raw.snapshotDate,
+    ticker:        raw.ticker,
+    snapshotDate:  raw.snapshotDate,
     priceAtT7,
     payload,
+    isControl:     raw.isControl,
+    parentTicker:  raw.parentTicker,
   };
 }
 
@@ -115,6 +123,15 @@ function loadCaseFile(ticker: string): RawCaseFile {
     throw new Error(`[Harvester] No case file found for ticker "${ticker}" at ${filePath}`);
   }
   const raw = JSON.parse(fs.readFileSync(filePath, 'utf-8')) as RawCaseFile;
+
+  // A3: isControl is required — fail loudly so missing fields are caught at load time
+  if (typeof raw.isControl !== 'boolean') {
+    throw new Error(
+      `[Harvester] Case file "${ticker}.json" is missing required field "isControl" (boolean). ` +
+      `Add "isControl": true or "isControl": false to the JSON file.`,
+    );
+  }
+
   return raw;
 }
 

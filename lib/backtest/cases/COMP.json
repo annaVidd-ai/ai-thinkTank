@@ -2,11 +2,12 @@
   "ticker": "COMP",
   "signalDate": "2020-07-01",
   "snapshotDate": "2020-06-30",
-  "priceAtSnapshot": 64.00,
+  "priceAtSnapshot": 185.00,
+  "isControl": true,
   "developers": [
     { "name": "Robert Leshner", "isElite": true, "activity": "Protocol architecture and daily GitHub commits. Active on governance forums daily. Public speaker at ETH conferences." },
     { "name": "Geoffrey Hayes", "isElite": true, "activity": "Core smart contract engineering, security audit liaison, cToken protocol development. 10+ commits per week." },
-    { "name": "Calvin Liu", "isElite": false, "activity": "Strategy and institutional partnerships. Onboarding materials for funds and protocols." }
+    { "name": "Calvin Liu", "isElite": true, "activity": "Strategy and institutional partnerships. Former a16z crypto, deep institutional network. Onboarding major DeFi funds and protocols." }
   ],
   "assets": [
     { "name": "Compound Protocol", "type": "Repository", "url": "github.com/compound-finance/compound-protocol" },
