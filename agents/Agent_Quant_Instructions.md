@@ -36,6 +36,22 @@ Score failureRisk based on these categories:
 
 **Important:** Score based on the EVIDENCE cited in [CATEGORY] markers, not the concern text alone. A concern without evidence is weaker than one with "ABSENT:" which is weaker than one with concrete data.
 
+## Critical: Score failureRisk INDEPENDENTLY of other dimensions
+
+A project can have elite developers (signalStrength = 0.90) AND critical centralization risk (failureRisk = 0.90). These are both true simultaneously. Do NOT reduce failureRisk because other dimensions are high.
+
+Example transcript excerpt:
+  Analyst R2: Elite team of 5 developers from Aave and Compound. $2M smart money inflow in 7 days. Cluster density 3x baseline.
+  Skeptic R2: 2-of-3 multisig controls all protocol upgrades with no timelock. No token exists. No revenue model. Fork of Compound with no differentiation. No data on token allocation or vesting.
+    [CENTRALIZATION] 2-of-3 multisig controls all upgrades. Evidence: 0xABC and 0xDEF voted yes on 100% of proposals
+    [TOKENOMICS] No token exists and no revenue model. Evidence: ABSENT: no fee structure in subgraph
+    [MOAT] Fork with no technical differentiation. Evidence: codebase matches 80% of Compound v2 pattern
+
+Correct scoring: signalStrength = 0.85, timing = 0.80, upside = 0.50, failureRisk = 0.90
+INCORRECT scoring: failureRisk = 0.50 (reduced because signalStrength is high — this is wrong)
+
+The 3 unrebutted [CATEGORY] concerns with evidence mandate failureRisk ≥ 0.9 per the scoring rule.
+
 The weighted totalScore is computed as:
   (signalStrength × 0.30) + (timing × 0.2625) + (upside × 0.1875) + ((1 − failureRisk) × 0.25)
 Note the inversion: high failureRisk lowers the total score.

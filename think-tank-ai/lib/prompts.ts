@@ -369,10 +369,10 @@ export function buildSkepticUser(
   isFinal: boolean,
 ): string {
   if (isFinal) {
-    return `Debate round ${round} of 3 — FINAL ROUND.\n\nNarrative context (early momentum assessment):\n${narrativeContext || 'Not available.'}\n\nFull debate transcript:\n${transcript}\n\nThis is the final round. Conclude the debate on whether this project can deliver 10x returns.\nYou MUST respond with ONLY this exact JSON structure:\n{"argument": "your closing argument", "failure_modes": [{"category": "CENTRALIZATION"|"TOKENOMICS"|"MOAT"|"LIQUIDITY"|"DEPENDENCY", "concern": "...", "evidence": "..."}], "verdict": "agreed" or "deadlocked", "finalThesis": "SHORT_THESIS_LABEL"}\n\nInclude 1–5 failure modes summarising your final structural assessment. For each, state the concern and cite specific evidence or write "ABSENT" if data is missing.\nUse "agreed" if you accept the bull case (even conditionally). Use "deadlocked" if fundamental disagreement remains.\nfinalThesis examples: "CAUTIOUSLY_BULLISH", "STRONG_BUY", "NEUTRAL", "STRUCTURAL_RISKS_REMAIN", "DEADLOCKED"`;
+    return `Debate round ${round} of 3 — FINAL ROUND.\n\nNarrative context (early momentum assessment):\n${narrativeContext || 'Not available.'}\n\nFull debate transcript:\n${transcript}\n\nThis is the final round. Conclude the debate on whether this project can deliver 10x returns.\nUse "agreed" if you accept the bull case (even conditionally). Use "deadlocked" if fundamental disagreement remains.`;
   }
 
-  return `Debate round ${round} of 3.\n\nNarrative context (early momentum assessment):\n${narrativeContext || 'Not available.'}\n\nPrior transcript:\n${transcript}\n\nChallenge the analyst's 10x thesis. Be specific — cite evidence from the narrative or name absent data.\nYou MUST respond with ONLY this exact JSON structure:\n{"argument": "...", "failure_modes": [{"category": "CENTRALIZATION"|"TOKENOMICS"|"MOAT"|"LIQUIDITY"|"DEPENDENCY", "concern": "...", "evidence": "..."}]}\nInclude 1–5 failure modes. For each, state the concern and cite specific evidence or write "ABSENT" if data is missing.`;
+  return `Debate round ${round} of 3.\n\nNarrative context (early momentum assessment):\n${narrativeContext || 'Not available.'}\n\nPrior transcript:\n${transcript}\n\nChallenge the analyst's 10x thesis. Be specific — cite evidence from the narrative or name absent data for each failure category.`;
 }
 
 export function buildScoreUser(
