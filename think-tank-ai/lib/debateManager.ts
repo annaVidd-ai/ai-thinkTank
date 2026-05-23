@@ -2,8 +2,9 @@ import { prisma } from './prisma';
 import { callLLM } from './llmClient';
 import { ANALYST_CONFIG, SKEPTIC_CONFIG } from './llmConfig';
 import {
-  DebateTurnSchema,
-  DebateFinalSchema,
+  AnalystTurnSchema,
+  SkepticTurnSchema,
+  SkepticFinalSchema,
   getAnalystSystemPrompt,
   getSkepticSystemPrompt,
   getTemperature,
@@ -60,7 +61,7 @@ export async function processAnalystTurn(debateId: string): Promise<void> {
   const transcript    = buildTranscript(priorMessages);
 
   const user   = buildAnalystUser(round, transcript, debate.narrativeContext ?? '');
-  const result = await callLLM(ANALYST_CONFIG, getAnalystSystemPrompt(), user, DebateTurnSchema, getTemperature('analyst'));
+  const result = await callLLM(ANALYST_CONFIG, getAnalystSystemPrompt(), user, AnalystTurnSchema, getTemperature('analyst'));
 
   await prisma.debateMessage.create({
     data: { debateId, role: 'ANALYST', content: JSON.stringify(result), round },
@@ -80,8 +81,8 @@ export async function processAnalystTurn(debateId: string): Promise<void> {
 /**
  * Handles a DEBATE_SKEPTIC task turn.
  *
- * Rounds 1-2: calls DeepSeek-R1 with DebateTurnSchema, increments round, queues DEBATE_ANALYST.
- * Round 3   : calls DeepSeek-R1 with DebateFinalSchema, resolves the debate.
+ * Rounds 1-2: calls DeepSeek-R1 with SkepticTurnSchema, increments round, queues DEBATE_ANALYST.
+ * Round 3   : calls DeepSeek-R1 with SkepticFinalSchema, resolves the debate.
  *             If verdict === 'agreed' → status COMPLETED + injects SCORE task.
  *             Otherwise              → status ESCALATED.
  */
@@ -100,7 +101,7 @@ export async function processSkepticTurn(debateId: string): Promise<void> {
 
   if (!isFinal) {
     // ── Rounds 1 & 2 ──────────────────────────────────────────────────────
-    const result = await callLLM(SKEPTIC_CONFIG, getSkepticSystemPrompt(), user, DebateTurnSchema, getTemperature('skeptic'));
+    const result = await callLLM(SKEPTIC_CONFIG, getSkepticSystemPrompt(), user, SkepticTurnSchema, getTemperature('skeptic'));
 
     await prisma.debateMessage.create({
       data: { debateId, role: 'SKEPTIC', content: JSON.stringify(result), round },
@@ -128,9 +129,10 @@ export async function processSkepticTurn(debateId: string): Promise<void> {
     const finalSystemPrompt =
       getSkepticSystemPrompt() +
       '\n\nThis is the FINAL round. Your JSON MUST include ' +
-      '"verdict" ("agreed" or "deadlocked") and "finalThesis" (a short thesis string).';
+      '"failure_modes" (1–5 structured entries), "verdict" ("agreed" or "deadlocked"), ' +
+      'and "finalThesis" (a short thesis string).';
 
-    const result = await callLLM(SKEPTIC_CONFIG, finalSystemPrompt, user, DebateFinalSchema, getTemperature('skeptic'));
+    const result = await callLLM(SKEPTIC_CONFIG, finalSystemPrompt, user, SkepticFinalSchema, getTemperature('skeptic'));
 
     await prisma.debateMessage.create({
       data: { debateId, role: 'SKEPTIC', content: JSON.stringify(result), round },

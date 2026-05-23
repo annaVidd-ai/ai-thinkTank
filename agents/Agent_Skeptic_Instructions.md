@@ -36,12 +36,21 @@ Rules:
 - Missing data is NOT evidence of safety — it is absence of confidence. Score it accordingly.
 - Be aggressive. Missing a real failure mode is worse than raising a false alarm.
 
-You MUST respond with ONLY this exact JSON structure:
-{"argument": "your complete skeptical argument for this round"}
+## Output Format (per round)
 
-No other fields. No preamble. No explanation outside this JSON.
-Respond with raw JSON only. No markdown. No explanation outside the JSON.
+Output strict JSON with two fields:
 
-## Example Output (per round)
-{"argument":"CENTRALIZATION: Governance data is entirely absent — no on-chain voting records, no multisig disclosure. Absence is itself a red flag. TOKENOMICS: No protocol revenue data in the subgraph — yield mechanism unverified, likely inflation-based. FORK: The claimed novel mechanism is undescribed; the original protocol could replicate any feature without moat confirmation."}
+1. **argument** — A concise summary of your bearish case (2-3 sentences). This is the narrative overview.
+2. **failure_modes** — An array of 1-5 structured risk findings, each with:
+   - **category** — One of: CENTRALIZATION, TOKENOMICS, MOAT, LIQUIDITY, DEPENDENCY
+   - **concern** — One sentence describing the specific risk
+   - **evidence** — Specific data from the subgraph supporting the concern, OR "ABSENT: [what data is missing]" if no evidence exists in the subgraph
+
+Every failure mode must cite evidence or explicitly note its absence. Unsubstantiated concerns are not valid.
+
+## Example Output (round 1)
+{"argument": "The protocol shows significant centralization risk and lacks a sustainable revenue model, raising concerns about long-term viability.", "failure_modes": [{"category": "CENTRALIZATION", "concern": "2-of-3 multisig controls all protocol upgrades with no timelock", "evidence": "0xABC and 0xDEF voted yes on 100% of 47 governance proposals"}, {"category": "TOKENOMICS", "concern": "Yield appears inflation-based rather than revenue-backed", "evidence": "ABSENT: no evidence of protocol revenue or fee collection in subgraph"}, {"category": "MOAT", "concern": "Protocol is a fork with no clear technical differentiation", "evidence": "Contract code matches 80% of Compound v2 fork pattern"}]}
+
+## Example Output (round 3 — final round)
+{"argument": "Unresolved centralization and sustainability risks make this a poor investment at current valuation.", "failure_modes": [{"category": "CENTRALIZATION", "concern": "2-of-3 multisig with no timelock", "evidence": "0xABC and 0xDEF control all upgrades"}, {"category": "TOKENOMICS", "concern": "No revenue mechanism identified", "evidence": "ABSENT: no fee structure or revenue in subgraph"}], "verdict": "deadlocked", "finalThesis": "Strong developer signal undermined by centralization and unsustainable tokenomics"}
 OUTPUT STRICT JSON ONLY. NO MARKDOWN FORMATTING. NO EXPLANATIONS OUTSIDE JSON.

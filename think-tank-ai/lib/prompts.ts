@@ -24,6 +24,9 @@ export { getTemperature };
  * Given a raw parsed value, attempts to extract a string from common
  * field names that LLMs might use instead of `argument`.
  * Returns `{ argument: <found string> }` or the original value unchanged.
+ * When `obj.argument` is already a string, returns the entire raw object
+ * unchanged — preserving any additional structured fields (e.g. failure_modes)
+ * for the downstream Zod schema to validate or strip as appropriate.
  */
 function normaliseArgument(raw: unknown): unknown {
   if (typeof raw === 'string') return { argument: raw };
@@ -113,25 +116,55 @@ export const NarrativeSchema = z.preprocess((raw) => {
 export type NarrativeOutput = z.infer<typeof NarrativeSchema>;
 
 /**
- * Single debate turn (rounds 1–2 for both Analyst and Skeptic).
+ * A single failure-mode entry in a Skeptic turn.
+ * Five fixed categories map directly onto the Skeptic's instruction headings.
+ */
+export const FailureModeSchema = z.object({
+  category: z.enum(['CENTRALIZATION', 'TOKENOMICS', 'MOAT', 'LIQUIDITY', 'DEPENDENCY']),
+  concern:  z.string(),
+  evidence: z.string(),
+});
+
+export type FailureMode = z.infer<typeof FailureModeSchema>;
+
+/**
+ * Single Analyst debate turn (rounds 1–2).
  * Preprocessing normalises common alternate field names from reasoning models.
  */
-export const DebateTurnSchema = z.preprocess(
+export const AnalystTurnSchema = z.preprocess(
   normaliseArgument,
   z.object({ argument: z.string() }),
 );
 
-export type DebateTurnOutput = z.infer<typeof DebateTurnSchema>;
+export type AnalystTurnOutput = z.infer<typeof AnalystTurnSchema>;
+
+/**
+ * Single Skeptic debate turn (rounds 1–2).
+ * Extends the Analyst turn with structured per-category failure mode scores.
+ * failure_modes is optional for graceful degradation — buildTranscript() still
+ * works if the model omits the field, and old DB rows without the field remain valid.
+ */
+export const SkepticTurnSchema = z.preprocess(
+  normaliseArgument,
+  z.object({
+    argument:      z.string(),
+    failure_modes: z.array(FailureModeSchema).min(1).max(5).optional(),
+  }),
+);
+
+export type SkepticTurnOutput = z.infer<typeof SkepticTurnSchema>;
 
 /**
  * Final round Skeptic verdict (round 3 only).
- * Preprocessing normalises `argument` field and common verdict aliases.
+ * Extends SkepticTurnSchema with verdict and finalThesis.
+ * Preprocessing normalises `argument` field and common verdict/thesis aliases.
+ * failure_modes is optional for graceful degradation.
  */
-export const DebateFinalSchema = z.preprocess((raw) => {
+export const SkepticFinalSchema = z.preprocess((raw) => {
   if (typeof raw !== 'object' || raw === null) return raw;
   const obj = raw as Record<string, unknown>;
 
-  // Normalise argument field (same candidates as DebateTurnSchema)
+  // Normalise argument field (same candidates as AnalystTurnSchema)
   if (!obj.argument) {
     for (const k of [
       'response', 'content', 'text', 'reply', 'statement',
@@ -161,12 +194,13 @@ export const DebateFinalSchema = z.preprocess((raw) => {
 
   return obj;
 }, z.object({
-  argument:    z.string(),
-  verdict:     z.enum(['agreed', 'deadlocked']),
-  finalThesis: z.string(),
+  argument:      z.string(),
+  failure_modes: z.array(FailureModeSchema).min(1).max(5).optional(),
+  verdict:       z.enum(['agreed', 'deadlocked']),
+  finalThesis:   z.string(),
 }));
 
-export type DebateFinalOutput = z.infer<typeof DebateFinalSchema>;
+export type SkepticFinalOutput = z.infer<typeof SkepticFinalSchema>;
 
 /**
  * Quantitative score produced by DeepSeek-R1. Each dimension is 0–1.
@@ -248,6 +282,10 @@ export interface TranscriptMessage {
 /**
  * Formats an array of DebateMessage rows into a readable transcript string.
  * Each message's content is stored as JSON; we extract the `argument` field.
+ * For Skeptic messages that include structured failure_modes, each mode is
+ * formatted on its own indented line beneath the argument:
+ *   [CATEGORY] concern. Evidence: evidence_text
+ * Analyst messages and old Skeptic rows without failure_modes are unaffected.
  */
 export function buildTranscript(messages: TranscriptMessage[]): string {
   if (messages.length === 0) return '(No prior debate messages)';
@@ -257,13 +295,27 @@ export function buildTranscript(messages: TranscriptMessage[]): string {
     .sort((a, b) => a.round - b.round || (a.role === 'ANALYST' ? -1 : 1))
     .map((msg) => {
       let argument = msg.content;
+      let failureModes: Array<{ category: string; concern: string; evidence: string }> | undefined;
       try {
-        const parsed = JSON.parse(msg.content) as { argument?: string };
+        const parsed = JSON.parse(msg.content) as {
+          argument?:      string;
+          failure_modes?: Array<{ category: string; concern: string; evidence: string }>;
+        };
         if (parsed.argument) argument = parsed.argument;
+        if (Array.isArray(parsed.failure_modes) && parsed.failure_modes.length > 0) {
+          failureModes = parsed.failure_modes;
+        }
       } catch {
         // content wasn't valid JSON — use raw string
       }
-      return `[Round ${msg.round} - ${msg.role}]: ${argument}`;
+
+      const header = `[Round ${msg.round} - ${msg.role}]: ${argument}`;
+      if (!failureModes) return header;
+
+      const fmLines = failureModes
+        .map((fm) => `  [${fm.category}] ${fm.concern}. Evidence: ${fm.evidence}`)
+        .join('\n');
+      return `${header}\n${fmLines}`;
     })
     .join('\n');
 }
@@ -317,10 +369,10 @@ export function buildSkepticUser(
   isFinal: boolean,
 ): string {
   if (isFinal) {
-    return `Debate round ${round} of 3 — FINAL ROUND.\n\nNarrative context (early momentum assessment):\n${narrativeContext || 'Not available.'}\n\nFull debate transcript:\n${transcript}\n\nThis is the final round. Conclude the debate on whether this project can deliver 10x returns.\nYou MUST respond with ONLY this exact JSON structure:\n{"argument": "your closing argument", "verdict": "agreed" or "deadlocked", "finalThesis": "SHORT_THESIS_LABEL"}\n\nUse "agreed" if you accept the bull case (even conditionally). Use "deadlocked" if fundamental disagreement remains.\nfinalThesis examples: "CAUTIOUSLY_BULLISH", "STRONG_BUY", "NEUTRAL", "STRUCTURAL_RISKS_REMAIN", "DEADLOCKED"`;
+    return `Debate round ${round} of 3 — FINAL ROUND.\n\nNarrative context (early momentum assessment):\n${narrativeContext || 'Not available.'}\n\nFull debate transcript:\n${transcript}\n\nThis is the final round. Conclude the debate on whether this project can deliver 10x returns.\nYou MUST respond with ONLY this exact JSON structure:\n{"argument": "your closing argument", "failure_modes": [{"category": "CENTRALIZATION"|"TOKENOMICS"|"MOAT"|"LIQUIDITY"|"DEPENDENCY", "concern": "...", "evidence": "..."}], "verdict": "agreed" or "deadlocked", "finalThesis": "SHORT_THESIS_LABEL"}\n\nInclude 1–5 failure modes summarising your final structural assessment. For each, state the concern and cite specific evidence or write "ABSENT" if data is missing.\nUse "agreed" if you accept the bull case (even conditionally). Use "deadlocked" if fundamental disagreement remains.\nfinalThesis examples: "CAUTIOUSLY_BULLISH", "STRONG_BUY", "NEUTRAL", "STRUCTURAL_RISKS_REMAIN", "DEADLOCKED"`;
   }
 
-  return `Debate round ${round} of 3.\n\nNarrative context (early momentum assessment):\n${narrativeContext || 'Not available.'}\n\nPrior transcript:\n${transcript}\n\nChallenge the analyst's 10x thesis. Be specific — address false momentum, structural risks, competition, or market conditions.\nRemember: respond with {"argument": "..."} only.`;
+  return `Debate round ${round} of 3.\n\nNarrative context (early momentum assessment):\n${narrativeContext || 'Not available.'}\n\nPrior transcript:\n${transcript}\n\nChallenge the analyst's 10x thesis. Be specific — cite evidence from the narrative or name absent data.\nYou MUST respond with ONLY this exact JSON structure:\n{"argument": "...", "failure_modes": [{"category": "CENTRALIZATION"|"TOKENOMICS"|"MOAT"|"LIQUIDITY"|"DEPENDENCY", "concern": "...", "evidence": "..."}]}\nInclude 1–5 failure modes. For each, state the concern and cite specific evidence or write "ABSENT" if data is missing.`;
 }
 
 export function buildScoreUser(
