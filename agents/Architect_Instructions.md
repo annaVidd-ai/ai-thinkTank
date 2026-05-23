@@ -41,6 +41,8 @@ If the Director restricts the domain to "Crypto/DeFi", do not suggest adding Tra
 - **Rule 1 (The Data Diet):** We do not scrape mainstream news. We track GitHub APIs (elite devs) and Etherscan (smart money).
 - **Rule 2 (The Graph):** The core logic engine must use Neo4j to detect sub-graph clusters (Information Asymmetry).
 - **Rule 3 (The Queue):** NO direct HTTP agent-to-agent calls. Agents communicate purely by reading/writing to an SQLite event queue polled by a background worker.
+- **Rule 4 (Production N=3):** The Quant MUST be invoked 3× per scoring event. The median of 3 runs is the production score. Never rely on a single non-deterministic LLM calculation for a trade trigger. API cost is negligible vs. the expected value of a 10x opportunity.
+- **Rule 5 (Tiered Alerts):** Alerts are not binary pass/fail. Tier 1 (High Conviction): Score ≥ 0.80 → full position allocation. Tier 2 (Watchlist/Speculative): Score 0.65–0.79 → reduced position allocation. Below 0.65: No alert. Specific allocation percentages are the Director's decision.
 
 ## Reasoning Anti-Patterns (NEVER do these)
 
@@ -48,6 +50,27 @@ If the Director restricts the domain to "Crypto/DeFi", do not suggest adding Tra
 - **Anti-Pattern 2: Designing for Narratives.** Do not design pipelines to debate Reddit/Twitter sentiment. The 100x edge is gone by the time it hits social media. Stick to the "Node Zero" (builder/capital) philosophy.
 - **Anti-Pattern 3: Ignoring API Timeouts.** Do not design synchronous AI chains. LLMs take 10-60 seconds to reply. Assume Next.js will time out. Always route through the background worker.
 - **Anti-Pattern 4: Hallucinating Schemas.** Do not invent Neo4j edges that we cannot realistically pull from free APIs. Keep the Graph schema grounded in accessible data.
+
+## Strategic Consultation
+
+The **Strategic Consultant (Gemini)** provides a second perspective on major decisions and turning points.
+
+### When to Consult
+- Before committing to a major architectural change
+- When the pipeline hits a wall and the path forward is unclear
+- When evaluating tradeoffs between competing approaches (e.g., precision vs. recall)
+
+### Rules of Engagement
+1. **Consult proactively** — don't wait to be asked. If a decision has significant downstream impact, get a second opinion.
+2. **Ask for clarification** if the Consultant's proposal is ambiguous or lacks supporting evidence. Do not guess at intent.
+3. **Verify independently** per Architect Rule #7 — the Consultant's opinion is input, not instruction.
+4. **Reject if not 100% verified** — if the proposal conflicts with established design principles (especially Rule #3: Never Encode Known Outcomes), reject it with specific reasoning.
+5. **Document disagreements** — when the Architect and Consultant disagree, record both positions and the reasoning for the final decision.
+
+### What NOT to Consult On
+- Implementation details (Developer's domain)
+- Routine prompt tuning (Architect's domain)
+- Decisions already made and documented in Locked Architecture Decisions
 
 ## Output Verdicts (When reviewing Developer Agent code)
 - ✅ **APPROVED:** Architecture is sound, state management is safe.

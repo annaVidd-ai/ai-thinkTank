@@ -1,172 +1,106 @@
-# Project Status — Node Zero (v0.1.0)
+# Project Status — Node Zero (v0.4.0)
+**Last updated:** 2026-05-24 | **Phase:** Backtest Calibration | **Budget:** ~€9/mo
 
-**Last updated:** 2026-05-23 | **Phase:** Development | **Budget:** ~€9/mo
-
----
-
-## Vision
+### Vision
 AI agents that spot **paradigm-shifting profit opportunities before they go mainstream** (100x-1000x returns). Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
 
-## Domain Focus: Crypto/DeFi (v0.1.0)
+### Domain Focus: Crypto/DeFi (v0.1.0)
 Only domain where both product (open source GitHub) and money (blockchain) are fully public. AI + Tech domains later — architecture supports it via generic Neo4j labels.
 
-## Roles
-- **This AI (Z.ai)** = Architect (review specs, maintain docs, flag issues, enforce standards)
-- **Gemini 3.1 Pro** = Spec Writer (creates developer task specs from architecture)
-- **ClaudeCode** = Developer (implements locally on Director's machine)
-- **User** = Director (approve/reject, final calls, provide API keys, route between agents)
+### Roles
+- **Architect (Z.ai)** = System design, review, specifications, rule enforcement
+- **Developer (ClaudeCode)** = Implementation, debugging, terminal execution
+- **Director (User)** = Approve/reject, final calls, API keys, task routing
+- **Strategic Consultant (Gemini)** = Advisory opinions (verified independently per Architect Rule #7)
 
----
-
-## Architecture
-
-### Dual Database
+### Architecture — Dual Database
 - **SQLite (Prisma):** Pipeline state, task queue, debates, scoring, backtesting
 - **Neo4j (AuraDB Free):** Knowledge graph — entity relationships, cluster detection
 
 ### Tech Stack
 Next.js 16, TypeScript, Prisma/SQLite, Neo4j, monolith architecture
 
-### Agent Topology
-
-| Agent | Model | Role | Cost |
+### Agent Topology (6-Agent Pipeline)
+| Agent | Model | Role | Temperature |
 |---|---|---|---|
-| Scout A | GLM-5.* (Z.ai) | GitHub + on-chain data ingestion | Free |
-| Orchestrator | Claude Haiku | Map entities to Neo4j, dedup | €3 |
-| Weaver | DeepSeek-R1 | Sweep Neo4j for clusters | €6 |
-| Scout B | GLM-5.* (Z.ai) | Targeted narrative scan (elite actor feeds) | Free |
-| Analyst | DeepSeek-R1 | Argue bull case | Shared |
-| Skeptic | DeepSeek-R1 | Argue bear case | Shared |
-| Quant | DeepSeek-R1 | Score against ScoringConfig | Shared |
-| Mapper | Claude Haiku | Extract tradable ticker | Shared |
+| Scout (×3) | GLM-4.7-Flash | GitHub + on-chain data ingestion | 0 |
+| Weaver | (graph query) | Knowledge graph construction from Scout data | 0 |
+| Analyst | Claude Sonnet 4.6 | Argue bullish case in debate | 0.3 |
+| Skeptic | DeepSeek-R1 | Argue bearish case — 5 failure-mode categories | 0.6 |
+| Quant | DeepSeek-R1 | 4-dimension scoring (signalStrength, timing, upside, failureRisk) | 0.3 |
+| Mapper | Claude Haiku 4.5 | Generate tiered alerts with ticker | 0 |
 
 ### 5-Phase Pipeline
-1. **Extraction:** Scout A → raw GitHub + on-chain data → SQLite task queue
-2. **Detection:** Orchestrator → Neo4j graph → Weaver spots high-density clusters
-3. **Quality Gate:** Scout B checks narrative → Analyst vs Skeptic debate (3 rounds) → escalate to Director on disagreement
-4. **Scoring:** Quant scores against configurable ScoringConfig (supports sweeps)
-5. **Mapping:** Mapper extracts ticker → Dashboard alert
+1. **Extraction:** 3 Scouts → raw GitHub + on-chain data → structured JSON
+2. **Graph:** Weaver → Knowledge subgraph from Scout data
+3. **Debate:** Analyst (Claude Sonnet) vs Skeptic (DeepSeek-R1) — 3 rounds with structured failure_modes output
+4. **Scoring:** Quant scores 4 dimensions including failureRisk (inverted: high risk = lower total score)
+5. **Alert:** Mapper generates tiered alert if score ≥ 0.65
 
-### Neo4j Graph Schema
-- **Node Labels (generic base + domain):** `(:Actor:Elite)`, `(:Actor:Wallet)`, `(:Asset:SmartContract)`, `(:Asset:Repository)`
-- **Extensible:** `(:Actor:AI_Researcher)`, `(:Asset:Patent)` for future domains
-- **Edge Types:** `STARRED {createdAt}`, `DEPLOYED {createdAt}`, `FUNDED {amount, createdAt}`, `CONTRIBUTED {createdAt}`
-- **Weighted TTL:** Orphaned=7d, Elite-connected=90d, Cluster=never (all configurable)
+### Scoring Dimensions
+| Dimension | Weight | Description |
+|---|---|---|
+| signalStrength | 0.30 | Developer activity, commit quality, elite builders |
+| timing | 0.2625 | Information asymmetry window, adoption cycle position |
+| upside | 0.1875 | Market cap runway for 10x, value accrual potential |
+| failureRisk | 0.25 | Probability of catastrophic failure (INVERTED: high = lower score) |
 
-### SQLite Schema (Prisma)
+**Formula:** `totalScore = (signalStrength × 0.30) + (timing × 0.2625) + (upside × 0.1875) + ((1 − failureRisk) × 0.25)`
 
-```
-Task          — Agent task queue (type, status, payload, result)
-Cluster       — Detected Neo4j clusters (density, actorCount, status)
-Debate        — Analyst vs Skeptic (status, rounds, verdict)
-DebateRound   — Individual debate rounds
-Opportunity   — Scored opportunities (ticker, scores, status)
-ScoringConfig — Sweepable scoring weights (JSON factors, threshold)
-Alert         — Director notifications (type, message, isRead)
-BacktestCase  — Historical 100x cases (ticker, inceptionDate, split)
-BacktestResult — Test results per config per case
-```
+### Backtest Results (3-Case Smoke Test, Latest)
+| Metric | Value | Target |
+|---|---|---|
+| SAFE blinded | 0.655 | < 0.70 ✅ |
+| COMP blinded | 0.414 | < 0.70 ✅ |
+| YFI blinded | 0.708 | ≥ 0.70 ✅ |
+| Δ (winners vs controls) | 0.198 | ≥ 0.15 ✅ |
+| Winners avg | 0.804 | ≥ 0.80 ✅ |
+| Bias ratio | ≈1.0 | ≈ 1.0 ✅ |
+| Bias detected | 0 | 0 ✅ |
 
-### Scoring System
-- **Signal Strength (40%):** Graph Density + Actor Elite Status
-- **Timing (35%):** Secrecy (zero narrative) + Momentum (pace of connections)
-- **Potential Upside (25%):** Market Cap relative to sector average
-- Configurable: swap factors, change weights, sweep combinations
-- Track which configs produce best results over time
+**Full 15-case marathon pending.**
 
-### Backtesting (Walk-Forward 60/20/20)
-- 10 historical cases for v0.1.0
-- Director provides 100x tickers + inception dates
-- `Backtest_Harvester.ts` reconstructs graph state at T-minus-7 days via historical APIs
-- Run pipeline against isolated state, sweep ScoringConfig weights
-- 60% calibration / 20% validation / 20% verification
+### Backtest Methodology
+- **15 cases:** 12 positive (real 10x+ winners) + 3 negative controls (known failures: COMP, SAFE, YFI_CTRL)
+- **Dual condition:** Blinded (9-step anonymization) vs Unblinded — measures hindsight bias
+- **N=3 median smoothing:** 3 runs per case per condition, take median score
+- **Walk-forward split:** 7 calibration / 3 validation / 2 verification (from 12 positive cases)
+- **9-step blinding:** Step 0 (dates) → Steps 1-8 (names, tickers, URLs, amounts, outcomes)
 
-### API Keys
-- Gemini ✅ (free tier), Z.ai ✅ (free), DeepSeek ✅ (~€4), Anthropic ✅ (€5), OpenAI ❌ (payment issue)
+### Blinding (Hindsight Bias Prevention)
+Step 0: Date removal (ISO, slash, month+year, Q+year, seasons, bare years)
+Step 1: Project names → aliases (Project_Alpha, etc.)
+Step 2: Ticker symbols → aliases (case-insensitive)
+Step 3: Developer names → aliases (Dev_N)
+Step 4: Wallet addresses → aliases
+Step 5: Specific dollar amounts → ranges
+Step 6: Outcome language removed
+Step 7: Explorer URLs → anonymized
+Step 8: Remaining temporal references
 
-### File Structure
-```
-src/
-├── app/
-│   ├── page.tsx                    # Dashboard
-│   └── api/                        # REST endpoints
-├── lib/
-│   ├── db.ts                       # Prisma client
-│   ├── neo4j.ts                    # Neo4j driver
-│   ├── agents/                     # All 8 agent modules
-│   ├── scoring/                    # Engine + sweep
-│   ├── llm/                        # Z.ai, DeepSeek, Anthropic wrappers
-│   ├── graph/                      # Cypher queries + TTL
-│   └── backtest/                   # Harvester + runner
-├── components/                     # Dashboard UI
-└── prisma/schema.prisma
-```
+### Completed Tasks
+| Task | Description | Status |
+|---|---|---|
+| 01-07 | Foundation, schema, worker, pipeline | ✅ Complete |
+| 08 | Bug fixes + negative controls (COMP, SAFE, YFI_CTRL) | ✅ Complete |
+| 09 | 15 critical/high/medium fixes for marathon readiness | ✅ Complete |
+| 10 | Skeptic Red-Prompt (improved Δ from 0.074 → 0.081) | ✅ Complete |
+| 11 | failureRisk scoring dimension (improved Δ from 0.081 → 0.114) | ✅ Complete |
+| 12 | File-based system prompts + temperature config + few-shot examples | ✅ Complete |
+| 13 | Structured Skeptic output (failure_modes) + Quant anchoring example (improved Δ from 0.114 → 0.198) | ✅ Complete |
 
----
+### Pending Tasks
+| Task | Description | Priority |
+|---|---|---|
+| Full marathon | 15-case × 2 conditions × 3 reps = 90 runs | High |
+| Production N=3 | Quant fires 3× concurrently, uses median for alert | High |
+| Tiered alerts | Tier 1 (≥0.80), Tier 2 (0.65-0.79) — currently binary 0.70 | High |
+| Dashboard UI fixes | Skeptic thesis in red (not green), ESCALATED badge in amber | Low |
+| Remaining agent schemas | Expand Scout, Weaver, Analyst, Mapper schemas (currently thin) | Medium |
+| Provider prompt caching | Add cache-control headers per provider in llmClient.ts | Low |
+| Analyst structured output | Mirror Skeptic's structured output for Analyst (deferred) | Low |
 
-## Current Status
-
-### Done ✅
-- [x] Vision and core philosophy (Node Zero / Information Asymmetry)
-- [x] Domain scoped: Crypto/DeFi only
-- [x] Full architecture designed (agents, DBs, pipeline, scoring, backtesting)
-- [x] All API keys secured
-- [x] Budget confirmed: ~€9/month
-- [x] **Task 01:** Prisma schema (AgentTask model), worker (5s polling, SCOUT/ORCHESTRATE/ANALYZE), Prisma v7 adapter pattern, smoke-tested
-
-### In Progress 🔄
-- **Task 02:** Neo4j driver + `upsertEntities()` + ORCHESTRATE worker integration (with Director)
-
-### Next Steps 📋
-1. ~~Set up Neo4j AuraDB (free tier)~~ → Director sets up, developer integrates
-2. Add API keys to .env
-3. ~~Set up Prisma schema + push to SQLite~~ ✅ (Task 01)
-4. Build LLM wrappers (Z.ai, DeepSeek, Anthropic)
-5. ~~Build Neo4j driver + graph queries~~ → In progress (Task 02)
-6. Build Scout A (on-chain + GitHub ingestion)
-7. ~~Build Orchestrator (map to Neo4j)~~ → In progress (Task 02)
-8. Build Weaver (cluster detection)
-9. Build Scout B (targeted narrative scan)
-10. Build Analyst + Skeptic (debate system)
-11. Build Quant (scoring engine)
-12. Build Mapper (ticker extraction)
-13. Build Dashboard UI
-14. Build Backtest Harvester + Runner
-15. Build task queue / scheduling
-
-### Blockers 🚫
-- Neo4j AuraDB not set up yet (Director action needed)
-- API keys not yet in .env
-
-### Architect Review Log
-- **Task 02 v1:** Rejected `isElite` property → must be `:Elite` label for TTL indexing. Clarified `id` = canonical source ID. Renamed `insertScoutData` → `upsertEntities`.
-- **Task 02 v2:** Edge `timestamp` → `createdAt` for cross-DB naming consistency.
-- **Task 02 v3:** Approved.
-
----
-
-## Repo History Note
-
-On 2026-05-23 the repository was restructured. The original git history (all commits up to and including the marathon backtest run) is preserved on branch `legacy/pre-restructure` in `annaVidd-ai/ai-thinkTank`. The main branch was force-pushed with the new root structure:
-
-```
-ai-thinkTank/
-├── agents/          ← agent instruction files (Architect, Scout, Analyst, Orchestrator)
-├── docs/            ← general docs (schema, status, task history, Neo4j)
-└── think-tank-ai/   ← full Next.js application (pipeline, worker, backtest engine, dashboard)
-```
-
-To access old history: `git log legacy/pre-restructure`
-
----
-
-## Developer Spec Convention
-Every task spec sent to ClaudeCode must end with:
-> "This is a CRUCIAL task. Make 100% sure your code works exactly as intended. Take all the time you need. Correctness is above all."
-
-## Design Principles
-- Concise over verbose, but never sacrifice clarity
-- No hasty decisions — think before building
-- Build smallest version that proves the concept, then iterate
-- System must be backtestable — no trust without validation
-- Alpha = Information Asymmetry. Builders + capital > narratives
+### Known Issues
+1. **failureRisk volatility** — Quant scores it correctly (~0.90) on some runs but reverts to ~0.50 on others for the same project. N=3 smoothing handles it in backtest; production will use N=3 smoothing too.
+2. **Thin winner margins** — YFI scores 0.708 blinded, only 0.008 above threshold. Tiered alerts will address this.
+3. **DeepSeek-R1 JSON control characters** — Occasionally outputs unescaped control characters in JSON strings. Retry catches it; proper sanitizer deferred.
