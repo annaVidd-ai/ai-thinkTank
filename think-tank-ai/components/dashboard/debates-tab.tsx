@@ -104,9 +104,14 @@ export function DebatesTab() {
           <div className="p-6 space-y-4">
             <div className="flex items-center gap-3">
               <span className="font-mono font-bold text-zinc-100">{debate.cluster.assetId}</span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">{debate.status}</span>
+              <span className={cn(
+                'text-[10px] font-mono px-2 py-0.5 rounded',
+                debate.status === 'ESCALATED'
+                  ? 'bg-amber-500/20 text-amber-300'
+                  : 'bg-zinc-800 text-zinc-400',
+              )}>{debate.status}</span>
               {debate.verdict && (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-300">
                   {debate.verdict}
                 </span>
               )}
