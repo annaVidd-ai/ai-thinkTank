@@ -4,8 +4,9 @@ import { SCORE_CONFIG, MAPPER_CONFIG } from './llmConfig';
 import {
   ScoreSchema,
   MapperSchema,
-  SCORE_SYSTEM_PROMPT,
-  MAPPER_SYSTEM_PROMPT,
+  getScoreSystemPrompt,
+  getMapperSystemPrompt,
+  getTemperature,
   buildTranscript,
   buildScoreUser,
   buildMapperUser,
@@ -88,7 +89,7 @@ export async function processScore(clusterId: string): Promise<void> {
     transcript,
   );
 
-  const scoreResult = await callLLM(SCORE_CONFIG, SCORE_SYSTEM_PROMPT, user, ScoreSchema);
+  const scoreResult = await callLLM(SCORE_CONFIG, getScoreSystemPrompt(), user, ScoreSchema, getTemperature('quant'));
 
   console.log(
     `[Quant] LLM scores → signalStrength=${scoreResult.signalStrength}, ` +
@@ -178,7 +179,7 @@ export async function processMap(clusterId: string): Promise<void> {
 
   // Call Claude Haiku to derive ticker.
   const user      = buildMapperUser(cluster.assetId, cluster.assetType, thesis);
-  const mapResult = await callLLM(MAPPER_CONFIG, MAPPER_SYSTEM_PROMPT, user, MapperSchema);
+  const mapResult = await callLLM(MAPPER_CONFIG, getMapperSystemPrompt(), user, MapperSchema, getTemperature('mapper'));
 
   console.log(
     `[Mapper] Resolved ticker for "${cluster.assetId}" → ${mapResult.ticker} ` +

@@ -4,8 +4,9 @@ import { ANALYST_CONFIG, SKEPTIC_CONFIG } from './llmConfig';
 import {
   DebateTurnSchema,
   DebateFinalSchema,
-  ANALYST_SYSTEM_PROMPT,
-  SKEPTIC_SYSTEM_PROMPT,
+  getAnalystSystemPrompt,
+  getSkepticSystemPrompt,
+  getTemperature,
   buildTranscript,
   buildAnalystUser,
   buildSkepticUser,
@@ -59,7 +60,7 @@ export async function processAnalystTurn(debateId: string): Promise<void> {
   const transcript    = buildTranscript(priorMessages);
 
   const user   = buildAnalystUser(round, transcript, debate.narrativeContext ?? '');
-  const result = await callLLM(ANALYST_CONFIG, ANALYST_SYSTEM_PROMPT, user, DebateTurnSchema);
+  const result = await callLLM(ANALYST_CONFIG, getAnalystSystemPrompt(), user, DebateTurnSchema, getTemperature('analyst'));
 
   await prisma.debateMessage.create({
     data: { debateId, role: 'ANALYST', content: JSON.stringify(result), round },
@@ -99,7 +100,7 @@ export async function processSkepticTurn(debateId: string): Promise<void> {
 
   if (!isFinal) {
     // ── Rounds 1 & 2 ──────────────────────────────────────────────────────
-    const result = await callLLM(SKEPTIC_CONFIG, SKEPTIC_SYSTEM_PROMPT, user, DebateTurnSchema);
+    const result = await callLLM(SKEPTIC_CONFIG, getSkepticSystemPrompt(), user, DebateTurnSchema, getTemperature('skeptic'));
 
     await prisma.debateMessage.create({
       data: { debateId, role: 'SKEPTIC', content: JSON.stringify(result), round },
@@ -125,11 +126,11 @@ export async function processSkepticTurn(debateId: string): Promise<void> {
   } else {
     // ── Round 3 — structured final verdict ────────────────────────────────
     const finalSystemPrompt =
-      SKEPTIC_SYSTEM_PROMPT +
+      getSkepticSystemPrompt() +
       '\n\nThis is the FINAL round. Your JSON MUST include ' +
       '"verdict" ("agreed" or "deadlocked") and "finalThesis" (a short thesis string).';
 
-    const result = await callLLM(SKEPTIC_CONFIG, finalSystemPrompt, user, DebateFinalSchema);
+    const result = await callLLM(SKEPTIC_CONFIG, finalSystemPrompt, user, DebateFinalSchema, getTemperature('skeptic'));
 
     await prisma.debateMessage.create({
       data: { debateId, role: 'SKEPTIC', content: JSON.stringify(result), round },

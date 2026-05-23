@@ -4,7 +4,8 @@ import { callLLM } from './llmClient';
 import { NARRATIVE_CONFIG } from './llmConfig';
 import {
   NarrativeSchema,
-  NARRATIVE_SYSTEM_PROMPT,
+  getNarrativeSystemPrompt,
+  getTemperature,
   buildNarrativeUser,
 } from './prompts';
 
@@ -27,7 +28,7 @@ export async function processNarrativeScout(cluster: {
   assetType: string;
 }): Promise<string> {
   const user   = buildNarrativeUser(cluster.assetId, cluster.assetType);
-  const result = await callLLM(NARRATIVE_CONFIG, NARRATIVE_SYSTEM_PROMPT, user, NarrativeSchema);
+  const result = await callLLM(NARRATIVE_CONFIG, getNarrativeSystemPrompt(), user, NarrativeSchema, getTemperature('weaver'));
 
   console.log(
     `[Narrative] ${cluster.assetId} → ` +

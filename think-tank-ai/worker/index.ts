@@ -12,7 +12,7 @@ import { processNarrativeScout } from '../lib/weaver';
 import { processScore, processMap } from '../lib/quantManager';
 import { callLLM } from '../lib/llmClient';
 import { SCOUT_CONFIG } from '../lib/llmConfig';
-import { ScoutSchema, SCOUT_SYSTEM_PROMPT, buildScoutUser } from '../lib/prompts';
+import { ScoutSchema, getScoutSystemPrompt, getTemperature, buildScoutUser } from '../lib/prompts';
 
 // ---------------------------------------------------------------------------
 // Re-entrance guard — prevents overlapping async invocations under setInterval
@@ -55,7 +55,7 @@ async function _processNextTask() {
         console.log('-> Calling GLM (Scout) to structure raw data…');
         const rawPayload = task.payload;                   // raw data from upstream
         const user       = buildScoutUser(rawPayload);
-        const structured = await callLLM(SCOUT_CONFIG, SCOUT_SYSTEM_PROMPT, user, ScoutSchema);
+        const structured = await callLLM(SCOUT_CONFIG, getScoutSystemPrompt(), user, ScoutSchema, getTemperature('scout'));
 
         // Convert nullable fields → undefined to satisfy GraphPayload type
         const graphPayload: GraphPayload = {

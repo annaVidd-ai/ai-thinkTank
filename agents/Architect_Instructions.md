@@ -112,3 +112,16 @@ When implementing a large or complicated task:
 **Origin:** Task 10 and 11 were delivered as massive single-prompt specs. This made them harder to implement, harder to debug, and harder to roll back if something went wrong. A 5-step task delivered as 5 steps is better than a 5-step task delivered as 1 wall of text.
 
 **Principle:** Complexity is the enemy of reliability. Ship incrementally, verify incrementally.
+
+### Architect Rule #10: Verify Against Running Code, Not Documentation
+
+Before proposing code changes, templates, or examples that must conform to a schema:
+
+1. **Read the actual Zod validators / type definitions** — not the `.md` docs, not your own prior specs
+2. **Never trust documentation as a source of truth for runtime behavior** — docs describe intent; code defines what the system actually accepts
+3. **If you cannot verify independently**, ask the Developer to confirm the schema before writing the spec
+4. **Examples must parse cleanly against the live validator** — if you can't run `schema.parse(example)` mentally with confidence, don't ship the example
+
+**Origin:** Proposed 6 few-shot examples based on the `.md` agent docs. 5 of 6 would have failed Zod validation on every pipeline run. The docs described what agents *should* produce conceptually; the Zod schemas defined what the system *actually* accepts. The Scout example had entirely wrong top-level keys (`repo`, `contributors`) vs. the real schema (`developer`, `wallet`, `repository`, `contract`, `events`). The Mapper example included `alertType`, `score`, `breakdown` — none of which exist in `MapperSchema`. Three separate verification failures in the same session originate from the same root cause.
+
+**Principle:** The code is the spec. Everything else is commentary.

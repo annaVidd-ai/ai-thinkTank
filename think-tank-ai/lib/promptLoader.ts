@@ -194,3 +194,48 @@ export function reloadPrompts(): void {
   promptCache = null;
   loadAllPrompts();
 }
+
+// ---------------------------------------------------------------------------
+// Temperature configuration
+// ---------------------------------------------------------------------------
+
+/**
+ * Per-agent desired sampling temperatures.
+ *
+ * Model-specific constraints (enforced by guards in llmClient.ts):
+ *   glm-4.7-flash      — fully supports temperature (0–2); values are applied.
+ *   deepseek-reasoner  — does NOT support temperature; the API rejects the
+ *                        parameter. Values here are informational / future-use.
+ *   claude-sonnet-4-6,
+ *   claude-haiku-4-5-* — temperature deprecated in Claude 4.x+; any value
+ *                        other than 1.0 causes a 400 error. Values here are
+ *                        informational / future-use.
+ *
+ * Effectively applied today: scout (0) and weaver (0) on GLM.
+ */
+const AGENT_TEMPERATURES: Record<string, number> = {
+  scout:   0,
+  weaver:  0,
+  analyst: 0.3,   // informational — Claude 4.x rejects non-1.0 temperature
+  skeptic: 0.6,   // informational — deepseek-reasoner does not accept temperature
+  quant:   0.3,   // informational — deepseek-reasoner does not accept temperature
+  mapper:  0,     // informational — Claude 4.x rejects non-1.0 temperature
+};
+
+/**
+ * Returns the desired sampling temperature for the given lowercase agent name.
+ * Whether the temperature is actually sent to the API depends on the model's
+ * capabilities (see AGENT_TEMPERATURES comments and guards in llmClient.ts).
+ *
+ * @throws if `agentName` is not registered in AGENT_TEMPERATURES.
+ */
+export function getTemperature(agentName: string): number {
+  const temp = AGENT_TEMPERATURES[agentName];
+  if (temp === undefined) {
+    throw new Error(
+      `[PromptLoader] No temperature configured for agent: "${agentName}". ` +
+      `Available agents: [${Object.keys(AGENT_TEMPERATURES).sort().join(', ')}]`,
+    );
+  }
+  return temp;
+}

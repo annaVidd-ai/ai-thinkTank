@@ -13,7 +13,7 @@ import './lib/env'; // loads .env with override:true
 import { z, ZodError } from 'zod';
 import { parseAndValidate, cleanResponse, callLLM } from './lib/llmClient';
 import { NARRATIVE_CONFIG } from './lib/llmConfig';
-import { NarrativeSchema, NARRATIVE_SYSTEM_PROMPT, buildNarrativeUser } from './lib/prompts';
+import { NarrativeSchema, getNarrativeSystemPrompt, buildNarrativeUser } from './lib/prompts';
 
 // ---------------------------------------------------------------------------
 // Test harness
@@ -186,7 +186,7 @@ async function runLiveTest(): Promise<void> {
   console.log('  Running live callLLM → NarrativeSchema (GLM)…');
   try {
     const user   = buildNarrativeUser('owner/defi-v2', 'Repository');
-    const result = await callLLM(NARRATIVE_CONFIG, NARRATIVE_SYSTEM_PROMPT, user, NarrativeSchema);
+    const result = await callLLM(NARRATIVE_CONFIG, getNarrativeSystemPrompt(), user, NarrativeSchema);
 
     console.log('  ✓  Live call succeeded');
     console.log(`     mentions=${result.mentions}, sentiment=${result.sentiment}`);

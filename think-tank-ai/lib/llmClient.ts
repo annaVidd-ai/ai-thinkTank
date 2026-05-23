@@ -72,6 +72,19 @@ export function parseAndValidate<T>(rawText: string, schema: z.ZodSchema<T>): T 
 }
 
 // ---------------------------------------------------------------------------
+// Temperature guards
+// ---------------------------------------------------------------------------
+
+/**
+ * Models that do NOT support the `temperature` parameter.
+ * Passing temperature to these models causes an immediate API error.
+ *
+ * deepseek-reasoner: DeepSeek-R1 reasoning model. Its internal sampling
+ *   during chain-of-thought is not user-configurable via temperature.
+ */
+const MODELS_WITHOUT_TEMPERATURE = new Set(['deepseek-reasoner']);
+
+// ---------------------------------------------------------------------------
 // Provider-specific callers
 // ---------------------------------------------------------------------------
 
@@ -79,11 +92,15 @@ async function callOpenAICompatible(
   config: LLMConfig,
   system: string,
   user: string,
+  temperature?: number,
 ): Promise<string> {
   const client = new OpenAI({
     apiKey: config.apiKey,
     baseURL: config.baseURL,
   });
+
+  // Only pass temperature when the model supports it and a value was provided.
+  const supportsTemp = !MODELS_WITHOUT_TEMPERATURE.has(config.model);
 
   const response = await client.chat.completions.create({
     model: config.model,
@@ -91,6 +108,7 @@ async function callOpenAICompatible(
       { role: 'system', content: system },
       { role: 'user',   content: user   },
     ],
+    ...(supportsTemp && temperature !== undefined ? { temperature } : {}),
   });
 
   return response.choices[0]?.message?.content ?? '';
@@ -100,7 +118,13 @@ async function callAnthropic(
   config: LLMConfig,
   system: string,
   user: string,
+  _temperature?: number,
 ): Promise<string> {
+  // Note: temperature intentionally NOT forwarded to the Anthropic API.
+  // Claude models released after Opus 4.6 (including Sonnet 4.6 and Haiku 4.5+)
+  // have deprecated temperature support. The SDK rejects any value other than
+  // 1.0 with a 400 error. The _temperature parameter is accepted for API
+  // consistency but silently ignored here.
   const client = new Anthropic({ apiKey: config.apiKey });
 
   const response = await client.messages.create({
@@ -140,6 +164,7 @@ export async function callLLM<T>(
   system: string,
   user: string,
   schema: z.ZodSchema<T>,
+  temperature?: number,
 ): Promise<T> {
   if (!config.apiKey) {
     throw new Error(
@@ -154,8 +179,8 @@ export async function callLLM<T>(
     try {
       const raw =
         config.provider === 'openai-compatible'
-          ? await callOpenAICompatible(config, system, user)
-          : await callAnthropic(config, system, user);
+          ? await callOpenAICompatible(config, system, user, temperature)
+          : await callAnthropic(config, system, user, temperature);
 
       return parseAndValidate(raw, schema);
     } catch (err) {
