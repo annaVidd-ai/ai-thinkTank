@@ -5,10 +5,13 @@ import { Moon, Sun, Bell } from 'lucide-react';
 import { useDashboardStore } from '@/lib/dashboard-store';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
 export function Header() {
   const { theme, setTheme } = useTheme();
   const { readAlertIds, setActiveTab } = useDashboardStore();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const { data: alerts = [] } = useQuery<{ id: string }[]>({
     queryKey: ['alerts'],
@@ -49,7 +52,7 @@ export function Header() {
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           className="p-2 rounded-lg text-zinc-500 hover:bg-zinc-800 hover:text-zinc-100 transition-colors"
         >
-          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          {mounted && (theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />)}
         </button>
       </div>
     </header>
