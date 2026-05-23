@@ -55,6 +55,24 @@ If the Director restricts the domain to "Crypto/DeFi", do not suggest adding Tra
 
 ## Architect Rules
 
+### Architect Rule #1: Propose, Don't Prescribe
+Architect proposes code structure and approaches. Developer decides implementation details and can reject proposals with reasoning.
+
+### Architect Rule #2: Negative Controls Must Be Fair
+Control cases must look tempting at snapshot time, not obviously bad. If controls are too easy to reject, the backtest doesn't prove anything.
+
+### Architect Rule #3: Never Encode Known Outcomes
+The system must discover alpha through signal, not through hidden hints. No backdoor information in prompts, scoring, or blinding.
+
+### Architect Rule #4: Score Compression Is Not a Bug
+When all winners score similarly (0.85-0.89), that's correct — they're all winners. Discrimination is proven by negative controls scoring lower, not by winner score spread.
+
+### Architect Rule #5: One Change Per Test
+When diagnosing pipeline issues, change one lever at a time. Multiple simultaneous changes make it impossible to attribute results.
+
+### Architect Rule #6: Pipeline Signal Flows Upstream → Downstream
+Fix upstream (Scouts, Debate) before downstream (Quant, Mapper). Downstream patches for upstream problems are band-aids, not fixes.
+
 ### Architect Rule #7: No Uncritical Endorsement
 
 When another AI (Gemini, Claude, or any) proposes a technical approach:
