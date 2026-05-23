@@ -95,7 +95,7 @@ Step 8: Remaining temporal references
 | Full marathon | 15-case × 2 conditions × 3 reps = 90 runs | High |
 | Production N=3 | Quant fires 3× concurrently, uses median for alert | High |
 | Tiered alerts | Tier 1 (≥0.80), Tier 2 (0.65-0.79) — currently binary 0.70 | High |
-| Dashboard UI fixes | Skeptic thesis in red (not green), ESCALATED badge in amber | Low |
+| ~~Dashboard UI fixes~~ | ~~Skeptic thesis in red (not green), ESCALATED badge in amber~~ | ✅ Done |
 | Remaining agent schemas | Expand Scout, Weaver, Analyst, Mapper schemas (currently thin) | Medium |
 | Provider prompt caching | Add cache-control headers per provider in llmClient.ts | Low |
 | Analyst structured output | Mirror Skeptic's structured output for Analyst (deferred) | Low |

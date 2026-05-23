@@ -80,5 +80,5 @@ See `agents/Architect_Instructions.md` for the full set. Key rules for next sess
 | Binary anchors in Quant prompt | Gemini | Same class as hardcoded penalties. "If no token → failureRisk ≥ 0.8" encodes the answer. |
 | Temperature=0 for all agents | Gemini | Debate agents need variance. DeepSeek-R1 reasoning models lose IQ at temp=0. |
 
-### 9. Dashboard UI Fix (Backlog)
-- `components/dashboard/debates-tab.tsx`: Skeptic's finalThesis should be displayed in **red** (not green). ESCALATED badge should be **amber/orange**. Analyst's thesis (if shown) should be **green**.
+### 9. Dashboard UI Fix (Done ✅)
+- `components/dashboard/debates-tab.tsx`: Skeptic's finalThesis verdict badge is now **red**. ESCALATED status badge is now **amber/orange**. Shipped in commit `ddf517b`.
