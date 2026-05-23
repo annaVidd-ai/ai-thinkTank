@@ -1,0 +1,23 @@
+{
+  "ticker": "SUSHI",
+  "signalDate": "2020-10-01",
+  "snapshotDate": "2020-09-24",
+  "priceAtSnapshot": 0.50,
+  "isControl": false,
+  "developers": [
+    { "name": "0xMaki", "isElite": true, "activity": "Day-to-day protocol leadership after Chef Nomi exit, governance coordination, partnership development." },
+    { "name": "Chef Nomi", "isElite": true, "activity": "Original protocol creator — returned $14M dev fund after community pressure. Stepped back from leadership." },
+    { "name": "Joseph Delong", "isElite": true, "activity": "CTO, joining to rebuild engineering credibility and technical leadership." }
+  ],
+  "assets": [
+    { "name": "sushiswap", "type": "Repository", "url": "github.com/sushiswap/sushiswap" },
+    { "name": "SUSHI Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Chef Nomi", "asset": "SUSHI Token Contract", "date": "2020-08-27" },
+    { "type": "STARRED", "actor": "0xMaki", "asset": "sushiswap", "date": "2020-09-20" },
+    { "type": "STARRED", "actor": "Joseph Delong", "asset": "sushiswap", "date": "2020-09-22" },
+    { "type": "FUNDED", "actor": "0xMaki", "asset": "sushiswap", "date": "2020-09-09", "amount": 14000000 }
+  ],
+  "narrativeAtSnapshot": "SushiSwap launched August 28, 2020 as a Uniswap fork with added tokenomics (SUSHI rewards for LPs). Executed 'vampire attack' on Uniswap — migrated $1.14B in liquidity in September 2020. Chef Nomi controversy (withdrew $14M dev fund) resolved — funds returned, community governance now active. Price crashed from $10+ to $0.50 after controversy but community rebuilt. 0xMaki leading recovery. Joseph Delong joining as CTO signals engineering credibility restoration. Mention growth: ~2.5x week-over-week in DeFi communities as protocol recovers. Drama-driven crash created entry point below fair value. Structural signal: community-owned governance, actual $200M+ liquidity, MasterChef staking mechanism being forked by other projects (legitimacy signal), protocol revenue sharing with SUSHI stakers."
+}

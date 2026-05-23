@@ -1,0 +1,23 @@
+{
+  "ticker": "SNX",
+  "signalDate": "2020-07-01",
+  "snapshotDate": "2020-06-24",
+  "priceAtSnapshot": 2.55,
+  "isControl": false,
+  "developers": [
+    { "name": "Kain Warwick", "isElite": true, "activity": "Daily Twitter, SIP (Synthetix Improvement Proposals) authorship, staking mechanism design." },
+    { "name": "Justin Moses", "isElite": true, "activity": "Smart contract engineering, binary options development, Kwenta frontend." },
+    { "name": "Clinton Ennis", "isElite": true, "activity": "Protocol engineering, oracle integration, collateral framework." }
+  ],
+  "assets": [
+    { "name": "synthetix", "type": "Repository", "url": "github.com/Synthetixio/synthetix" },
+    { "name": "SNX Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F" }
+  ],
+  "events": [
+    { "type": "STARRED", "actor": "Kain Warwick", "asset": "synthetix", "date": "2020-06-20" },
+    { "type": "DEPLOYED", "actor": "Justin Moses", "asset": "synthetix", "date": "2020-03-14" },
+    { "type": "STARRED", "actor": "Clinton Ennis", "asset": "synthetix", "date": "2020-06-18" },
+    { "type": "FUNDED", "actor": "Kain Warwick", "asset": "synthetix", "date": "2020-06-01", "amount": 3800000 }
+  ],
+  "narrativeAtSnapshot": "Synthetix is the foundational synthetic assets protocol on Ethereum, formerly Havven (rebranded 2019). Enables trading of synthetic versions of any asset — stocks, commodities, forex, crypto. SNX stakers earn fees from protocol trading volume. DeFi summer beginning: Compound liquidity mining ignited June 15 and TVL across DeFi exploding. Synthetix was an early pioneer of yield farming mechanisms via fee rewards. Mention growth: ~2x week-over-week as DeFi summer narrative builds. SNX at historic lows relative to protocol fundamentals. No mainstream coverage. Structural signal: 3 elite developers, first-mover in synthetic assets, staking mechanism with 750%+ APY attracting sophisticated yield farmers, $100M+ TVL with real trading fees."
+}

@@ -1,0 +1,23 @@
+{
+  "ticker": "COMP",
+  "signalDate": "2020-07-01",
+  "snapshotDate": "2020-06-30",
+  "priceAtSnapshot": 185.00,
+  "isControl": true,
+  "developers": [
+    { "name": "Robert Leshner", "isElite": true, "activity": "Protocol architecture and daily GitHub commits. Active on governance forums daily. Public speaker at ETH conferences." },
+    { "name": "Geoffrey Hayes", "isElite": true, "activity": "Core smart contract engineering, security audit liaison, cToken protocol development. 10+ commits per week." },
+    { "name": "Calvin Liu", "isElite": true, "activity": "Strategy and institutional partnerships. Former a16z crypto, deep institutional network. Onboarding major DeFi funds and protocols." }
+  ],
+  "assets": [
+    { "name": "Compound Protocol", "type": "Repository", "url": "github.com/compound-finance/compound-protocol" },
+    { "name": "COMP Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0xc00e94Cb662C3520282E6f5717214004A7f26888" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Geoffrey Hayes", "asset": "COMP Token Contract", "date": "2020-06-15" },
+    { "type": "FUNDED", "actor": "Robert Leshner", "asset": "Compound Protocol", "date": "2019-11-18", "amount": 25000000 },
+    { "type": "STARRED", "actor": "Robert Leshner", "asset": "Compound Protocol", "date": "2020-06-25" },
+    { "type": "STARRED", "actor": "Geoffrey Hayes", "asset": "Compound Protocol", "date": "2020-06-20" }
+  ],
+  "narrativeAtSnapshot": "Compound Finance is the leading decentralized lending protocol on Ethereum, reporting $520M total value locked just two weeks after launching the COMP governance token on June 15th. Founders Robert Leshner (ex-Postmates, Columbia engineering) and Geoffrey Hayes represent an elite technical pair — 12+ smart contract commits per week, two completed Trail of Bits security audits, no critical vulnerabilities found. Institutional backing: Andreessen Horowitz, Paradigm, Coinbase Ventures ($25M total raised). COMP token distributes daily to users who supply or borrow assets — creating immediate yield-farming demand. Weekly mention growth: 4.2x across DeFi Telegram groups and Ethereum developer Discord servers. Protocol revenue: $2.1M per week in interest spread, growing 18% week-over-week. However, critical structural weakness: COMP is a governance-only token with zero value capture mechanism. Token holders vote on protocol parameters but receive no share of the $2.1M weekly interest income. This contrasts sharply with models like MKR where token holders benefit directly from protocol revenue. On-chain analysis: governance forum thread titled 'What gives COMP intrinsic value?' has 340 responses — the community itself cannot answer this question. Liquidity mining creates persistent sell pressure as farmers dump immediately. Mainstream coverage now daily: Bloomberg DeFi column, Coinbase blog, CoinDesk front page. Signal arrived post-mainstream."
+}

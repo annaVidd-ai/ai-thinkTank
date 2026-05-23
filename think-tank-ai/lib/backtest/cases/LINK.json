@@ -1,0 +1,22 @@
+{
+  "ticker": "LINK",
+  "signalDate": "2019-05-01",
+  "snapshotDate": "2019-04-24",
+  "priceAtSnapshot": 0.42,
+  "isControl": false,
+  "developers": [
+    { "name": "Sergey Nazarov", "isElite": true, "activity": "Weekly blog posts, conference appearances, active GitHub commits to chainlink node." },
+    { "name": "Steve Ellis", "isElite": true, "activity": "Core node software development, oracle network architecture." },
+    { "name": "Ari Juels", "isElite": true, "activity": "Academic advisor, DECO research (privacy-preserving oracles)." }
+  ],
+  "assets": [
+    { "name": "Chainlink Node", "type": "Repository", "url": "github.com/smartcontractkit/chainlink" },
+    { "name": "LINK Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x514910771AF9Ca656af840dff83E8264EcF986CA" }
+  ],
+  "events": [
+    { "type": "STARRED", "actor": "Sergey Nazarov", "asset": "Chainlink Node", "date": "2019-04-20" },
+    { "type": "DEPLOYED", "actor": "Steve Ellis", "asset": "Chainlink Node", "date": "2019-03-30" },
+    { "type": "STARRED", "actor": "Ari Juels", "asset": "Chainlink Node", "date": "2019-04-15" }
+  ],
+  "narrativeAtSnapshot": "Chainlink mainnet launched March 30, 2019. Oracle network for smart contracts gaining developer traction. Multiple smart contract platforms integrating Chainlink feeds (Synthetix already live). Community growing rapidly in niche smart contract developer circles — Telegram and early crypto Twitter. Weekly mention growth ~2.5x among blockchain developers. No mainstream financial press coverage. 'LINK Marines' community forming but still niche. Google partnership (announced June 2019) not yet public. Structural signal: 3 elite developers active, first production oracle network on Ethereum mainnet, multiple enterprise integration discussions underway. Low market cap relative to total addressable market for decentralized oracle infrastructure."
+}

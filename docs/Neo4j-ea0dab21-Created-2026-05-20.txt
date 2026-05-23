@@ -1,0 +1,7 @@
+# Wait 60 seconds before connecting using these details, or login to https://console.neo4j.io to validate the Aura Instance is available
+NEO4J_URI=neo4j+s://ea0dab21.databases.neo4j.io
+NEO4J_USERNAME=ea0dab21
+NEO4J_PASSWORD=qzNMuammYY_HympspT3V_qY8H-W612MPSlw1_LKv4Ow
+NEO4J_DATABASE=ea0dab21
+AURA_INSTANCEID=ea0dab21
+AURA_INSTANCENAME=Think Tank 01

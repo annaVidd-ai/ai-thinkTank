@@ -1,0 +1,23 @@
+{
+  "ticker": "AXS",
+  "signalDate": "2021-01-01",
+  "snapshotDate": "2020-12-25",
+  "priceAtSnapshot": 0.48,
+  "isControl": false,
+  "developers": [
+    { "name": "Trung Nguyen", "isElite": true, "activity": "Product direction, game economy design, weekly community updates." },
+    { "name": "Aleksander Larsen", "isElite": true, "activity": "COO, NFT marketplace development, breeding mechanic design." },
+    { "name": "Jeffrey Zirlin", "isElite": true, "activity": "Growth and community, Lunacia Land development, AXS tokenomics." }
+  ],
+  "assets": [
+    { "name": "axie-infinity-contracts", "type": "Repository", "url": "github.com/axieinfinity/axie-infinity-contracts" },
+    { "name": "AXS Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0xBB0E17EF65F82Ab018d8EDd776e8DD940327B28b" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Trung Nguyen", "asset": "AXS Token Contract", "date": "2020-11-04" },
+    { "type": "STARRED", "actor": "Aleksander Larsen", "asset": "axie-infinity-contracts", "date": "2020-12-20" },
+    { "type": "STARRED", "actor": "Jeffrey Zirlin", "asset": "axie-infinity-contracts", "date": "2020-12-18" },
+    { "type": "FUNDED", "actor": "Trung Nguyen", "asset": "axie-infinity-contracts", "date": "2021-05-11", "amount": 7500000 }
+  ],
+  "narrativeAtSnapshot": "Axie Infinity is a play-to-earn blockchain game on Ethereum (with Ronin sidechain under development). AXS governance token just launched November 2020. Game has 30,000+ daily active users — small but growing. Players in Philippines and Vietnam beginning to earn meaningful income from playing. NFT Axie breeding and battling mechanic creates genuine economic activity. Mention growth: ~3x week-over-week in NFT gaming communities, blockchain gaming Discord servers. Completely unknown to mainstream gaming press and mainstream crypto retail. Ronin sidechain will eliminate Ethereum gas costs for in-game transactions. Structural signal: 3 elite builders with clear product-market fit for play-to-earn in emerging markets, pre-mainstream NFT gaming narrative, Ronin bridge will be transformative catalyst."
+}

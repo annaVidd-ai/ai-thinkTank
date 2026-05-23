@@ -1,0 +1,23 @@
+{
+  "ticker": "MKR",
+  "signalDate": "2020-10-01",
+  "snapshotDate": "2020-09-24",
+  "priceAtSnapshot": 475.00,
+  "isControl": false,
+  "developers": [
+    { "name": "Rune Christensen", "isElite": true, "activity": "Governance forum leadership, Maker Foundation coordination, bi-weekly community calls." },
+    { "name": "Mariano Conti", "isElite": true, "activity": "Smart contract engineering, oracle price feed maintenance, Multi-Collateral DAI." },
+    { "name": "Derek Flossman", "isElite": true, "activity": "Protocol engineering, collateral onboarding process, risk frameworks." }
+  ],
+  "assets": [
+    { "name": "dss (DAI Stablecoin System)", "type": "Repository", "url": "github.com/makerdao/dss" },
+    { "name": "MKR Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2" }
+  ],
+  "events": [
+    { "type": "STARRED", "actor": "Rune Christensen", "asset": "dss (DAI Stablecoin System)", "date": "2020-09-20" },
+    { "type": "STARRED", "actor": "Mariano Conti", "asset": "dss (DAI Stablecoin System)", "date": "2020-09-18" },
+    { "type": "DEPLOYED", "actor": "Mariano Conti", "asset": "dss (DAI Stablecoin System)", "date": "2019-11-18" },
+    { "type": "FUNDED", "actor": "Rune Christensen", "asset": "dss (DAI Stablecoin System)", "date": "2020-09-01", "amount": 4000000 }
+  ],
+  "narrativeAtSnapshot": "MakerDAO is the oldest and most battle-tested DeFi protocol, launched November 2019 with Multi-Collateral DAI. Survived Black Thursday (March 12, 2020) market crash — DAI system remained solvent despite $4M bad debt. DAI supply growing: from $100M pre-DeFi-summer to $1B+ by September 2020. MKR governance increasingly active with multiple collateral onboarding proposals. Real Yield Dai Savings Rate mechanism provides backstop. Mention growth: steady 1.5-2x week-over-week as DeFi TVL grows. Pre-mainstream — institutional DeFi users aware, but retail mainstream unfamiliar. Structural signal: 3 elite developers, oldest operational DeFi protocol, DAI is the blue-chip decentralized stablecoin with growing integrations across all major DeFi protocols. Foundation dissolving — pure community governance imminent."
+}

@@ -1,0 +1,23 @@
+{
+  "ticker": "AVAX",
+  "signalDate": "2021-06-01",
+  "snapshotDate": "2021-05-25",
+  "priceAtSnapshot": 10.80,
+  "isControl": false,
+  "developers": [
+    { "name": "Emin Gun Sirer", "isElite": true, "activity": "Multiple GitHub commits weekly to avalanchego. Academic papers on consensus. Active Twitter." },
+    { "name": "Kevin Sekniqi", "isElite": true, "activity": "Protocol engineering, cross-chain bridge development." },
+    { "name": "Maofan Ted Yin", "isElite": true, "activity": "Snowflake/Snowball consensus research and implementation." }
+  ],
+  "assets": [
+    { "name": "AvalancheGo", "type": "Repository", "url": "github.com/ava-labs/avalanchego" },
+    { "name": "Avalanche Bridge", "type": "Repository", "url": "github.com/ava-labs/avalanche-bridge-resources" }
+  ],
+  "events": [
+    { "type": "STARRED", "actor": "Emin Gun Sirer", "asset": "AvalancheGo", "date": "2021-05-22" },
+    { "type": "DEPLOYED", "actor": "Kevin Sekniqi", "asset": "Avalanche Bridge", "date": "2021-02-08" },
+    { "type": "STARRED", "actor": "Maofan Ted Yin", "asset": "AvalancheGo", "date": "2021-05-20" },
+    { "type": "FUNDED", "actor": "Kevin Sekniqi", "asset": "AvalancheGo", "date": "2021-03-01", "amount": 230000000 }
+  ],
+  "narrativeAtSnapshot": "Avalanche mainnet launched September 2020. EVM-compatible L1 with sub-second finality. May 2021 crypto market crash brought AVAX from ~$50+ down to ~$10-11 — presenting a structural entry point. Avalanche Rush incentive program ($180M to attract DeFi protocols) not yet announced but under development. Developer activity accelerating despite price crash — elite team continuing builds. Mention growth: ~2x week-over-week in EVM developer communities, primarily among ETH developers frustrated with gas costs. No mainstream financial press coverage post-crash. Structural signal: 3 elite developers with strong academic credentials (Cornell), $230M venture raise from Polychain and others, EVM compatibility lowering migration barrier for ETH dApps. Trader Joe and Pangolin DEX early traction."
+}

@@ -1,0 +1,23 @@
+{
+  "ticker": "SOL",
+  "signalDate": "2021-01-01",
+  "snapshotDate": "2020-12-25",
+  "priceAtSnapshot": 1.35,
+  "isControl": false,
+  "developers": [
+    { "name": "Anatoly Yakovenko", "isElite": true, "activity": "Daily GitHub commits to solana-labs/solana, frequent Twitter engagement with developers." },
+    { "name": "Raj Gokal", "isElite": true, "activity": "Ecosystem partnerships, investor relations, Serum DEX coordination with FTX." },
+    { "name": "Greg Fitzgerald", "isElite": true, "activity": "Core protocol engineering, consensus mechanism development." }
+  ],
+  "assets": [
+    { "name": "Solana Core", "type": "Repository", "url": "github.com/solana-labs/solana" },
+    { "name": "Solana Program Library", "type": "Repository", "url": "github.com/solana-labs/solana-program-library" }
+  ],
+  "events": [
+    { "type": "STARRED", "actor": "Anatoly Yakovenko", "asset": "Solana Core", "date": "2020-12-20" },
+    { "type": "DEPLOYED", "actor": "Greg Fitzgerald", "asset": "Solana Core", "date": "2020-03-16" },
+    { "type": "STARRED", "actor": "Raj Gokal", "asset": "Solana Core", "date": "2020-12-18" },
+    { "type": "FUNDED", "actor": "Raj Gokal", "asset": "Solana Core", "date": "2020-06-10", "amount": 20000000 }
+  ],
+  "narrativeAtSnapshot": "Solana mainnet beta launched March 2020. Claims 65,000 TPS with sub-second finality using Proof of History consensus. Serum DEX (FTX-backed) live on Solana since August 2020. Developer ecosystem forming rapidly — Rust-based programming attracting systems engineers. Weekly mention growth: ~3x in blockchain developer communities, Rust/systems programming forums. Still completely unknown to mainstream crypto retail (most retail investors focused on ETH DeFi). FTX providing significant ecosystem support. Structural signal: 3 elite developers with systems programming backgrounds, $20M+ venture backing, unique technical architecture addressing ETH scalability limits. Wormhole bridge development underway for cross-chain interoperability."
+}

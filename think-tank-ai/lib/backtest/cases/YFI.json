@@ -1,0 +1,22 @@
+{
+  "ticker": "YFI",
+  "signalDate": "2020-08-01",
+  "snapshotDate": "2020-07-25",
+  "priceAtSnapshot": 2200.00,
+  "isControl": false,
+  "developers": [
+    { "name": "Andre Cronje", "isElite": true, "activity": "Solo developer, daily commits, published Medium posts explaining protocol mechanics. No marketing." },
+    { "name": "banteg", "isElite": true, "activity": "Core contributor, vault strategy development, community coordination." },
+    { "name": "Klim K", "isElite": true, "activity": "Frontend development, UI/UX for yearn vaults." }
+  ],
+  "assets": [
+    { "name": "yearn-finance/yearn-protocol", "type": "Repository", "url": "github.com/yearn-finance/yearn-protocol" },
+    { "name": "YFI Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Andre Cronje", "asset": "YFI Token Contract", "date": "2020-07-17" },
+    { "type": "STARRED", "actor": "banteg", "asset": "yearn-finance/yearn-protocol", "date": "2020-07-20" },
+    { "type": "STARRED", "actor": "Klim K", "asset": "yearn-finance/yearn-protocol", "date": "2020-07-22" }
+  ],
+  "narrativeAtSnapshot": "yearn.finance launched July 17, 2020 with a completely fair launch — no pre-mine, no VC allocation, no ICO. 30,000 YFI total supply ever. Andre Cronje built it solo as a yield aggregator that automatically moves funds between Compound, Aave, and dYdX for maximum yield. YFI distributed 100% to liquidity providers. DeFi-native Twitter and Discord exploding with discussion — 5-10x mention growth week-over-week. Completely unknown outside DeFi circles. No institutional holders, no mainstream press. Community governance already active with multiple YIPs (Yearn Improvement Proposals). Structural signal: novel fair-launch mechanism, 3 elite developers, protocol already generating real yield on $100M+ TVL. Multiple DeFi blue chips seeking integrations."
+}
