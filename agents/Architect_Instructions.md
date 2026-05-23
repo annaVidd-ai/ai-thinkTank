@@ -99,3 +99,16 @@ Before declaring a blocker or asking to stop a running process:
 **Origin:** Saw `[Worker] Picked up task: DEBATE_ANALYST` immediately followed by `[LLM] failed for model "deepseek-reasoner"` and declared the Analyst was using the wrong model. In reality, these were concurrent async log lines from different tasks — the Analyst was correctly using Claude Sonnet. The Skeptic's DeepSeek call failed on a JSON parse error and its log line happened to appear right after the Analyst's task-pickup line. Demanded the mini-marathon be stopped. It should have been allowed to run.
 
 **Principle:** Async logs are not sequential narratives. Correlation ≠ causation.
+
+### Architect Rule #9: Incremental Task Delivery
+
+When implementing a large or complicated task:
+
+1. **Inform the Developer of the overall goal first** — what we're trying to accomplish and why
+2. **Break into atomic subtasks** — deliver one step at a time
+3. **Wait for confirmation before the next step** — don't stack unimplemented changes
+4. **Each step should be independently verifiable** — if a step breaks, we know exactly where
+
+**Origin:** Task 10 and 11 were delivered as massive single-prompt specs. This made them harder to implement, harder to debug, and harder to roll back if something went wrong. A 5-step task delivered as 5 steps is better than a 5-step task delivered as 1 wall of text.
+
+**Principle:** Complexity is the enemy of reliability. Ship incrementally, verify incrementally.
