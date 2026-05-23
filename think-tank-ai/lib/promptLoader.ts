@@ -142,6 +142,51 @@ export function getPrompt(agentName: string): string {
 }
 
 /**
+ * Returns the system prompt for `agentName` with all `{{KEY}}` placeholders
+ * replaced by the corresponding values in `vars`.
+ *
+ * Replacement rules
+ * ─────────────────
+ * - Every occurrence of `{{KEY}}` in the prompt is replaced with `vars[KEY]`.
+ * - Matching is case-sensitive: `{{key}}` ≠ `{{KEY}}`.
+ * - Extra keys in `vars` that have no matching placeholder are silently ignored.
+ * - After all replacements, if any `{{WORD}}` patterns remain, the call throws
+ *   with a deduplicated list of the unresolved placeholders.
+ *
+ * `getPrompt(agentName)` is unchanged — it always returns raw content with
+ * placeholders intact.
+ *
+ * @example
+ *   getPromptWithVars('scout', { ASSET_ID: 'uniswap/v3-core', ASSET_TYPE: 'repository' })
+ *
+ * @throws if `agentName` is not found (delegates to `getPrompt`).
+ * @throws if any `{{PLACEHOLDER}}` remains after substitution.
+ */
+export function getPromptWithVars(
+  agentName: string,
+  vars: Record<string, string>,
+): string {
+  let prompt = getPrompt(agentName); // throws if agent not found
+
+  for (const [key, value] of Object.entries(vars)) {
+    prompt = prompt.replaceAll(`{{${key}}}`, value);
+  }
+
+  // Detect any {{PLACEHOLDER}} patterns that were not resolved.
+  // Deduplicate so each missing key appears once in the error message.
+  const unresolved = prompt.match(/\{\{\w+\}\}/g);
+  if (unresolved) {
+    const unique = [...new Set(unresolved)];
+    throw new Error(
+      `[PromptLoader] Unresolved template placeholders in "${agentName}" prompt: ` +
+      `${unique.join(', ')}`,
+    );
+  }
+
+  return prompt;
+}
+
+/**
  * Clears the in-memory cache and re-reads all files from disk.
  * Intended for development hot-reload or runtime prompt updates.
  */
