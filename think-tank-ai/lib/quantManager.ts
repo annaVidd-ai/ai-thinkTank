@@ -18,9 +18,10 @@ import {
 const DEFAULT_CONFIG_NAME = 'default-v1';
 
 const DEFAULT_WEIGHTS: Record<string, number> = {
-  signalStrength: 0.40,
-  timing:         0.35,
-  upside:         0.25,
+  signalStrength: 0.30,
+  timing:         0.2625,
+  upside:         0.1875,
+  failureRisk:    0.25,
 };
 
 // ---------------------------------------------------------------------------
@@ -89,14 +90,21 @@ export async function processScore(clusterId: string): Promise<void> {
 
   const scoreResult = await callLLM(SCORE_CONFIG, SCORE_SYSTEM_PROMPT, user, ScoreSchema);
 
-  console.log(`[Quant] LLM scores → signalStrength=${scoreResult.signalStrength}, timing=${scoreResult.timing}, upside=${scoreResult.upside}`);
+  console.log(
+    `[Quant] LLM scores → signalStrength=${scoreResult.signalStrength}, ` +
+    `timing=${scoreResult.timing}, upside=${scoreResult.upside}, ` +
+    `failureRisk=${scoreResult.failureRisk}`,
+  );
   console.log(`[Quant] Reasoning: ${scoreResult.reasoning}`);
 
   // 4. Compute weighted breakdown.
+  // failureRisk is inverted: (1 - raw) × weight so high risk lowers totalScore.
+  // If failureRisk was absent from LLM output, ScoreSchema defaults it to 0 (no risk).
   const rawScores: Record<string, number> = {
     signalStrength: scoreResult.signalStrength,
     timing:         scoreResult.timing,
     upside:         scoreResult.upside,
+    failureRisk:    scoreResult.failureRisk ?? 0.0,
   };
 
   let totalScore = 0;
@@ -104,7 +112,9 @@ export async function processScore(clusterId: string): Promise<void> {
 
   for (const [dimension, weight] of Object.entries(weights)) {
     const raw      = rawScores[dimension] ?? 0.5;
-    const weighted = parseFloat((raw * weight).toFixed(4));
+    // failureRisk contributes (1 - raw) × weight; all other dimensions contribute raw × weight
+    const effective = dimension === 'failureRisk' ? (1 - raw) : raw;
+    const weighted  = parseFloat((effective * weight).toFixed(4));
     breakdown[dimension] = { raw, weight, weighted };
     totalScore += weighted;
   }
