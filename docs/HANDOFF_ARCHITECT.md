@@ -1,19 +1,19 @@
 # Architect Handoff — Session → Session
 
 **Generated:** 2026-05-25
-**Session context:** Marathon failed (Δ=0.076). Three post-marathon prompt fixes all attempted and committed. Prompt-only approach has hit a ceiling. Next session should evaluate non-prompt approaches.
+**Session context:** Marathon failed (Δ=0.076). Three post-marathon prompt fixes all made things worse. Prompt-only approach has hit a ceiling.
 
 ---
 
-## ⚠️ Current State — DISCRIMINATION BELOW TARGET
+## ⚠️ Current State — STUCK
 
-The marathon failed discrimination targets (Δ=0.076 vs target ≥0.15). Three prompt fix attempts all made things worse and are now committed to the repo (not reverting — they represent the current live state). The proposed next step was a targeted fix to the Skeptic's evidence_type classification (CONCRETE for confirmed non-existence), but that was deprioritised in favour of evaluating non-prompt approaches.
+The marathon failed discrimination targets (Δ=0.076 vs target ≥0.15). Three attempted prompt fixes all made things WORSE. The Quant prompt is now in a modified state (Fix A+ worked examples + evidence_type schema). **These changes should be reverted before any further testing.**
 
-### What the Next Session Should Do
+### What the Next Session MUST Do First
 
-1. **Evaluate non-prompt approaches** (see Options below) — the prompt space has been exhausted
-2. **One optional prompt micro-fix** may still be worth trying first (see "Proposed but not applied" below) — it's one targeted change, low risk, no new session cost
-3. **Do NOT attempt more broad prompt rewrites.** Three iterations proved the problem is not solvable by adjusting the Quant's anchoring text or worked examples
+1. **Revert all post-marathon prompt changes** — restore Quant and Skeptic prompts to their pre-Fix-A state (the state that produced Δ=0.198 in the 3-case smoke test and Δ=0.076 in the full marathon)
+2. **Do NOT attempt more prompt tweaks.** Three iterations proved the problem is not solvable by adjusting the Quant's anchoring text or the Skeptic's evidence classification
+3. **Evaluate non-prompt approaches** (see Options below)
 
 ---
 
@@ -59,11 +59,9 @@ Score compression: all winners clustered 0.625–0.709, controls 0.425–0.636.
 
 ### Attempt 3: evidence_type schema + updated Skeptic definitions
 **Diagnosis:** The Skeptic outputs concerns with formal `[CATEGORY]` markers regardless of evidence quality. The Quant can't distinguish ABSENT from CONCRETE because the format makes both look equally serious. Added `evidence_type` field to Skeptic's Zod schema.
-**Change:** Added `evidence_type: ABSENT|CONCRETE|MIXED` + `evidence_type_reasoning` to Skeptic's failure_modes Zod schema. Updated Skeptic instructions with classification guide. Updated `buildTranscript()` to surface evidence_type lines to the Quant. Reverted Quant to single worked-example format (showing ABSENT+CONCRETE concerns → FR=0.90).
+**Change:** Added `evidence_type: ABSENT|CONCRETE|MIXED` + `evidence_type_reasoning` to Skeptic's failure_modes Zod schema. Updated Skeptic instructions with classification guide.
 **Result:** Δ = 0.062 (worse again)
-**Why it failed:** The Skeptic correctly tagged SAFE's concerns as ABSENT ("no token, no revenue, no governance") → Quant lowered SAFE's FR → SAFE score rose. The classification was mechanically correct but semantically wrong: "no token exists" is confirmed non-existence (CONCRETE), not a data gap (ABSENT). The rule "ABSENT: prefix → evidence_type MUST be ABSENT" conflates two different things: data not in subgraph (true ABSENT) vs confirmed structural non-existence (should be CONCRETE).
-
-**Proposed micro-fix (not applied, low cost to try):** Update Skeptic classification guide so that confirmed non-existence of a critical component (no token ever issued, no revenue mechanism ever deployed — facts verifiable from the narrative itself) is classified CONCRETE, not ABSENT. This would raise SAFE's FR, lowering its total score and widening Δ. One targeted sentence change to `Agent_Skeptic_Instructions.md`.
+**Why it failed:** The Skeptic correctly tagged SAFE's concerns as ABSENT ("no token, no revenue, no governance") → Quant lowered SAFE's FR → SAFE score rose. The classification was mechanically correct but semantically wrong: "no token exists" is confirmed non-existence (CONCRETE), not a data gap (ABSENT). A proposed fix to update ABSENT/CONCRETE definitions was NOT applied (session stopped before running it).
 
 ### Summary table
 | Config | UNI FR | AAVE FR | SAFE FR | Δ | Winners Avg |
@@ -77,15 +75,14 @@ Score compression: all winners clustered 0.625–0.709, controls 0.425–0.636.
 
 ---
 
-## Current State of Prompts (committed to repo as-is)
+## Current State of Prompts (NEEDS REVERT)
 
-All fix attempt changes are committed. The current live state:
-- **Quant prompt (`agents/Agent_Quant_Instructions.md`):** Has ABSENT/CONCRETE guidance text (Fix A) + single worked example showing ABSENT+CONCRETE concerns → FR=0.90. Reverted from Fix A+ two-example format.
-- **Skeptic Zod schema (`lib/prompts.ts` `FailureModeSchema`):** Has optional `evidence_type: ABSENT|CONCRETE|MIXED` and `evidence_type_reasoning: string` fields.
-- **Skeptic instructions (`agents/Agent_Skeptic_Instructions.md`):** Has evidence_type classification guide + updated example JSONs with evidence_type fields.
-- **`buildTranscript()`:** Updated to emit `evidence_type: TYPE — reasoning` lines beneath each `[CATEGORY]` marker in the Quant's transcript.
+The Quant and Skeptic prompts are currently in a MODIFIED state from the failed fix attempts:
+- **Quant prompt:** Has ABSENT/CONCRETE guidance text (from Fix A) + two worked examples (from Fix A+). Should be reverted to the original single-example format.
+- **Skeptic Zod schema:** Has `evidence_type` and `evidence_type_reasoning` fields. Should be reverted to remove these fields.
+- **Skeptic instructions:** Has evidence_type classification guide. Should be reverted.
 
-The best-known baseline for discrimination is the marathon config (Δ=0.076). Rolling back to that state requires reverting all three files above. **Do not revert without first trying the proposed micro-fix** (see Attempt 3 above).
+The original prompts (pre-Fix-A) are the ones that produced Δ=0.076 in the marathon. They're the best-known baseline for any further changes.
 
 ---
 
@@ -199,9 +196,8 @@ Marathon + fix attempts total cost: ~$5-7 (Anthropic ~$3-4, DeepSeek ~$2).
 - Credits ran out during initial marathon attempt. Director topped up.
 - **Monitor credit balance** — marathon burns ~$3 Anthropic in ~6 hours.
 
-## Dashboard UI Fixes
-- **Done:** `debates-tab.tsx` — real timestamps (yyyy-MM-dd HH:mm), newest-first sort, Show More (+50) pagination.
-- **Backlog:** Skeptic's finalThesis in **red**, ESCALATED badge in **amber/orange**, Analyst thesis in **green**.
+## Dashboard UI Fix (Backlog)
+- `components/dashboard/debates-tab.tsx`: Skeptic's finalThesis in **red**, ESCALATED badge in **amber/orange**, Analyst thesis in **green**.
 
 ## Post-Marathon Checklist (Once Δ Target is Met)
 - [ ] Pin DeepSeek model explicitly in config
