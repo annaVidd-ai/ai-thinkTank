@@ -142,6 +142,16 @@ async function callAnthropic(
     messages: [{ role: 'user', content: user }],
   });
 
+  // Cache verification log — remove after confirming cache hits
+  const u = response.usage as unknown as Record<string, number>;
+  console.log(
+    `[LLM:cache] model=${config.model}` +
+    ` in=${u.input_tokens}` +
+    ` cache_write=${u.cache_creation_input_tokens ?? 0}` +
+    ` cache_read=${u.cache_read_input_tokens ?? 0}` +
+    ` out=${u.output_tokens}`,
+  );
+
   if (!response.content.length) {
     throw new Error('[LLM] Anthropic returned empty content array');
   }

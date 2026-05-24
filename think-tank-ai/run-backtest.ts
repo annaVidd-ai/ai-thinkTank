@@ -104,8 +104,8 @@ Examples:
 // ---------------------------------------------------------------------------
 
 function checkWorkerRunning(): boolean {
-  if (!fs.existsSync('.worker.pid')) return false;
-  const pid = parseInt(fs.readFileSync('.worker.pid', 'utf-8').trim(), 10);
+  if (!fs.existsSync('logs/.worker.pid')) return false;
+  const pid = parseInt(fs.readFileSync('logs/.worker.pid', 'utf-8').trim(), 10);
   try {
     process.kill(pid, 0); // signal 0 = check existence only
     return true;
