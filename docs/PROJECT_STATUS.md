@@ -1,5 +1,5 @@
 # Project Status — Node Zero (v0.5.0)
-**Last updated:** 2026-05-25 | **Phase:** Backtest Calibration — Option 1 In Progress (Quant → Sonnet) | **Budget:** ~€9/mo
+**Last updated:** 2026-05-26 | **Phase:** Backtest Calibration — Option 1 In Progress (Quant → Sonnet) | **Budget:** ~€9/mo
 
 ### Vision
 AI agents that spot **paradigm-shifting profit opportunities before they go mainstream** (100x-1000x returns). Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
