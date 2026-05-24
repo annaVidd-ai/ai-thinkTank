@@ -130,7 +130,15 @@ async function callAnthropic(
   const response = await client.messages.create({
     model:      config.model,
     max_tokens: config.maxTokens ?? 1024,
-    system,
+    // Cache the system prompt — it is long and identical across retries/runs.
+    // cache_control is Anthropic-only; the OpenAI-compatible path is untouched.
+    system: [
+      {
+        type:          'text',
+        text:          system,
+        cache_control: { type: 'ephemeral' },
+      },
+    ],
     messages: [{ role: 'user', content: user }],
   });
 
