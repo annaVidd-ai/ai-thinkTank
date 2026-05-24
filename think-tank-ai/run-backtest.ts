@@ -20,9 +20,9 @@ import './lib/env'; // loads .env with override:true — must be first import
 // Prepend local timestamp to every console.log / console.error line
 const _log = console.log.bind(console);
 const _err = console.error.bind(console);
-const ts = () => new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-console.log   = (...a: unknown[]) => _log(`[${ts()}]`, ...a);
-console.error = (...a: unknown[]) => _err(`[${ts()}]`, ...a);
+const ts = () => { const n = new Date(); return `[${n.toLocaleDateString('en-CA')}][${n.toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]`; };
+console.log   = (...a: unknown[]) => _log(ts(), ...a);
+console.error = (...a: unknown[]) => _err(ts(), ...a);
 
 import { prisma }                    from './lib/prisma';
 import { runWalkForwardValidation }  from './lib/backtest/walkForward';
