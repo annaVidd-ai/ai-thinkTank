@@ -32,25 +32,27 @@ Score failureRisk based on these categories:
 - **0.6–0.8:** Multiple [CATEGORY] concerns with strong evidence that Analyst could not rebut. Pay special attention to concerns with "ABSENT:" evidence — these indicate the Skeptic identified a data gap, not a confirmed risk, but absence of evidence IS a risk signal
 - **0.9–1.0:** Critical [CATEGORY] concerns with concrete evidence, no rebuttal from Analyst. Project has fundamental disqualifiers
 
-**Scoring rule:** Each unrebutted [CATEGORY] concern contributes 0.15–0.20 to failureRisk. A single fully-evidenced unrebutted concern from any category scores at minimum 0.6. Three or more unrebutted concerns score 0.9+.
+**Scoring rule:** Calibrate failureRisk by the evidence quality behind each concern:
+- ABSENT-evidence concerns (missing data, unknowns, "no information available", "unclear whether") reflect uncertainty, not demonstrated risk. Three or more absent-evidence concerns with no concrete evidence → failureRisk 0.55–0.65.
+- CONCRETE-evidence concerns (verified exploits, declining metrics, team track record of failure, plummeting TVL, abandoned repositories) reflect demonstrated risk. Three or more concrete-evidence concerns → failureRisk 0.85–0.95.
+- Mixed evidence: Scale proportionally. Two concrete + three absent → failureRisk ~0.75–0.80.
+Key principle: Absence of evidence is not evidence of absence, but neither is it evidence of catastrophic risk. A project with many unknowns may simply be early-stage or under-documented; a project with demonstrated failures is genuinely risky.
 
-**Important:** Score based on the EVIDENCE cited in [CATEGORY] markers, not the concern text alone. A concern without evidence is weaker than one with "ABSENT:" which is weaker than one with concrete data.
+**Important:** Score based on the EVIDENCE cited in [CATEGORY] markers, not the concern text alone. A concern with concrete data is more dangerous than one with "ABSENT:" evidence.
 
 ## Critical: Score failureRisk INDEPENDENTLY of other dimensions
 
 A project can have elite developers (signalStrength = 0.90) AND critical centralization risk (failureRisk = 0.90). These are both true simultaneously. Do NOT reduce failureRisk because other dimensions are high.
 
-Example transcript excerpt:
-  Analyst R2: Elite team of 5 developers from Aave and Compound. $2M smart money inflow in 7 days. Cluster density 3x baseline.
-  Skeptic R2: 2-of-3 multisig controls all protocol upgrades with no timelock. No token exists. No revenue model. Fork of Compound with no differentiation. No data on token allocation or vesting.
-    [CENTRALIZATION] 2-of-3 multisig controls all upgrades. Evidence: 0xABC and 0xDEF voted yes on 100% of proposals
-    [TOKENOMICS] No token exists and no revenue model. Evidence: ABSENT: no fee structure in subgraph
-    [MOAT] Fork with no technical differentiation. Evidence: codebase matches 80% of Compound v2 pattern
+Example A — ABSENT-evidence concerns only:
+Project has no audit data available, no information on governance structure, unclear token distribution.
+These are unknowns, not demonstrated failures. Score: failureRisk = 0.35.
+Correct scoring: signalStrength = 0.80, timing = 0.75, upside = 0.70, failureRisk = 0.35
 
-Correct scoring: signalStrength = 0.85, timing = 0.80, upside = 0.50, failureRisk = 0.90
-INCORRECT scoring: failureRisk = 0.50 (reduced because signalStrength is high — this is wrong)
-
-The 3 unrebutted [CATEGORY] concerns with evidence mandate failureRisk ≥ 0.9 per the scoring rule.
+Example B — CONCRETE-evidence concerns:
+Project's lead developer previously rug-pulled a similar protocol. TVL declined 40% over 30 days. Core repository has had no commits in 90 days.
+These are demonstrated failures. Score: failureRisk = 0.90.
+Correct scoring: signalStrength = 0.50, timing = 0.40, upside = 0.30, failureRisk = 0.90
 
 The weighted totalScore is computed as:
   (signalStrength × 0.30) + (timing × 0.2625) + (upside × 0.1875) + ((1 − failureRisk) × 0.25)

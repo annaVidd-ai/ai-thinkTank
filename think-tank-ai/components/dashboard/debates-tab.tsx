@@ -1,8 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useDashboardStore } from '@/lib/dashboard-store';
-import { formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 interface DebateMessage {
@@ -27,7 +28,7 @@ interface DebateDetail {
 interface Cluster {
   id: string;
   assetId: string;
-  debates: { id: string; status: string; currentRound: number }[];
+  debates: { id: string; status: string; currentRound: number; createdAt: string }[];
   alert: { ticker: string } | null;
 }
 
@@ -45,15 +46,17 @@ function parseContent(raw: string): string {
 
 export function DebatesTab() {
   const { selectedDebateId, setSelectedDebateId } = useDashboardStore();
+  const [limit, setLimit] = useState(50);
 
   const { data: clusters = [] } = useQuery<Cluster[]>({
-    queryKey: ['clusters'],
-    queryFn: () => fetch('/api/clusters').then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
+    queryKey: ['clusters', limit],
+    queryFn: () => fetch(`/api/clusters?take=${limit}`).then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
   });
 
-  const debateList = clusters.flatMap((c) =>
-    c.debates.map((d) => ({ ...d, ticker: c.alert?.ticker ?? c.assetId })),
-  );
+  const debateList = clusters
+    .flatMap((c) => c.debates.map((d) => ({ ...d, ticker: c.alert?.ticker ?? c.assetId })))
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const hasMore = debateList.length >= limit;
 
   const { data: debate, isLoading: detailLoading } = useQuery<DebateDetail>({
     queryKey: ['debate', selectedDebateId],
@@ -84,8 +87,19 @@ export function DebatesTab() {
             <p className="text-[10px] font-mono text-zinc-500 mt-0.5">
               Round {d.currentRound} · {d.status}
             </p>
+            <p className="text-[10px] font-mono text-zinc-600 mt-0.5">
+              {format(new Date(d.createdAt), 'yyyy-MM-dd HH:mm')}
+            </p>
           </button>
         ))}
+        {hasMore && (
+          <button
+            onClick={() => setLimit((l) => l + 50)}
+            className="w-full px-4 py-3 text-[10px] font-mono text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 transition-colors"
+          >
+            Show more…
+          </button>
+        )}
       </div>
 
       {/* Detail */}
@@ -145,7 +159,7 @@ export function DebatesTab() {
                       {msg.role} · Round {msg.round}
                     </span>
                     <span className="text-[10px] font-mono text-zinc-600">
-                      {formatDistanceToNow(new Date(msg.createdAt), { addSuffix: true })}
+                      {format(new Date(msg.createdAt), 'yyyy-MM-dd HH:mm')}
                     </span>
                   </div>
                   <p className="text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap">
