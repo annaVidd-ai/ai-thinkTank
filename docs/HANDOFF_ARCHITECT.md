@@ -107,6 +107,13 @@ The original prompts (pre-Fix-A) are the ones that produced Δ=0.076 in the mara
 **Cost:** 5× per case = 150 runs for marathon. ~$8-10.
 **Risk:** May not help if the problem is systematic (Quant always scores FR high) rather than noisy.
 
+### Recommended Option Sequencing
+
+1. **Option 2 first** (re-run original baseline, 9 runs, ~$0.30) — Cheap sanity check. If the original prompts still produce Δ≈0.198 on 3 cases, the problem is variance at scale, not the model. That would point to Option 4 (increase N). If the baseline can't reproduce Δ≈0.198, move to step 2.
+2. **Option 1 second** (switch Quant to Sonnet) — If the original prompts can't reproduce the smoke test result, the model is likely the bottleneck. Sonnet has stronger structured reasoning for nuanced evidence quality assessment. Revert prompts to original, switch only the Quant model to Sonnet, run 3-case smoke test.
+3. **Option 4 third** (increase N) — Only if Option 2 shows the baseline IS reproducible on 3 cases but variance destroys it at 15-case scale. Increase N from 3 to 5 or 7.
+4. **Option 3 last** (accept and recalibrate) — Only if Options 1-2-4 all fail. Don't accept prematurely.
+
 ---
 
 ## Architecture Rules (All 15 + 5 Locked)
