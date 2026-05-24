@@ -1,5 +1,5 @@
 # Project Status — Node Zero (v0.5.0)
-**Last updated:** 2026-05-25 | **Phase:** Backtest Calibration | **Budget:** ~€9/mo
+**Last updated:** 2026-05-25 | **Phase:** Backtest Calibration — Option 1 In Progress (Quant → Sonnet) | **Budget:** ~€9/mo
 
 ### Vision
 AI agents that spot **paradigm-shifting profit opportunities before they go mainstream** (100x-1000x returns). Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
@@ -27,7 +27,7 @@ Next.js 16, TypeScript, Prisma/SQLite, Neo4j, monolith architecture
 | Weaver | (graph query) | Knowledge graph construction from Scout data | 0 |
 | Analyst | Claude Sonnet 4.6 | Argue bullish case in debate | 0.3 |
 | Skeptic | DeepSeek-R1 | Argue bearish case — 5 failure-mode categories | 0.6 |
-| Quant | DeepSeek-R1 | 4-dimension scoring (signalStrength, timing, upside, failureRisk) | 0.3 |
+| Quant | DeepSeek-R1 (→v4-flash) — switching to Claude Sonnet 4.6 | 4-dimension scoring (signalStrength, timing, upside, failureRisk) | 0.3 |
 | Mapper | Claude Haiku 4.5 | Generate tiered alerts with ticker | 0 |
 
 ### 5-Phase Pipeline
@@ -71,7 +71,18 @@ Next.js 16, TypeScript, Prisma/SQLite, Neo4j, monolith architecture
 | Fix A+ (worked examples) | −0.004 | ❌❌ much worse |
 | +evidence_type schema | 0.062 | ❌ worse |
 
-**Conclusion: Prompt-only approach has hit a ceiling. Non-prompt approaches needed (model change, N increase, or threshold recalibration). See HANDOFF_ARCHITECT.md for options.**
+**Baseline Verification Smoke Test (2026-05-26, original prompts, v4-flash, blinded, N=3 median)**
+| Case | Type | Run 1 | Run 2 | Run 3 | Median | σ |
+|------|------|-------|-------|-------|--------|---|
+| UNI | winner | 0.559 | 0.659 | 0.631 | 0.631 | 0.042 |
+| AAVE | winner | 0.653 | 0.635 | 0.718 | 0.653 | 0.036 |
+| SAFE | control | 0.625 | 0.604 | 0.662 | 0.625 | 0.024 |
+
+Winners avg: 0.642 | Control avg: 0.625 | **Δ = 0.017** (target ≥ 0.15) ❌
+
+**Root cause:** Δ=0.198 original smoke test was on v4-pro. On v4-flash, baseline is NOT reproducible (Δ=0.017). Model downgrade confirmed as discrimination bottleneck. Decision: Option 1 — switch Quant to Claude Sonnet 4.6.
+
+**Conclusion: Prompt-only approach has hit a ceiling. Non-prompt approaches needed (model change, N increase, or threshold recalibration).**
 
 ### Backtest Methodology
 - **15 cases:** 12 positive (real 10x+ winners) + 3 negative controls (known failures: COMP, SAFE, YFI_CTRL)
@@ -105,9 +116,10 @@ Step 8: Remaining temporal references
 ### Pending Tasks
 | Task | Description | Priority |
 |---|---|---|
-| 14 | Marathon completed — Δ=0.076 (failed). All prompt fix attempts exhausted. | High |
-| 15 | Try Skeptic micro-fix: CONCRETE for confirmed non-existence ("no token issued") — one-line change, low risk | Medium |
-| 16 | Evaluate non-prompt approaches: Quant model → Claude Sonnet, N increase (3→5), or threshold recalibration | High |
+| 14 | Marathon completed — Δ=0.076 (failed). All prompt fix attempts exhausted. | ✅ Complete |
+| 15 | Baseline verification smoke test — Δ=0.017 (FAILED). Root cause: model downgrade v4-pro→v4-flash. | ✅ Complete |
+| 16 | **Option 1: Switch Quant to Claude Sonnet 4.6** + smoke test (UNI, AAVE, SAFE, blinded, N=3). In progress. | **High** |
+| 17 | Based on Sonnet smoke test: proceed to full marathon (Δ≥0.10) or reassess (Δ<0.10) | High |
 | Production N=3 | Quant fires 3× concurrently, uses median for alert | High |
 | Tiered alerts | Tier 1 (≥0.80), Tier 2 (0.65-0.79) — currently binary 0.70 | High |
 | Dashboard UI fixes (partial) | Debates tab: real timestamps, newest-first, Show More ✅. Skeptic thesis in red, ESCALATED badge in amber still pending. | Low |
@@ -120,4 +132,5 @@ Step 8: Remaining temporal references
 2. **Score compression** — All winners cluster 0.625–0.709, controls 0.425–0.636. Δ=0.076 below target of 0.15. Three prompt fix attempts all made it worse. Root cause may be model capability (deepseek-v4-flash) rather than prompt design.
 3. **DeepSeek-R1 JSON control characters** — Occasionally outputs unescaped control characters in JSON strings. Retry catches it; proper sanitizer deferred.
 4. **DeepSeek model alias remapping** — `deepseek-reasoner` silently remapped from v4-pro → v4-flash (May 18–22). Marathon runs are all on v4-flash (internally consistent). Pin model explicitly post-marathon.
-5. **Prompts in modified state** — Quant and Skeptic prompts have failed Fix A/A+/evidence_type changes applied. Must revert before further testing.
+5. **Baseline not reproducible on v4-flash** — Δ=0.017 on fresh smoke test vs Δ=0.198 on original (v4-pro). Root cause is model capability, not prompt design. Switching Quant to Claude Sonnet (Option 1).
+6. **DeepSeek v4-flash reasoning limitation** — Cannot differentiate ABSENT from CONCRETE evidence quality in Quant scoring. Both winners and controls receive similar failureRisk, compressing totalScore discrimination.

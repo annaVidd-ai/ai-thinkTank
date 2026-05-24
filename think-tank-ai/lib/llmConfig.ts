@@ -49,6 +49,11 @@ export const ANALYST_CONFIG: LLMConfig = {
   maxTokens: 4096,
 };
 
+/**
+ * ⚠️ `deepseek-reasoner` resolves to v4-flash as of May 22, 2026.
+ * DeepSeek does not offer separate model IDs for flash vs pro.
+ * Monitor response.model in logs to detect future remapping.
+ */
 /** DeepSeek-R1 — Debate sceptic (BEAR) */
 export const SKEPTIC_CONFIG: LLMConfig = {
   provider: 'openai-compatible',
@@ -57,12 +62,21 @@ export const SKEPTIC_CONFIG: LLMConfig = {
   apiKey:   env('DEEPSEEK_API_KEY'),
 };
 
-/** DeepSeek-R1 — Quant scoring */
+/**
+ * Baseline verification (Δ=0.017) confirmed v4-flash cannot
+ * meaningfully discriminate winners from controls. Option 1:
+ * switch this to Claude Sonnet for the smoke test:
+ *   provider:  'anthropic',
+ *   model:     'claude-sonnet-4-6',
+ *   apiKey:    env('ANTHROPIC_API_KEY'),
+ *   maxTokens: 4096,
+ */
+/** Claude Sonnet — Quant scoring (switched from deepseek-reasoner for stronger evidence reasoning) */
 export const SCORE_CONFIG: LLMConfig = {
-  provider: 'openai-compatible',
-  model:    'deepseek-reasoner',
-  baseURL:  env('DEEPSEEK_API_BASE') || 'https://api.deepseek.com',
-  apiKey:   env('DEEPSEEK_API_KEY'),
+  provider:  'anthropic',
+  model:     'claude-sonnet-4-6',
+  apiKey:    env('ANTHROPIC_API_KEY'),
+  maxTokens: 4096,
 };
 
 /** Claude Haiku — Asset mapper (short JSON output, 1024 tokens sufficient) */
