@@ -48,7 +48,7 @@ export function DebatesTab() {
 
   const { data: clusters = [] } = useQuery<Cluster[]>({
     queryKey: ['clusters'],
-    queryFn: () => fetch('/api/clusters').then((r) => r.json()),
+    queryFn: () => fetch('/api/clusters').then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
   });
 
   const debateList = clusters.flatMap((c) =>
@@ -57,7 +57,7 @@ export function DebatesTab() {
 
   const { data: debate, isLoading: detailLoading } = useQuery<DebateDetail>({
     queryKey: ['debate', selectedDebateId],
-    queryFn: () => fetch(`/api/debates/${selectedDebateId}`).then((r) => r.json()),
+    queryFn: () => fetch(`/api/debates/${selectedDebateId}`).then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
     enabled: !!selectedDebateId,
   });
 
@@ -125,7 +125,7 @@ export function DebatesTab() {
             )}
 
             <div className="space-y-3">
-              {debate.messages.map((msg) => (
+              {debate.messages?.map((msg) => (
                 <div
                   key={msg.id}
                   className={cn(

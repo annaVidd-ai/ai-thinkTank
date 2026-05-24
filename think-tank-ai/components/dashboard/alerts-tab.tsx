@@ -20,7 +20,7 @@ export function AlertsTab() {
 
   const { data: alerts = [], isLoading } = useQuery<Alert[]>({
     queryKey: ['alerts'],
-    queryFn: () => fetch('/api/alerts').then((r) => r.json()),
+    queryFn: () => fetch('/api/alerts').then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
   });
 
   if (isLoading) {

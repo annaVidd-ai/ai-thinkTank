@@ -26,7 +26,7 @@ export function ConfigTab() {
 
   const { data: configs = [], isLoading } = useQuery<ScoringConfig[]>({
     queryKey: ['scoring-config'],
-    queryFn: () => fetch('/api/scoring-config').then((r) => r.json()),
+    queryFn: () => fetch('/api/scoring-config').then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
   });
 
   const active = configs.find((c) => c.isActive) ?? configs[0];
@@ -48,7 +48,7 @@ export function ConfigTab() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
-      }).then((r) => r.json()),
+      }).then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['scoring-config'] });
       setSaved(true);

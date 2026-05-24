@@ -42,7 +42,7 @@ const PIPELINE_PHASES = [
 export function PipelineTab() {
   const { data, isLoading } = useQuery<DashboardData>({
     queryKey: ['dashboard'],
-    queryFn: () => fetch('/api/dashboard').then((r) => r.json()),
+    queryFn: () => fetch('/api/dashboard').then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
   });
 
   if (isLoading) {

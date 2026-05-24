@@ -28,7 +28,7 @@ export function ClustersTab() {
 
   const { data: clusters = [], isLoading } = useQuery<Cluster[]>({
     queryKey: ['clusters'],
-    queryFn: () => fetch('/api/clusters').then((r) => r.json()),
+    queryFn: () => fetch('/api/clusters').then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
   });
 
   if (isLoading) {

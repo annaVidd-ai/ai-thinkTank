@@ -15,7 +15,7 @@ export function Header() {
 
   const { data: alerts = [] } = useQuery<{ id: string }[]>({
     queryKey: ['alerts'],
-    queryFn: () => fetch('/api/alerts').then((r) => r.json()),
+    queryFn: () => fetch('/api/alerts').then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
   });
 
   const unreadCount = alerts.filter((a) => !readAlertIds.includes(a.id)).length;

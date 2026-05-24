@@ -9,7 +9,7 @@ interface DashboardStats {
 export function Footer() {
   const { data } = useQuery<DashboardStats>({
     queryKey: ['dashboard'],
-    queryFn: () => fetch('/api/dashboard').then((r) => r.json()),
+    queryFn: () => fetch('/api/dashboard').then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
   });
 
   const stats = data?.stats;

@@ -45,7 +45,7 @@ function avg(nums: number[]): number | null {
 export function BacktestTab() {
   const { data: cases = [], isLoading } = useQuery<BacktestSummary[]>({
     queryKey:        ['backtest'],
-    queryFn:         () => fetch('/api/backtest').then((r) => r.json()),
+    queryFn:         () => fetch('/api/backtest').then((r) => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); }),
     staleTime:       10_000,
     refetchInterval: 10_000,
   });
