@@ -1,4 +1,11 @@
 import '../lib/env'; // loads .env with override:true — must be first
+
+// Prepend local timestamp to every console.log / console.error line
+const _log = console.log.bind(console);
+const _err = console.error.bind(console);
+const ts = () => new Date().toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+console.log   = (...a: unknown[]) => _log(`[${ts()}]`, ...a);
+console.error = (...a: unknown[]) => _err(`[${ts()}]`, ...a);
 import { prisma } from '../lib/prisma';
 import { upsertEntities, type GraphPayload } from '../lib/graphOperations';
 import { closeDriver } from '../lib/neo4j';
