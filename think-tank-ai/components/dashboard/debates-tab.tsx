@@ -103,7 +103,7 @@ export function DebatesTab() {
         {debate && (
           <div className="p-6 space-y-4">
             <div className="flex items-center gap-3">
-              <span className="font-mono font-bold text-zinc-100">{debate.cluster.assetId}</span>
+              <span className="font-mono font-bold text-zinc-100">{debate.cluster?.assetId ?? '—'}</span>
               <span className={cn(
                 'text-[10px] font-mono px-2 py-0.5 rounded',
                 debate.status === 'ESCALATED'
