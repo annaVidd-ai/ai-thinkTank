@@ -42,9 +42,8 @@ next-env.d.ts
 
 /app/generated/prisma
 
-# worker process management
-.worker.pid
-worker.log
+# logs and worker process management
+logs/
 
 # database
 *.db

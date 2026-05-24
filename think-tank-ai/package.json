@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "worker:start": "npx tsx worker/index.ts >> worker.log 2>&1 & echo $! > .worker.pid && echo \"Worker started (PID $(cat .worker.pid)) — logs: worker.log\"",
-    "worker:stop": "[ -f .worker.pid ] && kill $(cat .worker.pid) 2>/dev/null && rm .worker.pid && echo \"Worker stopped\" || echo \"Worker is not running\"",
-    "worker:status": "if [ -f .worker.pid ]; then pid=$(cat .worker.pid); ps -p $pid > /dev/null 2>&1 && echo \"Worker running (PID $pid)\" || echo \"Worker not running (stale PID file — run worker:stop to clean up)\"; else echo \"Worker not running\"; fi",
-    "worker:logs": "tail -f worker.log"
+    "worker:start": "mkdir -p logs && npx tsx worker/index.ts >> logs/worker.log 2>&1 & echo $! > logs/.worker.pid && echo \"Worker started (PID $(cat logs/.worker.pid)) — logs: logs/worker.log\"",
+    "worker:stop": "[ -f logs/.worker.pid ] && kill $(cat logs/.worker.pid) 2>/dev/null && rm logs/.worker.pid && echo \"Worker stopped\" || echo \"Worker is not running\"",
+    "worker:status": "if [ -f logs/.worker.pid ]; then pid=$(cat logs/.worker.pid); ps -p $pid > /dev/null 2>&1 && echo \"Worker running (PID $pid)\" || echo \"Worker not running (stale PID file — run worker:stop to clean up)\"; else echo \"Worker not running\"; fi",
+    "worker:logs": "tail -f logs/worker.log"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.98.0",
