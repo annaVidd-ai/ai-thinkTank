@@ -118,11 +118,19 @@ export type NarrativeOutput = z.infer<typeof NarrativeSchema>;
 /**
  * A single failure-mode entry in a Skeptic turn.
  * Five fixed categories map directly onto the Skeptic's instruction headings.
+ * evidence_type and evidence_type_reasoning are optional for graceful degradation
+ * (old DB rows without these fields remain valid; Quant uses them when present).
  */
 export const FailureModeSchema = z.object({
   category: z.enum(['CENTRALIZATION', 'TOKENOMICS', 'MOAT', 'LIQUIDITY', 'DEPENDENCY']),
   concern:  z.string(),
   evidence: z.string(),
+  evidence_type: z.enum(['ABSENT', 'CONCRETE', 'MIXED'])
+    .describe('ABSENT = no data available / unknown / unconfirmed. CONCRETE = verified declining metrics, exploits, track record of failure. MIXED = some data supports the concern but key elements are unconfirmed.')
+    .optional(),
+  evidence_type_reasoning: z.string()
+    .describe('One sentence explaining why this concern is ABSENT, CONCRETE, or MIXED evidence.')
+    .optional(),
 });
 
 export type FailureMode = z.infer<typeof FailureModeSchema>;
@@ -295,11 +303,23 @@ export function buildTranscript(messages: TranscriptMessage[]): string {
     .sort((a, b) => a.round - b.round || (a.role === 'ANALYST' ? -1 : 1))
     .map((msg) => {
       let argument = msg.content;
-      let failureModes: Array<{ category: string; concern: string; evidence: string }> | undefined;
+      let failureModes: Array<{
+        category: string;
+        concern: string;
+        evidence: string;
+        evidence_type?: string;
+        evidence_type_reasoning?: string;
+      }> | undefined;
       try {
         const parsed = JSON.parse(msg.content) as {
           argument?:      string;
-          failure_modes?: Array<{ category: string; concern: string; evidence: string }>;
+          failure_modes?: Array<{
+            category: string;
+            concern: string;
+            evidence: string;
+            evidence_type?: string;
+            evidence_type_reasoning?: string;
+          }>;
         };
         if (parsed.argument) argument = parsed.argument;
         if (Array.isArray(parsed.failure_modes) && parsed.failure_modes.length > 0) {
@@ -313,7 +333,14 @@ export function buildTranscript(messages: TranscriptMessage[]): string {
       if (!failureModes) return header;
 
       const fmLines = failureModes
-        .map((fm) => `  [${fm.category}] ${fm.concern}. Evidence: ${fm.evidence}`)
+        .map((fm) => {
+          const base = `  [${fm.category}] ${fm.concern}. Evidence: ${fm.evidence}`;
+          if (fm.evidence_type) {
+            const reasoning = fm.evidence_type_reasoning ? ` — ${fm.evidence_type_reasoning}` : '';
+            return `${base}\n  evidence_type: ${fm.evidence_type}${reasoning}`;
+          }
+          return base;
+        })
         .join('\n');
       return `${header}\n${fmLines}`;
     })

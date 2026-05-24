@@ -44,15 +44,19 @@ Key principle: Absence of evidence is not evidence of absence, but neither is it
 
 A project can have elite developers (signalStrength = 0.90) AND critical centralization risk (failureRisk = 0.90). These are both true simultaneously. Do NOT reduce failureRisk because other dimensions are high.
 
-Example A — ABSENT-evidence concerns only:
-Project has no audit data available, no information on governance structure, unclear token distribution.
-These are unknowns, not demonstrated failures. Score: failureRisk = 0.35.
-Correct scoring: signalStrength = 0.80, timing = 0.75, upside = 0.70, failureRisk = 0.35
+Example transcript excerpt:
+  Analyst R2: Elite team of 5 developers from Aave and Compound. $2M smart money inflow in 7 days. Cluster density 3x baseline.
+  Skeptic R2: 2-of-3 multisig controls all protocol upgrades with no timelock. No token exists. No revenue model. Fork of Compound with no differentiation. No data on token allocation or vesting.
+    [CENTRALIZATION] 2-of-3 multisig controls all upgrades. Evidence: 0xABC and 0xDEF voted yes on 100% of proposals
+    evidence_type: CONCRETE — on-chain wallet data directly confirms voting concentration
+    [TOKENOMICS] No token exists and no revenue model. Evidence: ABSENT: no fee structure in subgraph
+    evidence_type: ABSENT — no data available to verify or refute this concern
+    [MOAT] Fork with no technical differentiation. Evidence: codebase matches 80% of Compound v2 pattern
+    evidence_type: CONCRETE — code analysis directly confirms fork status
 
-Example B — CONCRETE-evidence concerns:
-Project's lead developer previously rug-pulled a similar protocol. TVL declined 40% over 30 days. Core repository has had no commits in 90 days.
-These are demonstrated failures. Score: failureRisk = 0.90.
-Correct scoring: signalStrength = 0.50, timing = 0.40, upside = 0.30, failureRisk = 0.90
+Correct scoring: signalStrength = 0.85, timing = 0.80, upside = 0.50, failureRisk = 0.90
+(2 CONCRETE unrebutted concerns drive high failureRisk; 1 ABSENT concern does not reduce it)
+INCORRECT scoring: failureRisk = 0.50 (reduced because signalStrength is high — this is wrong)
 
 The weighted totalScore is computed as:
   (signalStrength × 0.30) + (timing × 0.2625) + (upside × 0.1875) + ((1 − failureRisk) × 0.25)
