@@ -128,28 +128,25 @@ async function callAnthropic(
   const client = new Anthropic({ apiKey: config.apiKey });
 
   const response = await client.messages.create({
-    model:      config.model,
-    max_tokens: config.maxTokens ?? 1024,
-    // Cache the system prompt — it is long and identical across retries/runs.
-    // cache_control is Anthropic-only; the OpenAI-compatible path is untouched.
-    system: [
-      {
-        type:          'text',
-        text:          system,
-        cache_control: { type: 'ephemeral' },
-      },
-    ],
+    model:         config.model,
+    max_tokens:    config.maxTokens ?? 1024,
+    // Top-level cache_control: Anthropic automatically places the cache
+    // breakpoint on the last cacheable block in the request (system prompt +
+    // conversation history). Covers the full growing context, not just the
+    // system block. Anthropic SDK only — openai-compatible path is untouched.
+    cache_control: { type: 'ephemeral' },
+    system,
     messages: [{ role: 'user', content: user }],
   });
 
   // Cache verification log — remove after confirming cache hits
-  const u = response.usage as unknown as Record<string, number>;
+  const { cache_creation_input_tokens: cacheWrite, cache_read_input_tokens: cacheRead } = response.usage;
   console.log(
     `[LLM:cache] model=${config.model}` +
-    ` in=${u.input_tokens}` +
-    ` cache_write=${u.cache_creation_input_tokens ?? 0}` +
-    ` cache_read=${u.cache_read_input_tokens ?? 0}` +
-    ` out=${u.output_tokens}`,
+    ` in=${response.usage.input_tokens}` +
+    ` cache_write=${cacheWrite ?? 0}` +
+    ` cache_read=${cacheRead ?? 0}` +
+    ` out=${response.usage.output_tokens}`,
   );
 
   if (!response.content.length) {
