@@ -167,16 +167,50 @@
       "Stefan George": "Dev_42"
     }
   },
-  "YFI_CTRL": {
-    "alias": "Project_Omicron",
-    "tokenAlias": "$TOKEN_O",
-    "projectNames": ["Yearn Finance Late", "yearn finance", "Yearn Finance", "yearn-late", "YFI_CTRL", "yfi_ctrl", "yearn"],
-    "domains": ["yearn.finance", "yearn.fi", "gov.yearn.finance"],
-    "githubOrgs": ["yearn-finance"],
+  "ZRX": {
+    "alias": "Project_Pi",
+    "tokenAlias": "$TOKEN_P",
+    "projectNames": ["0x", "0x Protocol", "0xProject", "ZRX", "zrx", "0x protocol"],
+    "domains": ["0x.org", "matcha.xyz"],
+    "githubOrgs": ["0xProject"],
     "actorAliases": {
-      "Andre Cronje": "Dev_43",
-      "banteg": "Dev_44",
-      "Klim K": "Dev_45"
+      "Will Warren": "Dev_43",
+      "Amir Bandeali": "Dev_44",
+      "Fabio Berger": "Dev_45"
+    }
+  },
+  "BAT": {
+    "alias": "Project_Rho",
+    "tokenAlias": "$TOKEN_Q",
+    "projectNames": ["Brave", "brave", "BAT", "bat", "Basic Attention Token", "basic attention token"],
+    "domains": ["brave.com", "basicattentiontoken.org"],
+    "githubOrgs": ["brave"],
+    "actorAliases": {
+      "Brendan Eich": "Dev_46",
+      "Brian Bondy": "Dev_47",
+      "Yan Zhu": "Dev_48"
+    }
+  },
+  "ALGO": {
+    "alias": "Project_Sigma",
+    "tokenAlias": "$TOKEN_R",
+    "projectNames": ["Algorand", "algorand", "ALGO", "algo"],
+    "domains": ["algorand.com", "algorand.foundation"],
+    "githubOrgs": ["algorand"],
+    "actorAliases": {
+      "Silvio Micali": "Dev_49",
+      "Steve Kokinos": "Dev_50",
+      "W. Sean Ford": "Dev_51"
+    }
+  },
+  "CRV": {
+    "alias": "Project_Tau",
+    "tokenAlias": "$TOKEN_S",
+    "projectNames": ["Curve", "curve", "Curve Finance", "CRV", "crv", "curvefi"],
+    "domains": ["curve.fi", "dao.curve.fi", "resources.curve.fi"],
+    "githubOrgs": ["curvefi"],
+    "actorAliases": {
+      "Michael Egorov": "Dev_52"
     }
   }
 }

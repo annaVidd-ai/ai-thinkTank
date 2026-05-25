@@ -44,11 +44,13 @@ export interface BacktestRunResult {
 }
 
 interface BreakdownEntry {
-  runIndex:      number;
+  runIndex:       number;
   signalStrength: number;
-  timing:        number;
-  upside:        number;
-  totalScore:    number;
+  timing:         number;
+  upside:         number;
+  totalScore:     number;
+  // T+U sub-score: (0.2625 × timing + 0.1875 × upside) / 0.45 — normalised to 0–1
+  timingUpside:   number;
 }
 
 // ---------------------------------------------------------------------------
@@ -206,6 +208,10 @@ async function runSingle(
     `score=${scoreData.totalScore.toFixed(3)}, verdict=${verdict}`,
   );
 
+  // T+U sub-score: normalise to 0–1 by dividing by the combined weight (0.45)
+  const timingUpside =
+    parseFloat(((0.2625 * scoreData.timing + 0.1875 * scoreData.upside) / 0.45).toFixed(4));
+
   return {
     result: {
       runIndex,
@@ -213,6 +219,7 @@ async function runSingle(
       timing:         scoreData.timing,
       upside:         scoreData.upside,
       totalScore:     scoreData.totalScore,
+      timingUpside,
     },
     verdict,
     totalScore: scoreData.totalScore,

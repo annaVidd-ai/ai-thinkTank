@@ -1,0 +1,21 @@
+{
+  "ticker": "CRV",
+  "signalDate": "2020-12-15",
+  "snapshotDate": "2020-12-14",
+  "priceAtSnapshot": 0.65,
+  "isControl": true,
+  "developers": [
+    { "name": "Michael Egorov", "isElite": true, "activity": "Founder and lead developer. Quantitative physicist with deep DeFi expertise. Personally authored the StableSwap invariant whitepaper. 40+ commits per week to the Curve protocol monorepo. Active in governance forum with technical responses to every substantive proposal." }
+  ],
+  "assets": [
+    { "name": "Curve Protocol", "type": "Repository", "url": "github.com/curvefi/curve-contract" },
+    { "name": "CRV Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0xD533a949740bb3306d119CC777fa900bA034cd52" },
+    { "name": "Curve DAO", "type": "SmartContract", "url": "etherscan.io/address/0x5f3b5DfEb7B28CDbD7FAba78963Fb202c93EeCA4" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Michael Egorov", "asset": "Curve DAO", "date": "2020-08-13" },
+    { "type": "STARRED", "actor": "Michael Egorov", "asset": "Curve Protocol", "date": "2020-10-01" },
+    { "type": "DEPLOYED", "actor": "Michael Egorov", "asset": "CRV Token Contract", "date": "2020-08-13" }
+  ],
+  "narrativeAtSnapshot": "Curve Finance has become the dominant stableswap DEX with $1.1B total value locked — a 5x increase in four months — driven by Michael Egorov's breakthrough StableSwap invariant algorithm that minimizes slippage for like-asset swaps (stablecoin/stablecoin, BTC variants) by an order of magnitude versus Uniswap's constant product formula. Developer density is exceptional and unique: unlike most DeFi protocols with 5-10 core contributors, Curve has 35+ specialized contributors submitting novel pool designs, gas optimization patches, and Vyper contract improvements daily — the technical community considers Curve's codebase the gold standard for AMM engineering. The emergence of the 'Curve Wars' — protocols (Convex Finance, Yearn Finance, StakeDAO) competing to accumulate veCRV voting power to direct CRV emissions toward their liquidity pools — demonstrates that Curve has become foundational infrastructure that other protocols depend on. Cross-asset coordination: AAVE uses Curve pools for stablecoin liquidity, Compound Treasury holds Curve positions, every major yield aggregator routes through Curve. Three Chainsecurity and Trail of Bits audits, zero critical vulnerabilities across all deployed pools. The investment thesis problem is the CRV emission schedule. Curve launched its DAO with 3.03 billion total CRV supply and an inflation schedule releasing approximately 700 million CRV in year one, declining geometrically. The veCRV lock-up mechanism (locking CRV for up to 4 years for maximum voting power and fee share) is the only value capture mechanism — and while it creates demand, the emission rate mathematically exceeds lock-up demand at any sustainable price level. Protocol revenue (trading fees distributed to veCRV holders) amounts to $2-4M per month, representing less than 3% annualized yield on CRV market cap. The 'Curve Wars' dynamics create secondary demand from protocols accumulating veCRV, but this is institutional demand for governance power, not organic token price support. On-chain analysis: veCRV lock ratio has risen to 42% of circulating supply — better than most governance tokens — but the continuous new emission from liquidity mining means net sell pressure from liquidity providers exceeds buy pressure from lockers. Historical pattern: every major liquidity pool launch generates a 2-4 week emission rush where farmers mint CRV and immediately sell. Michael Egorov's protocol is genuinely revolutionary — the technical architecture and market position are undeniable. But CRV as an investment requires TVL to grow faster than emission inflation indefinitely, which no DeFi protocol has achieved at this scale."
+}

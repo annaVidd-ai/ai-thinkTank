@@ -11,8 +11,11 @@ import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 const adapter = new PrismaBetterSqlite3({ url: 'file:./dev.db' });
 const prisma   = new PrismaClient({ adapter });
 
+// ── Training set: 6W (UNI, LINK, AAVE, YFI, MKR, SNX) + 4C (COMP, ZRX, BAT, CRV)
+// ── Holdout set: 2W (AVAX, SUSHI) + 2C (SAFE, ALGO)  — isHoldout: true
+// ── Legacy cases retained but not in 8W/6C design: SOL, GRT, AXS
 const CASES = [
-  // ── Calibration — Positive (7) ───────────────────────────────────────────
+  // ── Calibration — Positive — Training ────────────────────────────────────
   {
     ticker:         'UNI',
     projectAlias:   'Project_Alpha',
@@ -23,6 +26,7 @@ const CASES = [
     actualMultiple: 11.9,
     split:          'calibration',
     isControl:      false,
+    isHoldout:      false,
   },
   {
     ticker:         'LINK',
@@ -34,6 +38,7 @@ const CASES = [
     actualMultiple: 109.8,
     split:          'calibration',
     isControl:      false,
+    isHoldout:      false,
   },
   {
     ticker:         'AAVE',
@@ -45,6 +50,7 @@ const CASES = [
     actualMultiple: 23.6,
     split:          'calibration',
     isControl:      false,
+    isHoldout:      false,
   },
   {
     ticker:         'SOL',
@@ -56,6 +62,7 @@ const CASES = [
     actualMultiple: 194.2,
     split:          'calibration',
     isControl:      false,
+    isHoldout:      false,
   },
   {
     ticker:         'AVAX',
@@ -67,6 +74,7 @@ const CASES = [
     actualMultiple: 12.1,
     split:          'calibration',
     isControl:      false,
+    isHoldout:      true,   // holdout winner
   },
   {
     ticker:         'MATIC',
@@ -78,6 +86,7 @@ const CASES = [
     actualMultiple: 162.2,
     split:          'calibration',
     isControl:      false,
+    isHoldout:      false,
   },
   {
     ticker:         'YFI',
@@ -89,8 +98,9 @@ const CASES = [
     actualMultiple: 30.3,
     split:          'calibration',
     isControl:      false,
+    isHoldout:      false,
   },
-  // ── Calibration — Negative Controls (2) ─────────────────────────────────
+  // ── Calibration — Negative Controls — Training ────────────────────────────
   {
     ticker:         'COMP',
     projectAlias:   'Project_Nu',
@@ -101,6 +111,7 @@ const CASES = [
     actualMultiple: 1.5,    // peaked early, returned to near launch price within 6 months
     split:          'calibration',
     isControl:      true,
+    isHoldout:      false,
   },
   {
     ticker:         'SAFE',
@@ -112,8 +123,45 @@ const CASES = [
     actualMultiple: 2.0,    // no token at snapshot; token launched 2022, never 10x'd
     split:          'calibration',
     isControl:      true,
+    isHoldout:      true,   // holdout control
   },
-  // ── Validation (3) — Positive (2) + Negative Control (1) ─────────────────
+  {
+    ticker:         'ZRX',
+    projectAlias:   'Project_Pi',
+    sector:         'DeFi',
+    signalDate:     new Date('2020-08-01'),
+    signalPrice:    0.90,
+    athPrice:       1.35,   // ~1.5x from snapshot; ZRX price never sustained 2x
+    actualMultiple: 1.5,
+    split:          'calibration',
+    isControl:      true,
+    isHoldout:      false,
+  },
+  {
+    ticker:         'BAT',
+    projectAlias:   'Project_Rho',
+    sector:         'Infrastructure',
+    signalDate:     new Date('2020-10-01'),
+    signalPrice:    0.22,
+    athPrice:       0.264,  // ~1.2x within 3 years; peaked briefly higher but returned
+    actualMultiple: 1.2,
+    split:          'calibration',
+    isControl:      true,
+    isHoldout:      false,
+  },
+  {
+    ticker:         'CRV',
+    projectAlias:   'Project_Tau',
+    sector:         'DeFi',
+    signalDate:     new Date('2020-12-15'),
+    signalPrice:    0.65,
+    athPrice:       0.845,  // ~1.3x; emission inflation caused 2+ year price bleed
+    actualMultiple: 1.3,
+    split:          'calibration',
+    isControl:      true,
+    isHoldout:      false,
+  },
+  // ── Validation (3) — Positive (2) Training + Control (1) Legacy ───────────
   {
     ticker:         'GRT',
     projectAlias:   'Project_Theta',
@@ -124,6 +172,7 @@ const CASES = [
     actualMultiple: 94.7,
     split:          'validation',
     isControl:      false,
+    isHoldout:      false,
   },
   {
     ticker:         'AXS',
@@ -135,6 +184,7 @@ const CASES = [
     actualMultiple: 305.4,
     split:          'validation',
     isControl:      false,
+    isHoldout:      false,
   },
   {
     ticker:         'MKR',
@@ -146,17 +196,19 @@ const CASES = [
     actualMultiple: 12.6,
     split:          'validation',
     isControl:      false,
+    isHoldout:      false,
   },
   {
-    ticker:         'YFI_CTRL',
-    projectAlias:   'Project_Omicron',
-    sector:         'DeFi',
-    signalDate:     new Date('2020-08-15'),
-    signalPrice:    30000,
-    athPrice:       90787,
-    actualMultiple: 3.0,    // ~3x to ATH from $30K entry; ~0.5x within 3 months
+    ticker:         'ALGO',
+    projectAlias:   'Project_Sigma',
+    sector:         'L1',
+    signalDate:     new Date('2020-12-01'),
+    signalPrice:    0.30,
+    athPrice:       0.75,   // ~2.5x; underperformed ETH by 10x despite elite team
+    actualMultiple: 2.5,
     split:          'validation',
     isControl:      true,
+    isHoldout:      true,   // holdout control
   },
   // ── Verification (2) ─────────────────────────────────────────────────────
   {
@@ -169,6 +221,7 @@ const CASES = [
     actualMultiple: 9.8,
     split:          'verification',
     isControl:      false,
+    isHoldout:      false,
   },
   {
     ticker:         'SUSHI',
@@ -180,6 +233,7 @@ const CASES = [
     actualMultiple: 42.5,
     split:          'verification',
     isControl:      false,
+    isHoldout:      true,   // holdout winner
   },
 ] as const;
 
@@ -187,10 +241,20 @@ async function main() {
   console.log('[Seed] Seeding BacktestCase table…');
 
   // Remove stale YFIL row left over from the rename to YFI_CTRL.
-  const stale = await prisma.backtestCase.findUnique({ where: { ticker: 'YFIL' } });
-  if (stale) {
+  const staleYFIL = await prisma.backtestCase.findUnique({ where: { ticker: 'YFIL' } });
+  if (staleYFIL) {
     await prisma.backtestCase.delete({ where: { ticker: 'YFIL' } });
-    console.log('  ✓  Removed stale YFIL row (renamed to YFI_CTRL)');
+    console.log('  ✓  Removed stale YFIL row');
+  }
+
+  // Remove YFI_CTRL — structural confound (same protocol as YFI winner, different snapshot).
+  // Pre-specified exclusion per 8W/6C balanced redesign.
+  const staleYFICTRL = await prisma.backtestCase.findUnique({ where: { ticker: 'YFI_CTRL' } });
+  if (staleYFICTRL) {
+    // Delete associated BacktestResult rows before the parent BacktestCase
+    await prisma.backtestResult.deleteMany({ where: { caseId: staleYFICTRL.id } });
+    await prisma.backtestCase.delete({ where: { ticker: 'YFI_CTRL' } });
+    console.log('  ✓  Removed YFI_CTRL (structural confound — same protocol as YFI winner)');
   }
 
   for (const c of CASES) {

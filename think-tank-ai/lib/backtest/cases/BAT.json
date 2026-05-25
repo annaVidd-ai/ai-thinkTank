@@ -1,0 +1,23 @@
+{
+  "ticker": "BAT",
+  "signalDate": "2020-10-01",
+  "snapshotDate": "2020-09-30",
+  "priceAtSnapshot": 0.22,
+  "isControl": true,
+  "developers": [
+    { "name": "Brendan Eich", "isElite": true, "activity": "Creator of JavaScript, co-founder of Mozilla Foundation. CEO and daily technical contributor to Brave browser. Ships features personally — recent commits to BAT creator dashboard and privacy-preserving ad matching algorithm." },
+    { "name": "Brian Bondy", "isElite": true, "activity": "Co-founder and CTO. Former Mozilla and Khan Academy engineer. Architect of Brave's chromium-based rendering engine. 15+ commits per week to the Brave browser core codebase." },
+    { "name": "Yan Zhu", "isElite": true, "activity": "Chief Information Security Officer. Former EFF researcher, HTTPS Everywhere co-creator. Leads privacy engineering and threat model design for Brave's fingerprinting resistance features." }
+  ],
+  "assets": [
+    { "name": "Brave Browser", "type": "Repository", "url": "github.com/brave/brave-browser" },
+    { "name": "BAT Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x0D8775F648430679A709E98d2b0Cb6250d2887EF" }
+  ],
+  "events": [
+    { "type": "FUNDED", "actor": "Brendan Eich", "asset": "BAT Token Contract", "date": "2017-06-01", "amount": 35000000 },
+    { "type": "STARRED", "actor": "Brendan Eich", "asset": "Brave Browser", "date": "2019-11-19" },
+    { "type": "DEPLOYED", "actor": "Brian Bondy", "asset": "Brave Browser", "date": "2020-04-15" },
+    { "type": "STARRED", "actor": "Brian Bondy", "asset": "Brave Browser", "date": "2020-09-22" }
+  ],
+  "narrativeAtSnapshot": "Brave browser has achieved 20 million monthly active users, growing 30% quarter-over-quarter — a genuine mainstream product adoption curve powered by Brendan Eich's unmatched credentials (creator of JavaScript, co-founder of Mozilla). The browser blocks ads and trackers by default, offering users BAT rewards for opting in to privacy-respecting Brave Ads, while verified content creators receive BAT tips from users. Real product metrics: 1.2 million verified content creators, $1.8M in BAT flowing to creators monthly, 4.8 million daily active users engaging with Brave Rewards. The developer team is elite — Brian Bondy's infrastructure architecture has maintained 99.9% uptime, Yan Zhu's privacy engineering is cited in academic papers on browser fingerprinting resistance. Three completed security audits (NCC Group, Cure53, Bishop Fox) with zero critical vulnerabilities. Cross-asset coordination: Coinbase Commerce integration, Uphold wallet partnership, Gemini custody support. Media coverage: TechCrunch, Wired, Ars Technica — mainstream tech press, not just crypto. The investment thesis problem is entirely structural and has nothing to do with product quality: BAT is a velocity token by design. Advertisers buy BAT to pay users; users receive BAT and spend it on creator tips or convert it to fiat; creators receive BAT and must sell it for operational expenses. The entire economic model requires continuous circulation — no staking, no burn, no lockup mechanism exists to reduce velocity. Unlike MKR (buyback and burn from protocol surplus), AAVE (staking for safety module yield), or SNX (fee distribution requiring staking), BAT has no mechanism by which token holders benefit from holding versus selling. Mathematical consequence: price appreciation would require advertising spend to outpace user and creator sell pressure on a sustained basis, which contradicts the protocol's design objective of being a neutral exchange medium for attention. The gap between product adoption success and token value is not a marketing failure — it is the protocol working exactly as designed. On-chain analysis: BAT wallet concentration shows 72% of supply in the top 100 wallets, with Uphold holding custodial positions for millions of micro-BAT redemptions pending conversion. High-conviction technical team, real product with real users, structurally broken investment vehicle."
+}

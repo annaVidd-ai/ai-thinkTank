@@ -23,20 +23,24 @@ import { prisma } from '../prisma';
 // ---------------------------------------------------------------------------
 
 export interface BiasReport {
-  ticker:             string;
-  projectAlias:       string;
-  sector:             string;
-  split:              string;
-  isControl:          boolean;     // true = negative control case
-  actualMultiple:     number;
-  blindedMedian:      number;
-  unblindedMedian:    number;
-  biasRatio:          number;      // unblindedMedian / blindedMedian; 99.0 = ∞ sentinel; 0 = no data
-  biasDetected:       boolean;     // biasRatio > 1.5
-  stdDevBlinded:      number;
-  stdDevUnblinded:    number;
-  blindedRuns:        number;      // how many blinded runs used (≤ numRuns)
-  unblindedRuns:      number;
+  ticker:                string;
+  projectAlias:          string;
+  sector:                string;
+  split:                 string;
+  isControl:             boolean;     // true = negative control case
+  isHoldout:             boolean;     // true = holdout set (final validation only)
+  actualMultiple:        number;
+  blindedMedian:         number;
+  unblindedMedian:       number;
+  biasRatio:             number;      // unblindedMedian / blindedMedian; 99.0 = ∞ sentinel; 0 = no data
+  biasDetected:          boolean;     // biasRatio > 1.5
+  stdDevBlinded:         number;
+  stdDevUnblinded:       number;
+  blindedRuns:           number;      // how many blinded runs used (≤ numRuns)
+  unblindedRuns:         number;
+  // T+U sub-score: (0.2625 × timing + 0.1875 × upside) / 0.45, normalised to 0–1
+  timingUpsideBlinded:   number;      // median T+U across blinded runs
+  timingUpsideUnblinded: number;      // median T+U across unblinded runs
 }
 
 export interface ReportSummary {
@@ -49,9 +53,13 @@ export interface ReportSummary {
   overallPassRate:      number;
   avgBiasRatio:         number | null;  // null when no cases have both sides tested yet
   biasDetectedCount:    number;
-  controlsAvg:          number | null;  // avg blinded score for tested controls
-  winnersAvg:           number | null;  // avg blinded score for tested positive cases
+  controlsAvg:          number | null;  // avg blinded score for tested controls (training only)
+  winnersAvg:           number | null;  // avg blinded score for tested positive cases (training only)
   discriminationWarning: boolean;       // true when |winnersAvg − controlsAvg| < 0.10
+  // T+U sub-score discrimination (PRIMARY CALIBRATION METRIC) — training cases only
+  winnersAvgTU:         number | null;  // avg T+U for tested winners (blinded)
+  controlsAvgTU:        number | null;  // avg T+U for tested controls (blinded)
+  deltaTU:              number | null;  // winnersAvgTU - controlsAvgTU
 }
 
 // ---------------------------------------------------------------------------
@@ -95,6 +103,12 @@ export async function generateBiasReport(
     const stdDevBlinded   = avgStdDev(blindedResults);
     const stdDevUnblinded = avgStdDev(unblindedResults);
 
+    // T+U sub-score: (0.2625 × timing + 0.1875 × upside) / 0.45 per run, then median
+    const tuBlinded   = blindedResults.map((r)   => (0.2625 * r.timing + 0.1875 * r.upside) / 0.45);
+    const tuUnblinded = unblindedResults.map((r)  => (0.2625 * r.timing + 0.1875 * r.upside) / 0.45);
+    const blindedTUMedian   = median(tuBlinded);
+    const unblindedTUMedian = median(tuUnblinded);
+
     const hasBothSides = blindedResults.length > 0 && unblindedResults.length > 0;
 
     // C2: biasRatio sentinel — 99.0 represents ∞ (blinded=0 but unblinded>0)
@@ -113,20 +127,23 @@ export async function generateBiasReport(
     const biasDetected = hasBothSides && biasRatio > 1.5;
 
     reports.push({
-      ticker:          c.ticker,
-      projectAlias:    c.projectAlias,
-      sector:          c.sector,
-      split:           c.split,
-      isControl:       c.isControl,
-      actualMultiple:  c.actualMultiple,
-      blindedMedian:   round4(blindedMedian),
-      unblindedMedian: round4(unblindedMedian),
-      biasRatio:       round4(biasRatio),
+      ticker:                c.ticker,
+      projectAlias:          c.projectAlias,
+      sector:                c.sector,
+      split:                 c.split,
+      isControl:             c.isControl,
+      isHoldout:             c.isHoldout,
+      actualMultiple:        c.actualMultiple,
+      blindedMedian:         round4(blindedMedian),
+      unblindedMedian:       round4(unblindedMedian),
+      biasRatio:             round4(biasRatio),
       biasDetected,
-      stdDevBlinded:   round4(stdDevBlinded),
-      stdDevUnblinded: round4(stdDevUnblinded),
-      blindedRuns:     blindedResults.length,
-      unblindedRuns:   unblindedResults.length,
+      stdDevBlinded:         round4(stdDevBlinded),
+      stdDevUnblinded:       round4(stdDevUnblinded),
+      blindedRuns:           blindedResults.length,
+      unblindedRuns:         unblindedResults.length,
+      timingUpsideBlinded:   round4(blindedTUMedian),
+      timingUpsideUnblinded: round4(unblindedTUMedian),
     });
   }
 
@@ -155,9 +172,9 @@ export async function generateBiasReport(
     (r) => r.blindedRuns > 0 && r.unblindedRuns > 0 && r.biasDetected,
   ).length;
 
-  // Controls vs winners discrimination
-  const testedControls = reports.filter((r) =>  r.isControl && r.blindedRuns > 0);
-  const testedWinners  = reports.filter((r) => !r.isControl && r.blindedRuns > 0);
+  // Controls vs winners discrimination — training cases only (exclude holdout)
+  const testedControls = reports.filter((r) =>  r.isControl && !r.isHoldout && r.blindedRuns > 0);
+  const testedWinners  = reports.filter((r) => !r.isControl && !r.isHoldout && r.blindedRuns > 0);
 
   const controlsAvg: number | null = testedControls.length > 0
     ? round4(testedControls.reduce((s, r) => s + r.blindedMedian, 0) / testedControls.length)
@@ -170,6 +187,18 @@ export async function generateBiasReport(
     controlsAvg !== null &&
     winnersAvg  !== null &&
     Math.abs(winnersAvg - controlsAvg) < 0.10;
+
+  // T+U sub-score discrimination — training cases only
+  const controlsAvgTU: number | null = testedControls.length > 0
+    ? round4(testedControls.reduce((s, r) => s + r.timingUpsideBlinded, 0) / testedControls.length)
+    : null;
+  const winnersAvgTU: number | null = testedWinners.length > 0
+    ? round4(testedWinners.reduce((s, r) => s + r.timingUpsideBlinded, 0) / testedWinners.length)
+    : null;
+  const deltaTU: number | null =
+    winnersAvgTU !== null && controlsAvgTU !== null
+      ? round4(winnersAvgTU - controlsAvgTU)
+      : null;
 
   return {
     cases:                reports,
@@ -184,6 +213,9 @@ export async function generateBiasReport(
     controlsAvg,
     winnersAvg,
     discriminationWarning,
+    winnersAvgTU,
+    controlsAvgTU,
+    deltaTU,
   };
 }
 
@@ -264,7 +296,7 @@ export function printBiasReport(summary: ReportSummary): void {
     console.log(row(line));
   }
 
-  // ── Controls vs winners summary ────────────────────────────────────────────
+  // ── Controls vs winners summary (training set) ────────────────────────────
   console.log(border('╠', '═', '╣'));
   if (summary.controlsAvg !== null && summary.winnersAvg !== null) {
     const delta    = summary.winnersAvg - summary.controlsAvg;
@@ -272,7 +304,7 @@ export function printBiasReport(summary: ReportSummary): void {
     const summLine =
       `  Controls avg: ${summary.controlsAvg.toFixed(3)}` +
       `  |  Winners avg: ${summary.winnersAvg.toFixed(3)}` +
-      `  |  Δ: ${sign}${delta.toFixed(3)}`;
+      `  |  Δ: ${sign}${delta.toFixed(3)}  [training set]`;
     console.log(row(summLine));
   } else {
     console.log(row('  Discrimination: insufficient data (run controls + at least one positive case).'));
@@ -296,6 +328,96 @@ export function printBiasReport(summary: ReportSummary): void {
   }
 
   console.log();
+
+  // ── T+U Sub-Score Report ────────────────────────────────────────────────────
+  // Training cases only. T+U = (0.2625×T + 0.1875×U) / 0.45 — primary calibration metric.
+  const tuW = 62; // inner content width for T+U box
+  const tuBorder = (l: string, m: string, r: string) => l + m.repeat(tuW) + r;
+  const tuRow = (content: string) => '║' + content.padEnd(tuW) + '║';
+
+  console.log(tuBorder('╔', '═', '╗'));
+  console.log(tuRow(' T+U SUB-SCORE DISCRIMINATION REPORT  [training set]'));
+  console.log(tuBorder('╠', '═', '╣'));
+
+  if (summary.winnersAvgTU !== null && summary.controlsAvgTU !== null && summary.deltaTU !== null) {
+    const tuDeltaSign = summary.deltaTU >= 0 ? '+' : '';
+    const tuTotalDelta = summary.controlsAvg !== null && summary.winnersAvg !== null
+      ? summary.winnersAvg - summary.controlsAvg
+      : null;
+    console.log(tuRow(`  Winners T+U Avg:  ${summary.winnersAvgTU.toFixed(3)}`));
+    console.log(tuRow(`  Controls T+U Avg: ${summary.controlsAvgTU.toFixed(3)}`));
+    console.log(tuRow(`  T+U Δ:            ${tuDeltaSign}${summary.deltaTU.toFixed(3)}  (PRIMARY CALIBRATION METRIC)`));
+    if (tuTotalDelta !== null) {
+      const tsSign = tuTotalDelta >= 0 ? '+' : '';
+      console.log(tuRow(`  TotalScore Δ:     ${tsSign}${tuTotalDelta.toFixed(3)}  (for production threshold)`));
+    }
+  } else {
+    console.log(tuRow('  Insufficient data — run at least one training winner and one training control.'));
+  }
+  console.log(tuBorder('╚', '═', '╝'));
+  console.log();
+
+  // ── Holdout Validation Section ─────────────────────────────────────────────
+  const holdoutCases = cases.filter((r) => r.isHoldout);
+  if (holdoutCases.length > 0) {
+    const holdoutWithData = holdoutCases.filter((r) => r.blindedRuns > 0);
+    console.log(border('╔', '═', '╗'));
+    console.log(row('  HOLDOUT VALIDATION — NOT USED FOR PROMPT ITERATION'));
+    console.log(row('  ⚠  Do NOT adjust prompts or weights based on these scores.'));
+    console.log(border('╠', '═', '╣'));
+    console.log(row(colHeader));
+    console.log(border('╠', '═', '╣'));
+
+    for (const r of holdoutCases) {
+      const noData      = r.blindedRuns === 0 && r.unblindedRuns === 0;
+      const det         = noData ? '-' : r.biasDetected ? '⚠' : '✓';
+      const blindedStr  = r.blindedRuns   > 0 ? r.blindedMedian.toFixed(3)   : 'N/A';
+      const unblindStr  = r.unblindedRuns > 0 ? r.unblindedMedian.toFixed(3) : 'N/A';
+      const biasStr     = (r.blindedRuns > 0 && r.unblindedRuns > 0)
+        ? (r.biasRatio >= 99.0 ? '∞' : r.biasRatio.toFixed(2))
+        : 'N/A';
+      const typeStr     = r.isControl ? 'Ctrl' : 'Pos';
+      const alias       = r.split === 'calibration' ? r.projectAlias : r.ticker;
+
+      const line =
+        '  ' +
+        alias.padEnd(14) +
+        r.split.padEnd(14) +
+        typeStr.padEnd(6) +
+        blindedStr.padEnd(9) +
+        unblindStr.padEnd(9) +
+        biasStr.padEnd(7) +
+        det.padEnd(5) +
+        String(r.actualMultiple).padEnd(9) +
+        `${r.blindedRuns}b/${r.unblindedRuns}u`;
+
+      console.log(row(line));
+    }
+
+    console.log(border('╠', '═', '╣'));
+    if (holdoutWithData.length > 0) {
+      const hldWinners  = holdoutWithData.filter((r) => !r.isControl);
+      const hldControls = holdoutWithData.filter((r) =>  r.isControl);
+      const hldWAvg = hldWinners.length > 0
+        ? hldWinners.reduce((s, r) => s + r.blindedMedian, 0) / hldWinners.length : null;
+      const hldCAvg = hldControls.length > 0
+        ? hldControls.reduce((s, r) => s + r.blindedMedian, 0) / hldControls.length : null;
+      if (hldWAvg !== null && hldCAvg !== null) {
+        const hldDelta = hldWAvg - hldCAvg;
+        const hldSign  = hldDelta >= 0 ? '+' : '';
+        console.log(row(
+          `  Controls avg: ${hldCAvg.toFixed(3)}  |  Winners avg: ${hldWAvg.toFixed(3)}` +
+          `  |  Δ: ${hldSign}${hldDelta.toFixed(3)}  [holdout]`,
+        ));
+      } else {
+        console.log(row('  Holdout: insufficient data for both sides.'));
+      }
+    } else {
+      console.log(row('  Holdout cases have not been run yet.'));
+    }
+    console.log(border('╚', '═', '╝'));
+    console.log();
+  }
 }
 
 // ---------------------------------------------------------------------------

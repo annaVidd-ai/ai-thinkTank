@@ -1,0 +1,23 @@
+{
+  "ticker": "ZRX",
+  "signalDate": "2020-08-01",
+  "snapshotDate": "2020-07-31",
+  "priceAtSnapshot": 0.90,
+  "isControl": true,
+  "developers": [
+    { "name": "Will Warren", "isElite": true, "activity": "Co-founder and lead researcher. Daily protocol design commits, deep Ethereum research. Regular speaker at ETH conferences. Author of ZEIPs (0x Improvement Proposals). 8,000+ Twitter followers in technical DeFi community." },
+    { "name": "Amir Bandeali", "isElite": true, "activity": "Co-founder and CTO. Core smart contract architecture, ZRX token contract, v3 protocol upgrade design. Regular open-source contributor to Ethereum tooling beyond 0x." },
+    { "name": "Fabio Berger", "isElite": true, "activity": "Protocol engineering, relayer infrastructure, 0x.js SDK development. 10+ commits per week across the monorepo. Key driver of the mesh peer-to-peer order sharing network." }
+  ],
+  "assets": [
+    { "name": "0x Protocol", "type": "Repository", "url": "github.com/0xProject/0x-protocol" },
+    { "name": "ZRX Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0xe41d2489571d322189246dafa5ebde1f4699f498" }
+  ],
+  "events": [
+    { "type": "FUNDED", "actor": "Will Warren", "asset": "0x Protocol", "date": "2018-10-01", "amount": 24000000 },
+    { "type": "DEPLOYED", "actor": "Amir Bandeali", "asset": "0x Protocol", "date": "2020-01-15" },
+    { "type": "STARRED", "actor": "Will Warren", "asset": "0x Protocol", "date": "2020-07-20" },
+    { "type": "STARRED", "actor": "Fabio Berger", "asset": "0x Protocol", "date": "2020-07-18" }
+  ],
+  "narrativeAtSnapshot": "0x Protocol is the leading open-source infrastructure for peer-to-peer exchange of Ethereum-based tokens, reporting $1.5B+ cumulative DEX volume routed through its relayer network with 60+ active integrations across the DeFi ecosystem including Radar Relay, DDEX, and Tokenlon. Co-founders Will Warren and Amir Bandeali bring elite credentials: Warren's cryptography and smart contract research is cited in Ethereum academic circles, while Bandeali's protocol architecture work has withstood multiple Trail of Bits security audits with zero critical findings. Institutional backing: Paradigm, Andreessen Horowitz Crypto, Blockchain Capital — $24M raised in 2018, well-capitalized for multi-year runway. The v3 upgrade launched earlier this year introduced ZRX staking pools where market makers lock ZRX to earn protocol fees, representing the first meaningful utility for the governance token. Developer density: 30+ contributors to the open-source monorepo, daily commits across protocol, SDK, and Matcha DEX frontend. Weekly mention growth: 2.8x across DeFi Discord and Telegram in the past month as DEX aggregation narrative accelerates. However, the critical structural weakness is unmistakable: ZRX staking for protocol fees is economically marginal in practice — the actual fee capture flowing to ZRX stakers represents less than 0.05% annualized yield at current volumes. The community's own governance forums contain a persistent thread titled 'What does ZRX actually do?' with 280+ responses spanning two years — the community itself cannot articulate a compelling value accrual thesis. Token holders vote on protocol parameters but receive no meaningful share of the value created by the protocol's routing infrastructure. The contrast with fee-accruing models (MKR, SUSHI) is stark. On-chain data: ZRX staking participation is below 8% of circulating supply, suggesting sophisticated holders do not find the yield compelling. DeFi Summer is flooding the market with alternative governance tokens offering stronger yield narratives. Signal arrived post-mainstream — Bloomberg DeFi coverage this week, Coindesk front page yesterday. The surface signal (elite team, institutional backing, real adoption, v3 upgrade) is exceptionally strong, but the token investment thesis is structurally empty."
+}

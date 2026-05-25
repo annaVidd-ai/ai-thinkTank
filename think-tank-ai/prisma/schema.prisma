@@ -54,6 +54,7 @@ model BacktestCase {
   split          String           // "calibration" | "validation" | "verification"
   blinded        Boolean          @default(false)
   isControl      Boolean          @default(false) // true = negative control case
+  isHoldout      Boolean          @default(false) // true = holdout set (final validation only)
   createdAt      DateTime         @default(now())
 
   results        BacktestResult[]

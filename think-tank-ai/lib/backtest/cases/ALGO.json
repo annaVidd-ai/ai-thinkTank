@@ -1,0 +1,23 @@
+{
+  "ticker": "ALGO",
+  "signalDate": "2020-12-01",
+  "snapshotDate": "2020-11-30",
+  "priceAtSnapshot": 0.30,
+  "isControl": true,
+  "developers": [
+    { "name": "Silvio Micali", "isElite": true, "activity": "Turing Award winner (2012), MIT professor, cryptographic protocol inventor (GMR signatures, zero-knowledge proofs). Designed Algorand's Pure Proof-of-Stake consensus. Active in research publication and conference keynotes. Personal GitHub contributions to cryptographic primitives." },
+    { "name": "Steve Kokinos", "isElite": true, "activity": "CEO, former entrepreneur (Fuze, BladeLogic acquired by BMC for $900M). Driving enterprise and government blockchain adoption. Marshall Islands CBDC partnership and Circle USDC integration on Algorand closed under his leadership." },
+    { "name": "W. Sean Ford", "isElite": true, "activity": "COO and former CMO at LogMeIn. Building institutional partnerships and developer ecosystem. 500+ DApp developers onboarded in the past year through Algorand Foundation grants program." }
+  ],
+  "assets": [
+    { "name": "Algorand Node", "type": "Repository", "url": "github.com/algorand/go-algorand" },
+    { "name": "Algorand Foundation", "type": "Repository", "url": "github.com/algorand/algorand-foundation" }
+  ],
+  "events": [
+    { "type": "FUNDED", "actor": "Silvio Micali", "asset": "Algorand Node", "date": "2019-06-15", "amount": 62000000 },
+    { "type": "DEPLOYED", "actor": "Silvio Micali", "asset": "Algorand Node", "date": "2019-06-19" },
+    { "type": "STARRED", "actor": "Steve Kokinos", "asset": "Algorand Node", "date": "2020-10-01" },
+    { "type": "STARRED", "actor": "W. Sean Ford", "asset": "Algorand Node", "date": "2020-11-15" }
+  ],
+  "narrativeAtSnapshot": "Algorand represents the strongest academic pedigree in blockchain — Silvio Micali's Turing Award (2012) for contributions to cryptography underpins the pure proof-of-stake consensus mechanism that Algorand has operated with zero downtime and 1,000+ TPS throughput since mainnet launch. Institutional partnerships are exceptional: Marshall Islands national digital currency (CBDC) built on Algorand, Circle USDC expanding to Algorand, Republic Securities tokenizing assets, FIFA exploring NFT infrastructure. Development activity: 200+ external developers contributing to SDKs across Python, JavaScript, Go, and Rust; 30+ DApps live in production; Algorand Foundation distributing $250M ecosystem fund. Technical differentiation: instant finality (blocks final in 4 seconds), no forks by design, carbon-negative blockchain certification. Security audits: Trail of Bits and NCC Group, no critical vulnerabilities. Developer density: Algorand's go-algorand repository has 8,500+ stars with daily commits from both Algorand Inc. and external contributors. Institutional investors: Union Square Ventures, Pillar, Naval Ravikant — $62M raised. The project is succeeding by every operational metric. The investment thesis failure is entirely in the token supply schedule, not the technology or adoption. The ALGO tokenomics were designed to fund ecosystem development and early validator participation over a decade, resulting in a vesting schedule that releases approximately 2.5 billion ALGO to early backers and the Algorand Foundation through 2024. At current circulating supply of 3.1 billion with 10 billion total supply, dilution from scheduled releases mathematically exceeds any plausible demand growth at the current price level. Early institutional participants who received ALGO at $0.10-$0.24 in the 2019 auction have been distributing systematically. On-chain analysis: large wallet outflows from 20+ validator nodes coincide with each quarterly unlock event. Community governance forum analysis: multiple proposals to 'fix tokenomics' by accelerating decentralization or burning Foundation allocation have been rejected. The gap is permanent and structural: Silvio Micali built the best blockchain consensus mechanism in the field, and Steve Kokinos built real institutional partnerships — but the token distribution model was designed for foundation funding, not retail investor value creation. This is the definitive test case for separating protocol engineering excellence from investment merit."
+}
