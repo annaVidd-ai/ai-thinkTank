@@ -1,0 +1,23 @@
+{
+  "ticker": "DYDX",
+  "signalDate": "2021-10-01",
+  "snapshotDate": "2021-09-24",
+  "priceAtSnapshot": 20.00,
+  "isControl": true,
+  "developers": [
+    { "name": "Antonio Juliano", "isElite": true, "activity": "Founder and CEO. Protocol architecture, StarkWare L2 integration, and institutional partnerships. Former Coinbase engineer. Princeton mathematics. Driving perpetuals product roadmap and regulatory strategy." },
+    { "name": "David Gogel", "isElite": true, "activity": "VP of Growth and partnerships. Token launch strategy, market maker relationships, and exchange integrations. Former Goldman Sachs. Key figure in the dYdX Foundation setup and token distribution design." },
+    { "name": "Brendan Chou", "isElite": false, "activity": "Engineering lead for the StarkWare L2 integration and order matching engine. Daily commits to the core trading infrastructure and API systems." }
+  ],
+  "assets": [
+    { "name": "dYdX Protocol", "type": "Repository", "url": "github.com/dydxprotocol/dydx-v3" },
+    { "name": "DYDX Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x92d6c1e31e14520e676a687f0a93788b716beff5" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Antonio Juliano", "asset": "DYDX Token Contract", "date": "2021-08-03" },
+    { "type": "FUNDED", "actor": "Antonio Juliano", "asset": "dYdX Protocol", "date": "2021-06-15", "amount": 65000000 },
+    { "type": "DEPLOYED", "actor": "Brendan Chou", "asset": "dYdX Protocol", "date": "2021-04-06" },
+    { "type": "STARRED", "actor": "David Gogel", "asset": "dYdX Protocol", "date": "2021-09-20" }
+  ],
+  "narrativeAtSnapshot": "dYdX is the leading decentralized perpetuals exchange, having processed over $9 billion in cumulative trading volume on its StarkWare Layer-2 deployment. The DYDX governance token launched via a retroactive airdrop on August 3, 2021, distributing tokens to historical users and creating immediate market depth. Daily trading volume on the protocol at snapshot: approximately $650 million — rivaling mid-tier centralized exchanges. The team is led by Antonio Juliano, a Princeton mathematics graduate and former Coinbase software engineer, backed by a16z Crypto (leading investor), Polychain Capital, Three Arrows Capital, Paradigm, Brian Armstrong, and others — with $65M raised in a June 2021 Series C at elite market conditions. The StarkWare L2 architecture eliminates gas costs for traders while maintaining self-custody of assets, solving the primary UX barrier that limited on-chain derivatives adoption. Developer activity: active GitHub across v3 protocol, API, and client libraries with multiple daily commits. The $65M raise provides years of operational runway. The critical structural weakness: 100% of trading fee revenue flows to the dYdX DAO treasury — token holders receive no direct yield, no fee rebates, and no revenue distribution. DYDX grants governance power over protocol parameters and treasury allocation, but governance over a treasury is not an investment return mechanism. Contrast with protocols like GMX where 70% of fees flow directly to stakers and liquidity providers in real-time. The token launched at a fully diluted valuation exceeding $4 billion with only 7.5% of supply circulating — a 13:1 fully-diluted-to-circulating ratio. Major unlock tranches are scheduled over 18 months: investor allocations, team tokens, and foundation reserves will create sustained sell pressure. The community's own governance forums contain repeated threads asking how DYDX token holders benefit from protocol revenue — no mechanism has been proposed or voted upon. The distinction between protocol utility (real) and token investment value (unproven) has not been resolved. Signal arrived post-mainstream: Bloomberg, CNBC, and major crypto media covered the airdrop last month. The market appears to be pricing the token on narrative momentum rather than fundamental value accrual."
+}

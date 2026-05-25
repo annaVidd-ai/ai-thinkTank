@@ -212,5 +212,65 @@
     "actorAliases": {
       "Michael Egorov": "Dev_52"
     }
+  },
+  "RNDR": {
+    "alias": "Project_Upsilon",
+    "tokenAlias": "$TOKEN_T",
+    "projectNames": ["Render Network", "Render", "render", "RNDR", "rndr", "rendernetwork", "OTOY", "OctaneRender"],
+    "domains": ["rendernetwork.com", "render.x.io"],
+    "githubOrgs": ["rendernetwork"],
+    "actorAliases": {
+      "Jules Urbach": "Dev_53",
+      "Ramesh Srikanth": "Dev_54",
+      "Alicia Nails": "Dev_55"
+    }
+  },
+  "PENDLE": {
+    "alias": "Project_Phi",
+    "tokenAlias": "$TOKEN_U",
+    "projectNames": ["Pendle", "pendle", "PENDLE", "Pendle Finance", "pendle-finance"],
+    "domains": ["pendle.finance", "app.pendle.finance"],
+    "githubOrgs": ["pendle-finance"],
+    "actorAliases": {
+      "TN Lee": "Dev_56",
+      "Vu Nguyen": "Dev_57",
+      "Long Vuong": "Dev_58"
+    }
+  },
+  "INJ": {
+    "alias": "Project_Chi",
+    "tokenAlias": "$TOKEN_V",
+    "projectNames": ["Injective", "injective", "INJ", "inj", "InjectiveLabs", "Injective Protocol", "injective-chain"],
+    "domains": ["injective.com", "injective.exchange", "explorer.injective.network"],
+    "githubOrgs": ["InjectiveLabs"],
+    "actorAliases": {
+      "Eric Chen": "Dev_59",
+      "Albert Chon": "Dev_60",
+      "Max Einhorn": "Dev_61"
+    }
+  },
+  "DYDX": {
+    "alias": "Project_Psi",
+    "tokenAlias": "$TOKEN_W",
+    "projectNames": ["dYdX", "dydx", "DYDX", "dYdX Protocol", "dydxprotocol"],
+    "domains": ["dydx.exchange", "dydx.community", "dydx.trade"],
+    "githubOrgs": ["dydxprotocol"],
+    "actorAliases": {
+      "Antonio Juliano": "Dev_62",
+      "David Gogel": "Dev_63",
+      "Brendan Chou": "Dev_64"
+    }
+  },
+  "ENS": {
+    "alias": "Project_Omega",
+    "tokenAlias": "$TOKEN_X",
+    "projectNames": ["Ethereum Name Service", "ENS", "ens", "ensdomains", "ens-contracts"],
+    "domains": ["ens.domains", "app.ens.domains"],
+    "githubOrgs": ["ensdomains"],
+    "actorAliases": {
+      "Nick Johnson": "Dev_65",
+      "Makoto Inoue": "Dev_66",
+      "Brantly Millegan": "Dev_67"
+    }
   }
 }

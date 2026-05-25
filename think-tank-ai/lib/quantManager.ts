@@ -156,14 +156,18 @@ export async function processScore(clusterId: string): Promise<void> {
  * Maps a scored cluster to a tradable ticker via Claude Haiku and generates an Alert:
  * 1. Calls Claude Haiku with MapperSchema to derive ticker + marketCap.
  * 2. Fetches the latest ClusterScore and completed Debate verdict.
- * 3. Upserts an Alert row (idempotent on re-runs).
+ * 3. Gates on the T+U sub-score threshold (NOT totalScore).
+ * 4. Upserts an Alert row (idempotent on re-runs).
+ *
+ * Alert gate: T+U sub-score = (0.2625 × timing_raw + 0.1875 × upside_raw) / 0.45
+ * Threshold locked from 8W/6C marathon training set (2026-05-25):
+ *   midpoint(min_Winner_TU=0.5667 [SUSHI], max_Control_TU=0.5667 [CRV]) = 0.5667
+ * TotalScore is NOT used for alert gating.
  */
+const TU_ALERT_THRESHOLD = 0.5667;
+
 export async function processMap(clusterId: string): Promise<void> {
   const cluster = await prisma.cluster.findUniqueOrThrow({ where: { id: clusterId } });
-
-  // C5: Fetch active ScoringConfig for alertThreshold — default 0.70 if none configured
-  const scoringConfig    = await prisma.scoringConfig.findFirst({ where: { isActive: true } });
-  const alertThreshold   = scoringConfig?.alertThreshold ?? 0.70;
 
   // Fetch completed debate for thesis.
   const debate = await prisma.debate.findFirst({
@@ -196,11 +200,30 @@ export async function processMap(clusterId: string): Promise<void> {
     throw new Error(`[Mapper] No ClusterScore found for cluster ${clusterId}`);
   }
 
-  // C5: Gate on alertThreshold — skip alert if score is too low to be actionable
-  if (clusterScore.totalScore < alertThreshold) {
+  // Compute T+U sub-score from breakdown JSON.
+  let timing = 0;
+  let upside = 0;
+  try {
+    const breakdown = JSON.parse(clusterScore.breakdown) as Record<string, { raw: number }>;
+    timing = breakdown.timing?.raw ?? 0;
+    upside = breakdown.upside?.raw ?? 0;
+  } catch {
+    console.warn(
+      `[Mapper] Could not parse breakdown JSON for cluster ${clusterId} — T+U defaults to 0.`,
+    );
+  }
+  const timingUpsideSubScore = parseFloat(((0.2625 * timing + 0.1875 * upside) / 0.45).toFixed(4));
+
+  console.log(
+    `[Mapper] T+U sub-score: timing=${timing}, upside=${upside}, ` +
+    `T+U=${timingUpsideSubScore.toFixed(4)} (threshold=${TU_ALERT_THRESHOLD})`,
+  );
+
+  // Gate on T+U sub-score — skip alert if below the locked training threshold.
+  if (timingUpsideSubScore < TU_ALERT_THRESHOLD) {
     console.log(
-      `[Mapper] Score ${clusterScore.totalScore.toFixed(3)} is below alert threshold ` +
-      `${alertThreshold} — no alert generated for cluster ${clusterId}.`,
+      `[Mapper] T+U ${timingUpsideSubScore.toFixed(4)} < ${TU_ALERT_THRESHOLD} ` +
+      `— no alert generated for cluster ${clusterId}.`,
     );
     return;
   }
@@ -213,7 +236,7 @@ export async function processMap(clusterId: string): Promise<void> {
   });
 
   console.log(
-    `[Mapper] Alert generated → ticker=${alert.ticker}, ` +
-    `score=${alert.totalScore}, thesis="${alert.thesis}" (id=${alert.id})`,
+    `[Mapper] Alert generated → ticker=${alert.ticker}, score=${alert.totalScore}, ` +
+    `T+U=${timingUpsideSubScore.toFixed(4)}, thesis="${alert.thesis}" (id=${alert.id})`,
   );
 }

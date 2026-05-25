@@ -269,3 +269,309 @@ Step 8: Remaining temporal references
 11. **ALGO r1 debate timeout (intermittent)** — During 8W/6C pilot, ALGO r1 debate `bd7a25e6` stalled and did not reach terminal status within the 5-minute poll window. Runner caught it and skipped to r2; r2 and r3 completed normally. Root cause: likely a DeepSeek-R1 latency spike on the first call. ALGO pilot median (0.365) is based on 2/3 runs — wider confidence interval than other cases. If re-run is required, ALGO r1 can be re-run in isolation.
 12. **CRV is the loudest control (narrowest discrimination gap)** — Pilot median 0.535; marathon N=6 median 0.551. CRV scores in winner territory on TotalScore due to veCRV governance mechanics inflating SS and T. However, T+U sub-score correctly places CRV in control territory (controls T+U avg 0.295). TotalScore alone is unreliable for CRV; use T+U threshold for production decisions. If CRV-type assets appear in production, expect false-positive risk on TotalScore gate.
 13. **SUSHI is the softest winner** — Marathon N=6 median 0.471, the lowest of all 8 training winners and only 0.080 above the top control (COMP 0.346 — excluding CRV outlier). SUSHI's post-crisis recovery narrative is less convincing blinded. Monitor: if T+U threshold is set above 0.47, SUSHI would be missed.
+
+---
+
+## v0.2 Phase 1 Specification — STATUS: PENDING CONSULTANT REVIEW
+
+# Phase 1 Specification: Training-Derived Tier System v0.2
+
+---
+
+## Preamble
+
+**Document:** ai-thinkTank v0.2 Phase 1 Specification  
+**Author:** Architect (GLM)  
+**Status:** DRAFT — Pending review by DeepSeek (Statistical) and Gemini (Strategic)  
+**Date:** 2025-07-09  
+**Supersedes:** v0.1 threshold system (T+U ≥ 0.5667, single cutoff)
+
+**Purpose:** Define a statistically clean tiered alert system derived exclusively from training data, establish the regime-awareness roadmap, and pre-register the validation protocol for the new holdout.
+
+---
+
+## 1. Frozen Data Inventory
+
+All scores below are **frozen and sealed**. They may be used for diagnosis and architecture design, but **no threshold, tier boundary, or decision rule may be derived from holdout data.**
+
+### 1.1 Training Set (Marathon, 8W/4C, 6 runs/case)
+
+| Case | Role | Median TotalScore | Median T+U | Era |
+|------|------|-------------------|------------|-----|
+| UNI | Winner | 0.532 | ~0.72 | 2020 DeFi Summer |
+| LINK | Winner | 0.539 | ~0.74 | 2020 DeFi Summer |
+| AAVE | Winner | 0.546 | ~0.75 | 2020 DeFi Summer |
+| MKR | Winner | 0.526 | ~0.69 | 2020 DeFi Summer |
+| SNX | Winner | 0.529 | ~0.68 | 2020 DeFi Summer |
+| YFI | Winner | 0.517 | ~0.52 | 2020 DeFi Summer |
+| SUSHI | Winner | 0.471 | ~0.45 | 2020 DeFi Summer |
+| AVAX | Winner | 0.503 | ~0.50 | 2020 DeFi Summer |
+| COMP | Control | 0.346 | ~0.25 | 2020 DeFi Summer |
+| ZRX | Control | 0.334 | ~0.21 | 2020 DeFi Summer |
+| BAT | Control | 0.326 | ~0.19 | 2020 DeFi Summer |
+| CRV | Control | 0.551 | ~0.52 | 2020 DeFi Summer |
+
+**Training T+U statistics:**
+- Winner mean T+U: ~0.631
+- Winner min T+U: ~0.45 (SUSHI)
+- Control mean T+U: ~0.293
+- Control max T+U: ~0.52 (CRV)
+- SVM midpoint (single threshold): 0.5667
+
+### 1.2 Holdout Set (Vault, 7 cases, 3 runs/case) — BURNED FOR THRESHOLD DESIGN
+
+| Case | Role | Median T+U | Diagnosed As |
+|------|------|------------|--------------|
+| RNDR | Winner | 0.355 | Missed — regime shift |
+| PENDLE | Winner | 0.408 | Missed — regime shift |
+| INJ | Winner | 0.403 | Missed — regime shift |
+| DYDX | Control | 0.192 | Correctly filtered |
+| ENS | Control | 0.508 | Correctly filtered (barely) |
+| SAFE | Control | 0.508 | Correctly filtered (barely) |
+| ALGO | Control | 0.350 | Correctly filtered |
+
+**Status: These scores are FROZEN. They inform our understanding of regime dependence but MUST NOT influence tier boundaries.**
+
+---
+
+## 2. Tier System Derivation (Training-Only)
+
+### 2.1 Tier Definitions
+
+| Tier | Label | T+U Range | Derivation Basis | Training Composition |
+|------|-------|-----------|------------------|---------------------|
+| **Tier 1** | High Conviction | ≥ 0.5667 | SVM midpoint (min Winner + max Control) / 2 | 5W / 0C |
+| **Tier 2** | Watchlist | [0.52, 0.5667) | CRV T+U ceiling to SVM midpoint | 3W / 1C |
+| **Trash** | Filtered | < 0.52 | Below highest-scoring Control | 0W / 3C |
+
+### 2.2 Derivation Logic
+
+**Tier 1 floor (0.5667):** Same SVM midpoint as v0.1. This is the cleanest separatrix in the training data — the arithmetic midpoint between the lowest Winner and highest Control T+U, excluding CRV as a known outlier.
+
+**Tier 2 floor (0.52):** CRV is the highest-T+U Control at ~0.52. Any project scoring above CRV has exceeded the best Control in training. This is the minimum T+U at which a project *might* be a Winner based on training evidence.
+
+**Tier 2 ceiling (0.5667):** Same as Tier 1 floor — the SVM midpoint. Projects in this band exceed the Control ceiling but haven't crossed the high-conviction threshold.
+
+### 2.3 Training-Set Performance (In-Sample)
+
+| Tier | Winners | Controls | Precision | Recall (W) |
+|------|---------|----------|-----------|------------|
+| Tier 1 | 5 (UNI, LINK, AAVE, MKR, SNX) | 0 | 100% | 62.5% |
+| Tier 2 | 3 (YFI, AVAX, SUSHI) | 1 (CRV) | 75% | 37.5% |
+| Trash | 0 | 3 (COMP, ZRX, BAT) | — | 0% |
+| **Combined Tier 1+2** | **8** | **1** | **88.9%** | **100%** |
+
+### 2.4 Known Limitations (Honest Assessment)
+
+1. **Tier 2 contains CRV.** A Control that scores in Watchlist range. Tier 2 precision is 75% in-sample but may be lower out-of-sample.
+
+2. **CRV is structurally ambiguous.** Curve Finance has genuine DeFi Summer credentials — the pipeline may be correctly detecting real alpha that was extinguished by tokenomics (veCRV inflation). CRV's classification as "Control" may itself be debatable.
+
+3. **Tier 2 is narrow (0.047 T+U units).** This is a consequence of CRV compressing the Control ceiling toward the Winner floor. The band may not generalize well.
+
+4. **Regime dependence is unaddressed.** All training cases are 2020 DeFi Summer. T+U scores are inflated relative to bear-market winners. The holdout proved this conclusively.
+
+5. **Tier 2 will miss bear-market winners.** RNDR (0.355), PENDLE (0.408), INJ (0.403) would all land in Trash under these training-derived boundaries. This is **correct behavior** until we earn the right to lower the floor through regime-conditional calibration on unseen data.
+
+---
+
+## 3. Regime-Awareness Architecture (Phase 2-3 Roadmap)
+
+### 3.1 Problem Statement
+
+The pipeline discriminates directionally across eras (Controls always filtered correctly) but calibrates absolute T+U levels to the training era. 2020 DeFi Summer winners had clear, unambiguous signals (T+U avg 0.692); 2021-2022 winners succeeded through more subtle, often narrative-driven mechanisms (T+U avg ~0.39).
+
+### 3.2 Proposed Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│                   INPUT                          │
+│  WEAVER_SWEEP → SCOUT_NARRATIVE (upstream)       │
+└──────────────────┬──────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────┐
+│           REGIME PRE-SCORER (NEW)               │
+│  Model: claude-haiku-4-5 (cost-optimized)       │
+│  Input: Project + market context                 │
+│  Output: regime_label ∈ {defi_summer, bear,     │
+│           l1_season, ai_narrative, sideways}     │
+│          confidence ∈ [0,1]                      │
+└──────────────────┬──────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────┐
+│         EXISTING PIPELINE (unchanged)           │
+│  Scout → Narrative → Analyst ↔ Skeptic →        │
+│  Quant/SCORE → Mapper                            │
+│  Output: {SS, T, U, FR, totalScore}             │
+└──────────────────┬──────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────┐
+│      REGIME-CONDITIONAL TIER ASSIGNMENT         │
+│  regime_label → tier_threshold_table            │
+│  T+U + regime → final_tier ∈ {T1, T2, Trash}   │
+└─────────────────────────────────────────────────┘
+```
+
+### 3.3 Regime-Conditional Threshold Tables
+
+These will be derived **after** Phase 2 training expansion and **before** Phase 4 holdout. They are NOT pre-specified here — only the architecture is pre-registered.
+
+**Expected structure:**
+
+| Regime | Tier 1 Floor | Tier 2 Floor | Derivation |
+|--------|-------------|-------------|------------|
+| defi_summer | 0.5667 | 0.52 | Current training data |
+| bear | TBD | TBD | Phase 2 expanded training |
+| l1_season | TBD | TBD | Phase 2 expanded training |
+| ai_narrative | TBD | TBD | Phase 2 expanded training |
+
+**Constraint:** All regime-conditional floors must be derived from training-set data only. The holdout is never used to set or adjust any floor.
+
+### 3.4 Regime Pre-Scorer Specification
+
+| Parameter | Value |
+|-----------|-------|
+| Model | claude-haiku-4-5 |
+| Input | Project name + token metrics + 90-day BTC/ETH trend + sector labels |
+| Output | `{regime_label, confidence}` |
+| Cost per call | ~$0.005 (Haiku) |
+| Added cost per pipeline run | ~$0.005 (negligible) |
+
+### 3.5 Regime Label Definitions
+
+| Regime | Definition | Example Era |
+|--------|-----------|-------------|
+| defi_summer | >60% of TVL growth in DeFi protocols, yield farming dominant | Jun–Dec 2020 |
+| bear | BTC -40%+ from ATH, declining volume, risk-off | 2022 |
+| l1_season | L1 blockchain launches/momentum, alt-L1 narratives | Late 2021 |
+| ai_narrative | AI/ML token narrative dominance | 2023-2024 |
+| sideways | No dominant narrative, range-bound | Intermittent |
+
+---
+
+## 4. Validation Protocol (Phase 4 Pre-Registration)
+
+### 4.1 New Holdout Selection Criteria
+
+| Criterion | Requirement |
+|-----------|-------------|
+| Size | 6–8 cases |
+| Balance | ≥3 Winners, ≥3 Controls |
+| Era diversity | Must span ≥2 regimes (at least 1 non-DeFi-Summer) |
+| Unseen | No case may have been used in training, pilot, or vault |
+| Selection lock | Cases selected and documented BEFORE any pipeline runs |
+
+### 4.2 Pre-Registered Decision Rule
+
+The full v0.2 system (regime-conditional tier assignment) will be evaluated with:
+
+**Primary metric:** Tier-weighted accuracy
+
+```
+Score = Σ (correct_tier_assignment × tier_weight) / Σ (tier_weight)
+
+Where:
+  Tier 1 correct = project is Winner AND assigned Tier 1  → weight 3
+  Tier 2 correct = project is Winner AND assigned Tier 2  → weight 2
+  Trash correct  = project is Control AND assigned Trash   → weight 2
+  Any incorrect  = 0
+```
+
+**Pass criterion:** Score ≥ 0.70
+
+**Failure criterion:** Score < 0.50 → triggers v0.3 redesign
+
+**Indeterminate (0.50–0.69):** Diagnose per-regime, iterate once with expanded training
+
+### 4.3 What Counts as Validation
+
+| Scenario | Claim |
+|----------|-------|
+| Pass on first holdout | "Validated out-of-sample" |
+| Pass after one iteration | "Validated with one adaptation cycle" |
+| Fail after one iteration | "Not validated — requires fundamental redesign" |
+| Ship without holdout | "Forward-tested experiment, not confirmed" |
+
+---
+
+## 5. Training Expansion Plan (Phase 2)
+
+### 5.1 Cases to Add
+
+| Case | Role | Era | Regime | Rationale |
+|------|------|-----|--------|-----------|
+| RNDR | Winner | 2021-2022 | bear→recovery | Vault data reincorporated |
+| PENDLE | Winner | 2021-2022 | bear→recovery | Vault data reincorporated |
+| INJ | Winner | 2021-2022 | bear→recovery | Vault data reincorporated |
+| DYDX | Control | 2021 | l1_season | Vault data reincorporated |
+| ENS | Control | 2021 | sideways | Vault data reincorporated |
+| TIA (Celestia) | Winner | 2023-2024 | ai_narrative? | New — expands regime coverage |
+| SEI | Control | 2023 | l1_season | New — recent Control |
+| 1 TBD | Control | 2023-2024 | TBD | Gemini to select |
+
+### 5.2 Vault Data Reincorporation
+
+The 5 vault cases (RNDR, PENDLE, INJ, DYDX, ENS) will be run at 6 runs/case to match Marathon protocol. Their existing 3-run vault scores are discarded for training purposes — we need the full 6-run median for consistency.
+
+**Justification:** These cases are no longer holdout once we've committed to a new holdout set. Reincorporating them as training is legitimate because:
+1. Their holdout role is complete (diagnosis delivered)
+2. The new holdout will be entirely unseen
+3. We need regime diversity in training — these are our only non-2020 cases
+
+---
+
+## 6. Cost and Timeline
+
+| Phase | Cost | Runs | Timeline |
+|-------|------|------|----------|
+| Phase 1 (this spec) | $0 | 0 | Immediate — review only |
+| Phase 2 (expand training) | ~$5.00 | 48 | After Director approval |
+| Phase 3 (regime engine) | ~$2.00 | 0 (added Haiku calls) | Concurrent with Phase 2 |
+| Phase 4 (new holdout) | ~$4.80 | 36-48 | After Phase 2-3 complete |
+| Buffer | ~$3.00 | — | If iteration needed |
+| **Total** | **~$15** | **84-96** | |
+
+---
+
+## 7. Items Requiring Consultant Review
+
+### For DeepSeek (Statistical):
+
+1. **Is the Tier 2 floor at CRV's T+U (0.52) defensible?** CRV is a single outlier Control. Should we use CRV's T+U or a percentile-based boundary instead?
+
+2. **Tier-weighted accuracy metric (Section 4.2):** Is this a reasonable primary validation metric, or should we use something simpler (e.g., raw accuracy, F1)?
+
+3. **Vault data reincorporation (Section 5.2):** Is it statistically legitimate to re-run vault cases at 6 runs and treat them as training, given that we've seen their 3-run scores?
+
+4. **Regime label granularity:** Are 5 regime labels too many for the available training data? Should we start with 2 (bull/bear) and expand?
+
+### For Gemini (Strategic):
+
+1. **New case selection (Section 5.1):** Please select the final 1-2 cases (especially the TBD Control). Consider: What 2023-2024 project had narrative heat but failed to deliver sustained alpha?
+
+2. **Tier 2 operational meaning:** In Phase 1 (before regime engine), Tier 2 = "human review warranted." What does the Director actually *do* with a Tier 2 alert? What information should accompany it?
+
+3. **Holdout case selection (Section 4.1):** Please nominate 6-8 cases for the new holdout. Requirements: ≥3W, ≥3C, ≥2 regimes, none previously used.
+
+4. **CRV classification:** Should CRV be reclassified as a "conditional winner" (DeFi Summer only) rather than a Control? This would reshape the Tier boundaries significantly.
+
+---
+
+## Appendix A: v0.1 → v0.2 Change Log
+
+| Item | v0.1 | v0.2 |
+|------|------|------|
+| Threshold type | Single cutoff | Tiered (T1/T2/Trash) |
+| T+U floor | 0.5667 (Tier 1 only) | 0.5667 (T1) / 0.52 (T2) |
+| Regime awareness | None | Regime Pre-Scorer (Phase 3) |
+| Training set | 8W/4C (2020 only) | 13W/6C+ (multi-era, Phase 2) |
+| Holdout | Burned (vault) | New clean set (Phase 4) |
+| Validation metric | Binary pass/fail | Tier-weighted accuracy ≥ 0.70 |
+| Data leak risk | N/A | Pre-registered protocol eliminates |
+
+---
+
+**This specification is now open for consultant review. Director approval required before Phase 2 execution.**

@@ -1,0 +1,23 @@
+{
+  "ticker": "PENDLE",
+  "signalDate": "2023-01-15",
+  "snapshotDate": "2023-01-08",
+  "priceAtSnapshot": 0.16,
+  "isControl": false,
+  "developers": [
+    { "name": "TN Lee", "isElite": true, "activity": "Co-founder and CEO. Protocol architecture, tokenomics design, vePENDLE mechanics. Former quantitative researcher. Key driver of V2 AMM design and Ethereum mainnet expansion strategy." },
+    { "name": "Vu Nguyen", "isElite": true, "activity": "Co-founder and CTO. Smart contract engineering, AMM implementation, security audit coordination. Core author of the yield-splitting math and PT/YT pricing model." },
+    { "name": "Long Vuong", "isElite": false, "activity": "Business development and protocol integrations. Coordinating liquidity partnerships with Lido, Aave, Compound for yield-bearing collateral onboarding." }
+  ],
+  "assets": [
+    { "name": "Pendle V2 Core", "type": "Repository", "url": "github.com/pendle-finance/pendle-core-v2-public" },
+    { "name": "PENDLE Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x808507121b80c02388fad14726482e061b8da827" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Vu Nguyen", "asset": "Pendle V2 Core", "date": "2022-12-10" },
+    { "type": "FUNDED", "actor": "TN Lee", "asset": "Pendle V2 Core", "date": "2022-04-15", "amount": 3700000 },
+    { "type": "STARRED", "actor": "Vu Nguyen", "asset": "Pendle V2 Core", "date": "2023-01-05" },
+    { "type": "STARRED", "actor": "TN Lee", "asset": "Pendle V2 Core", "date": "2022-12-28" }
+  ],
+  "narrativeAtSnapshot": "Pendle Finance is a yield tokenization and trading protocol that enables users to split yield-bearing tokens — such as staked ETH derivatives, Aave deposit receipts, or Compound cTokens — into two components: a Principal Token (PT) representing the underlying principal, and a Yield Token (YT) representing the future yield stream. This creates a new primitive: the ability to sell future yield upfront, hedge yield exposure, or speculate on yield movements with leverage. V2 launched on Ethereum mainnet in December 2022, replacing the V1 architecture that operated on Avalanche and struggled to gain traction. V2 introduces a purpose-built AMM specifically designed for yield trading, solving the time-decay problem that made standard AMMs unsuitable for yield markets. The team is led by TN Lee and Vu Nguyen, Singapore-based DeFi engineers backed by Mechanism Capital, Hashkey Capital, and angel investors including Arthur Hayes. TVL at snapshot: approximately $12M, almost entirely in stETH-based yield pools. Revenue model: the protocol takes 3% of yield as a swap fee plus 3% of YT value at expiry, with 100% of fees distributed to vePENDLE holders — locked PENDLE earns direct protocol revenue. Weekly protocol revenue at current TVL: approximately $12,000-15,000. The bull case is structural: as liquid staking derivatives (stETH, rETH, cbETH) grow from the Ethereum staking ecosystem, yield becomes a distinct tradable asset class. Pendle is the only protocol purpose-built for this market. The bear case is execution risk: V1 on Avalanche failed to reach escape velocity despite identical mechanics, suggesting the idea has product-market fit problems not just a chain selection problem. TVL of $12M is extremely early — the protocol needs 10-20x growth to generate meaningful revenue. vePENDLE lock mechanics add complexity that may limit adoption. With only $3.7M raised, the team has limited runway for extended growth. The FTX collapse has made institutional DeFi participation extremely cautious, and yield products require sophisticated counterparties who may be sitting on the sidelines."
+}

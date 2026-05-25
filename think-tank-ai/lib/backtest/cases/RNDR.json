@@ -1,0 +1,23 @@
+{
+  "ticker": "RNDR",
+  "signalDate": "2022-10-01",
+  "snapshotDate": "2022-09-24",
+  "priceAtSnapshot": 0.55,
+  "isControl": false,
+  "developers": [
+    { "name": "Jules Urbach", "isElite": true, "activity": "Founder and CEO of OTOY Inc., creator of OctaneRender (industry-standard GPU path tracer). Driving Render Network protocol development, node onboarding, and studio partnerships. 20+ years in 3D rendering software with production credits on major VFX titles." },
+    { "name": "Ramesh Srikanth", "isElite": true, "activity": "Head of engineering for RNDR token protocol. Architecting the on-chain job-dispatch system, RNDR escrow smart contracts, and node reputation scoring. Former GPU compute infrastructure engineer." },
+    { "name": "Alicia Nails", "isElite": false, "activity": "Developer relations and node operator onboarding. Maintaining documentation and operator tooling, coordinating community render farms." }
+  ],
+  "assets": [
+    { "name": "RNDR Token Contract", "type": "SmartContract", "url": "etherscan.io/address/0x6de037ef9ad2725eb40118bb1702ebb27e4aeb24" },
+    { "name": "Render Network Protocol", "type": "Repository", "url": "github.com/rendernetwork/RNDR-docs" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Jules Urbach", "asset": "RNDR Token Contract", "date": "2020-04-01" },
+    { "type": "FUNDED", "actor": "Jules Urbach", "asset": "Render Network Protocol", "date": "2021-01-15", "amount": 30500000 },
+    { "type": "STARRED", "actor": "Ramesh Srikanth", "asset": "Render Network Protocol", "date": "2022-09-10" },
+    { "type": "DEPLOYED", "actor": "Ramesh Srikanth", "asset": "Render Network Protocol", "date": "2022-02-01" }
+  ],
+  "narrativeAtSnapshot": "Render Network is a distributed GPU rendering marketplace on Ethereum that connects content creators — 3D artists, VFX studios, NFT projects — with GPU node operators who earn RNDR tokens in exchange for processing power. Founded by Jules Urbach, the CEO of OTOY Inc., which has production-grade relationships with NVIDIA (official OctaneRender partner), Autodesk, Intel, and major Hollywood studios whose VFX pipelines already run on OctaneRender. The network launched on Ethereum mainnet in February 2022 after two years on testnets, with GPU hardware requirements (minimum RTX 2080-class) that filter out underpowered nodes and ensure render quality standards. Network metrics at snapshot: approximately 160 active node operators across North America and Europe, 900+ render jobs completed in the past month, cumulative RNDR spend exceeding $280,000 equivalent. Token economics follow a clear utility model — creators must purchase and burn RNDR to pay for renders, creating constant real-world demand independent of speculative holding. The Ethereum Merge completed approximately 9 days ago, reducing gas costs for RNDR job submissions by roughly 99%, removing the primary UX friction that capped on-chain job throughput. OTOY parent company backing provides studio-grade rendering pipelines used in AAA VFX production and provides credible distribution channels unavailable to crypto-native projects. The bear case is direct: GPU compute is a deeply commoditized market where AWS, Google Cloud, and Lambda Labs offer GPU instances at competitive pricing with established SLAs. RNDR's 160-node network cannot match hyperscaler reliability for mission-critical production rendering. The 94% price decline from all-time highs reflects severe re-pricing of speculative premium in the bear market. Node operator economics are marginal — electricity plus hardware depreciation may not be covered by current RNDR yield for many operators, threatening supply-side sustainability at current network scale. Core protocol development happens primarily in OTOY's private codebase, not open-source — the on-chain token contract has minimal public commit history, limiting external auditability. The AI/ML GPU compute use case has not yet been formally articulated as part of the protocol roadmap; the current product focus remains creative-sector 3D rendering."
+}

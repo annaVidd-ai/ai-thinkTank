@@ -1,0 +1,23 @@
+{
+  "ticker": "INJ",
+  "signalDate": "2023-01-01",
+  "snapshotDate": "2022-12-25",
+  "priceAtSnapshot": 1.50,
+  "isControl": false,
+  "developers": [
+    { "name": "Eric Chen", "isElite": true, "activity": "Co-founder and CEO. Protocol architecture, ecosystem strategy, and institutional partnerships. Former researcher at Hessian Matrix. NYU physics background. Driving cross-chain DeFi vision and validator network expansion." },
+    { "name": "Albert Chon", "isElite": true, "activity": "Co-founder and CTO. Core L1 engineering, consensus mechanism implementation, and orderbook matching engine. Former software engineer at Amazon. Designing MEV resistance via frequent batch auction system." },
+    { "name": "Max Einhorn", "isElite": false, "activity": "Developer ecosystem and grants program. Onboarding dApps building on the chain, coordinating hackathons, and managing community developer relations." }
+  ],
+  "assets": [
+    { "name": "Injective Chain", "type": "Repository", "url": "github.com/InjectiveLabs/injective-chain-releases" },
+    { "name": "Injective Protocol Contracts", "type": "SmartContract", "url": "etherscan.io/address/0xe28b3b32b6c345a34ff64674606124dd5aceca30" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Albert Chon", "asset": "Injective Chain", "date": "2021-11-01" },
+    { "type": "FUNDED", "actor": "Eric Chen", "asset": "Injective Chain", "date": "2021-07-20", "amount": 10000000 },
+    { "type": "STARRED", "actor": "Albert Chon", "asset": "Injective Chain", "date": "2022-12-18" },
+    { "type": "STARRED", "actor": "Eric Chen", "asset": "Injective Chain", "date": "2022-12-10" }
+  ],
+  "narrativeAtSnapshot": "Injective is a Cosmos SDK-based Layer-1 blockchain purpose-built for decentralized finance, featuring a fully on-chain orderbook that enables advanced order types — limit, stop, TWAP — without the slippage constraints of AMM-based DEXs. Mainnet launched November 2021. The chain achieves approximately 10,000 TPS with instant finality via Tendermint BFT consensus, and is IBC-compatible enabling bridged assets from the Cosmos ecosystem and Ethereum via a custom Ethereum bridge. Key differentiation: MEV resistance via Frequent Batch Auctions (FBA) where all transactions within a block are matched at a single clearing price, eliminating front-running. 60% of all protocol trading fees are permanently burned, creating an ongoing deflationary supply mechanism tied directly to trading volume. Team: Eric Chen (CEO, ex-Hessian Matrix, NYU physics) and Albert Chon (CTO, ex-Amazon), backed by Binance Labs (lead investor), Jump Crypto, Pantera Capital, and Mark Cuban. $10M Series A raised July 2021. Active ecosystem: 40+ dApps deployed or in development including spot DEXs, perpetuals platforms, and prediction markets. Developer activity: InjectiveLabs GitHub organization shows 800+ commits in the past 3 months across the core chain, bridge, and SDK repositories. TVL at snapshot: approximately $38M across protocol-native applications. INJ token: used for gas fees, governance, staking collateral, and insurance fund — multi-utility design with direct value capture from fee burn. The bear case: The L1 landscape is brutally competitive. Ethereum has locked in DeFi network effects with 90%+ of total DeFi TVL. Cosmos ecosystem is fragmented across dozens of chains with limited shared liquidity. Injective's TVL of $38M is modest 14 months post-mainnet. FTX collapse has severely damaged confidence in centralized offshore crypto infrastructure, and the broader bear market has reduced risk appetite for L1 experiments. The Cosmos SDK is a mature but complex framework — onboarding Ethereum-native developers requires significant ecosystem tooling investment. The 60% fee burn model only creates meaningful deflationary pressure at significant volume scale not yet achieved."
+}

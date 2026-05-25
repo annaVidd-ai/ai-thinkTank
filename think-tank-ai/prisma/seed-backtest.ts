@@ -236,6 +236,67 @@ const CASES = [
     isControl:      false,
     isHoldout:      false,  // promoted to training set (marathon 2026-05-25)
   },
+  // ── Vault holdouts — 3 confirmation winners + 2 confirmation controls ─────
+  {
+    ticker:         'RNDR',
+    projectAlias:   'Project_Upsilon',
+    sector:         'Infrastructure',
+    signalDate:     new Date('2022-10-01'),
+    signalPrice:    0.55,
+    athPrice:       8.14,
+    actualMultiple: 14.8,   // ~14.8x to Jul-2023 ATH; AI/GPU narrative catalyst
+    split:          'verification',
+    isControl:      false,
+    isHoldout:      true,
+  },
+  {
+    ticker:         'PENDLE',
+    projectAlias:   'Project_Phi',
+    sector:         'DeFi',
+    signalDate:     new Date('2023-01-15'),
+    signalPrice:    0.16,
+    athPrice:       7.13,
+    actualMultiple: 44.6,   // ~44.6x to May-2024 ATH; liquid staking yield boom
+    split:          'verification',
+    isControl:      false,
+    isHoldout:      true,
+  },
+  {
+    ticker:         'INJ',
+    projectAlias:   'Project_Chi',
+    sector:         'DeFi',
+    signalDate:     new Date('2023-01-01'),
+    signalPrice:    1.50,
+    athPrice:       52.91,
+    actualMultiple: 35.3,   // ~35.3x to Mar-2024 ATH; Cosmos DeFi hub narrative
+    split:          'verification',
+    isControl:      false,
+    isHoldout:      true,
+  },
+  {
+    ticker:         'DYDX',
+    projectAlias:   'Project_Psi',
+    sector:         'DeFi',
+    signalDate:     new Date('2021-10-01'),
+    signalPrice:    20.00,
+    athPrice:       27.86,
+    actualMultiple: 1.4,    // ~1.4x ATH Nov-2021; governance-only token, no fee yield
+    split:          'verification',
+    isControl:      true,
+    isHoldout:      true,
+  },
+  {
+    ticker:         'ENS',
+    projectAlias:   'Project_Omega',
+    sector:         'Infrastructure',
+    signalDate:     new Date('2021-11-15'),
+    signalPrice:    65.00,
+    athPrice:       83.40,
+    actualMultiple: 1.3,    // ~1.3x ATH Nov-2021; DAO treasury with no distribution mechanism
+    split:          'verification',
+    isControl:      true,
+    isHoldout:      true,
+  },
 ] as const;
 
 async function main() {

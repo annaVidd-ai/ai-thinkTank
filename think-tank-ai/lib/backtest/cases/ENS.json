@@ -1,0 +1,23 @@
+{
+  "ticker": "ENS",
+  "signalDate": "2021-11-15",
+  "snapshotDate": "2021-11-08",
+  "priceAtSnapshot": 65.00,
+  "isControl": true,
+  "developers": [
+    { "name": "Nick Johnson", "isElite": true, "activity": "Founder and core developer. ENS protocol architecture, CCIP-Read (cross-chain interoperability), DNS integration. Former Google engineer. Sole author of the original ENS smart contracts. Widely respected in Ethereum core developer circles, active EIP contributor." },
+    { "name": "Makoto Inoue", "isElite": true, "activity": "Core developer. ENS subgraph, web3.js ENS integration, Japanese community. Key contributor to the ENS Manager app and resolution infrastructure." },
+    { "name": "Brantly Millegan", "isElite": false, "activity": "Director of operations and community. ENS DAO constitution drafting, governance coordination, and ecosystem partnerships with wallets and protocols integrating .eth resolution." }
+  ],
+  "assets": [
+    { "name": "ENS Registry Contract", "type": "SmartContract", "url": "etherscan.io/address/0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e" },
+    { "name": "ENS Contracts", "type": "Repository", "url": "github.com/ensdomains/ens-contracts" }
+  ],
+  "events": [
+    { "type": "DEPLOYED", "actor": "Nick Johnson", "asset": "ENS Registry Contract", "date": "2019-05-04" },
+    { "type": "DEPLOYED", "actor": "Nick Johnson", "asset": "ENS Contracts", "date": "2021-11-01" },
+    { "type": "FUNDED", "actor": "Nick Johnson", "asset": "ENS Contracts", "date": "2021-11-08", "amount": 0 },
+    { "type": "STARRED", "actor": "Makoto Inoue", "asset": "ENS Contracts", "date": "2021-11-07" }
+  ],
+  "narrativeAtSnapshot": "Ethereum Name Service is the dominant naming system for Ethereum, translating human-readable .eth names into machine-readable wallet addresses, contract addresses, and decentralized website hashes. ENS has operated since May 2017 without a governance token, and the ENS token was launched via retroactive airdrop on November 8, 2021 — one week before this snapshot — to historical .eth domain registrants. Over 265,000 .eth names are registered at snapshot, with approximately 50,000 new registrations in the past month driven by airdrop eligibility awareness. Nick Johnson, the founder and sole original author, brings elite credentials: former Google engineer, Ethereum core contributor, widely cited in EIP discussions, and one of the most respected infrastructure developers in the Ethereum ecosystem. Integration adoption is exceptional — MetaMask, Rainbow, Uniswap, OpenSea, and the majority of major Ethereum applications support .eth name resolution natively. Annual domain registration revenue: approximately $14 million flowing into the ENS DAO treasury. The ENS DAO constitution was ratified by token holders this week, establishing governance procedures. The fundamental tension: all registration fee revenue flows to the DAO treasury and is controlled by governance — ENS token holders have no mechanism to receive direct fee distributions or yield. The token is a governance token: it grants voting power over the treasury and protocol parameters, but holding ENS does not entitle the holder to protocol revenue. This structural design mirrors unsuccessful value-accrual models in other infrastructure tokens. A holder of 1,000 ENS tokens has governance votes but receives zero ETH from the $14M/year in registration fees. Contrast with MakerDAO (MKR burned from protocol revenue) or Synthetix (stakers earn trading fees in real-time). The DAO treasury is growing, but treasury accumulation is not equivalent to shareholder equity — distributions require governance votes that have not been proposed. The token launched six days ago and is still in the euphoria phase of airdrop season; genuine price discovery has not occurred. Fully diluted valuation at current prices exceeds $2.5 billion, implying a 178x multiple on annual protocol revenue with no direct yield to token holders."
+}
