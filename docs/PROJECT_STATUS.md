@@ -1,5 +1,5 @@
 # Project Status — Node Zero (v0.5.0)
-**Last updated:** 2026-05-26 | **Phase:** Backtest Calibration — Option 1 In Progress (Quant → Sonnet) | **Budget:** ~€9/mo
+**Last updated:** 2026-05-25 | **Phase:** Backtest Calibration — Test B complete (Δ=0.094), awaiting architect direction | **Budget:** ~€9/mo
 
 ### Vision
 AI agents that spot **paradigm-shifting profit opportunities before they go mainstream** (100x-1000x returns). Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
@@ -27,7 +27,7 @@ Next.js 16, TypeScript, Prisma/SQLite, Neo4j, monolith architecture
 | Weaver | (graph query) | Knowledge graph construction from Scout data | 0 |
 | Analyst | Claude Sonnet 4.6 | Argue bullish case in debate | 0.3 |
 | Skeptic | DeepSeek-R1 | Argue bearish case — 5 failure-mode categories | 0.6 |
-| Quant | DeepSeek-R1 (→v4-flash) — switching to Claude Sonnet 4.6 | 4-dimension scoring (signalStrength, timing, upside, failureRisk) | 0.3 |
+| Quant | Claude Sonnet 4.6 | 4-dimension scoring (signalStrength, timing, upside, failureRisk) | 0.3 |
 | Mapper | Claude Haiku 4.5 | Generate tiered alerts with ticker | 0 |
 
 ### 5-Phase Pipeline
@@ -84,6 +84,45 @@ Winners avg: 0.642 | Control avg: 0.625 | **Δ = 0.017** (target ≥ 0.15) ❌
 
 **Conclusion: Prompt-only approach has hit a ceiling. Non-prompt approaches needed (model change, N increase, or threshold recalibration).**
 
+**Sonnet Smoke Test — Baseline (2026-05-25, additive formula, no constraint, Sonnet Quant, blinded, N=3)**
+| Case | Type | Run 1 | Run 2 | Run 3 | Median | σ |
+|------|------|-------|-------|-------|--------|---|
+| UNI | winner | — | — | — | ~0.65* | — |
+| AAVE | winner | — | — | — | ~0.65* | — |
+| SAFE | control | — | — | — | ~0.64* | — |
+
+*Marathon blinded records for UNI/AAVE/SAFE were overwritten by subsequent smoke tests. Implied from aggregate back-calculation (see marathon section). Sonnet baseline Δ ≈ 0.01–0.03 (no discrimination improvement over v4-flash on additive+no-constraint).
+
+**Test A — Multiplicative FR Discount (2026-05-25, Sonnet Quant, blinded, N=3)**
+
+Formula tested: `baseScore = (SS×0.30)+(T×0.2625)+(U×0.1875); totalScore = baseScore × (1 − FR × 0.50)`
+
+| Case | Type | Run 1 | Run 2 | Run 3 | Median |
+|------|------|-------|-------|-------|--------|
+| UNI | winner | 0.527 | 0.309 | 0.293 | 0.309 |
+| AAVE | winner | 0.293 | 0.309 | 0.325 | 0.309 |
+| SAFE | control | 0.246 | 0.246 | 0.246 | 0.246 |
+
+Winners avg: 0.309 | Control avg: 0.246 | **Δ = 0.063** (target ≥ 0.15) ❌
+
+Note: UNI r1 = 0.527 was a contaminated run (stale worker, old additive formula). Median of [0.527, 0.309, 0.293] = 0.309 correctly excludes it. Reverted to additive after Test A.
+
+**Test B — Analyst Constraint (2026-05-25, additive formula + Analyst token/protocol constraint, Sonnet Quant, blinded, N=3)**
+
+Change: Added constraint to Analyst prompt blocking use of protocol adoption metrics (DAUs, TVL, volume) to rebut TOKENOMICS concerns — forces separate treatment of protocol quality vs token investment quality.
+
+| Case | Type | SS | T | U | FR | Run 1 | Run 2 | Run 3 | Median |
+|------|------|----|---|---|----|-------|-------|-------|--------|
+| UNI | winner | 0.72 | 0.75–0.82 | 0.45 | 0.82–0.88 | 0.5273 | 0.5502 | 0.5546 | 0.5502 |
+| AAVE | winner | 0.72 | 0.75–0.78 | 0.45–0.55 | 0.82 | 0.5502 | 0.5423 | 0.5610 | 0.5502 |
+| SAFE | control | 0.72 | 0.55–0.62 | 0.35 | 0.82–0.88 | 0.4560 | 0.4560 | 0.4894 | 0.4560 |
+
+Winners avg: 0.5502 | Control avg: 0.4560 | **Δ = 0.094** ← best result to date ✅ (still below 0.15 target)
+
+Discrimination mechanism: FR uniform 0.82–0.88 across all cases (no FR discrimination). SS uniform at 0.72. Discrimination comes entirely from T and U — Analyst constraint prevented adoption rebuttal, letting tokenomics verdict flow into Quant's timing/upside assessments.
+
+**Test C projection (Analyst constraint + multiplicative formula combined):** Δ ≈ 0.057 (WORSE than Test B). Multiplicative formula compresses the T/U-driven discrimination without adding FR-based discrimination. Not recommended.
+
 ### Backtest Methodology
 - **15 cases:** 12 positive (real 10x+ winners) + 3 negative controls (known failures: COMP, SAFE, YFI_CTRL)
 - **Dual condition:** Blinded (9-step anonymization) vs Unblinded — measures hindsight bias
@@ -118,8 +157,10 @@ Step 8: Remaining temporal references
 |---|---|---|
 | 14 | Marathon completed — Δ=0.076 (failed). All prompt fix attempts exhausted. | ✅ Complete |
 | 15 | Baseline verification smoke test — Δ=0.017 (FAILED). Root cause: model downgrade v4-pro→v4-flash. | ✅ Complete |
-| 16 | **Option 1: Switch Quant to Claude Sonnet 4.6** + smoke test (UNI, AAVE, SAFE, blinded, N=3). In progress. | **High** |
-| 17 | Based on Sonnet smoke test: proceed to full marathon (Δ≥0.10) or reassess (Δ<0.10) | High |
+| 16 | Switch Quant to Claude Sonnet 4.6 + smoke test | ✅ Complete (Sonnet baseline ≈ Δ0.02, no improvement from model alone) |
+| 17A | Test A: Multiplicative FR discount formula — Δ=0.063 ❌ | ✅ Complete |
+| 17B | Test B: Analyst token/protocol constraint — **Δ=0.094** ← best result | ✅ Complete (reverted additive) |
+| 18 | **Architect direction needed**: run full 15-case marathon with Test B config? Or next experiment? | **Awaiting** |
 | Production N=3 | Quant fires 3× concurrently, uses median for alert | High |
 | Tiered alerts | Tier 1 (≥0.80), Tier 2 (0.65-0.79) — currently binary 0.70 | High |
 | Dashboard UI fixes (partial) | Debates tab: real timestamps, newest-first, Show More ✅. Skeptic thesis in red, ESCALATED badge in amber still pending. | Low |
@@ -134,3 +175,7 @@ Step 8: Remaining temporal references
 4. **DeepSeek model alias remapping** — `deepseek-reasoner` silently remapped from v4-pro → v4-flash (May 18–22). Marathon runs are all on v4-flash (internally consistent). Pin model explicitly post-marathon.
 5. **Baseline not reproducible on v4-flash** — Δ=0.017 on fresh smoke test vs Δ=0.198 on original (v4-pro). Root cause is model capability, not prompt design. Switching Quant to Claude Sonnet (Option 1).
 6. **DeepSeek v4-flash reasoning limitation** — Cannot differentiate ABSENT from CONCRETE evidence quality in Quant scoring. Both winners and controls receive similar failureRisk, compressing totalScore discrimination.
+7. **Worker SIGTERM contamination** — `npm run worker:stop` sends SIGTERM (graceful). Old worker can continue draining its task queue for minutes post-SIGTERM, picking up tasks with OLD code. Always use `pkill -9 -f "worker/index.ts"` after code changes. Verify zero PIDs before restart.
+8. **Alert threshold miscalibrated for multiplicative formula** — Mapper gate is 0.70. Under multiplicative formula with typical FR=0.82–0.90, practical score ceiling is ~0.30–0.40. If multiplicative formula is ever adopted, alert threshold must be recalibrated (to ~0.40). No action needed while additive formula is in use.
+9. **COMP marathon blinded: 2-run sample** — Project_Nu (blinded COMP) only has 2 blinded runs (r1=0.41, r2=0.425) from the May 24 marathon. r3 was never executed or lost. Marathon blinded median of 0.425 is a 2-point sample; lower statistical confidence for this control.
+10. **Marathon blinded data for UNI/AAVE/SAFE permanently lost** — Runner's "Cleaned up 1 prior cluster" cascade deletes ClusterScores when a case is re-run. Test A/B overwrote marathon blinded records for UNI (Project_Alpha), AAVE (Project_Gamma), and SAFE (Project_Xi). Cannot be recovered.
