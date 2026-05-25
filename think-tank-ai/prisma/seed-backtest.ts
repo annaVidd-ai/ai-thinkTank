@@ -12,7 +12,8 @@ const adapter = new PrismaBetterSqlite3({ url: 'file:./dev.db' });
 const prisma   = new PrismaClient({ adapter });
 
 // ── Training set: 6W (UNI, LINK, AAVE, YFI, MKR, SNX) + 4C (COMP, ZRX, BAT, CRV)
-// ── Holdout set: 2W (AVAX, SUSHI) + 2C (SAFE, ALGO)  — isHoldout: true
+// ── Holdout set: 2C (SAFE, ALGO) — isHoldout: true
+// ── AVAX and SUSHI promoted to training set per marathon design (2026-05-25)
 // ── Legacy cases retained but not in 8W/6C design: SOL, GRT, AXS
 const CASES = [
   // ── Calibration — Positive — Training ────────────────────────────────────
@@ -74,7 +75,7 @@ const CASES = [
     actualMultiple: 12.1,
     split:          'calibration',
     isControl:      false,
-    isHoldout:      true,   // holdout winner
+    isHoldout:      false,  // promoted to training set (marathon 2026-05-25)
   },
   {
     ticker:         'MATIC',
@@ -233,7 +234,7 @@ const CASES = [
     actualMultiple: 42.5,
     split:          'verification',
     isControl:      false,
-    isHoldout:      true,   // holdout winner
+    isHoldout:      false,  // promoted to training set (marathon 2026-05-25)
   },
 ] as const;
 
