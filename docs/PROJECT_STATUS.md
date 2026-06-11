@@ -2,13 +2,13 @@
 **Last updated:** 2026-05-25 | **Phase:** Backtest Calibration — 8W/6C training marathon complete (72 runs, TotalScore Δ=0.165, T+U Δ=0.397), awaiting architect direction on threshold and holdout unlock | **Budget:** ~€9/mo
 
 ### Vision
-AI agents that spot **paradigm-shifting profit opportunities before they go mainstream** (100x-1000x returns). Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
+AI agents that spot **paradigm-shifting profit opportunities before they go mainstream**. Target: 10x+ returns (Director decision 2026-06-11; calibrated into the engine — changing this bar invalidates Δ baselines and case labels). 100x–1000x aspirational. Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
 
 ### Domain Focus: Crypto/DeFi (v0.1.0)
 Only domain where both product (open source GitHub) and money (blockchain) are fully public. AI + Tech domains later — architecture supports it via generic Neo4j labels.
 
 ### Roles
-- **Architect (Z.ai)** = System design, review, specifications, rule enforcement
+- **Chief Systems & Research Architect (Z.ai)** = System design, review, specifications, rule enforcement; adjudicates technical disputes (Director remains final)
 - **Developer (ClaudeCode)** = Implementation, debugging, terminal execution
 - **Director (User)** = Approve/reject, final calls, API keys, task routing
 - **Strategic Consultant (Gemini)** = Advisory opinions (verified independently per Architect Rule #7)
