@@ -1,5 +1,5 @@
 # Project Status — Node Zero (v0.5.0)
-**Last updated:** 2026-05-25 | **Phase:** Backtest Calibration — 8W/6C training marathon complete (72 runs, TotalScore Δ=0.165, T+U Δ=0.397), awaiting architect direction on threshold and holdout unlock | **Budget:** ~€9/mo
+**Last updated:** 2026-06-12 | **Phase:** v0.2 Phase 2 — Training Expansion approved, execution pending | **Budget:** ~€9/mo + ~$12 one-time v0.2 program
 
 ### Vision
 AI agents that spot **paradigm-shifting profit opportunities before they go mainstream**. Target: 10x+ returns (Director decision 2026-06-11; calibrated into the engine — changing this bar invalidates Δ baselines and case labels). 100x–1000x aspirational. Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
@@ -12,6 +12,7 @@ Only domain where both product (open source GitHub) and money (blockchain) are f
 - **Developer (ClaudeCode)** = Implementation, debugging, terminal execution
 - **Director (User)** = Approve/reject, final calls, API keys, task routing
 - **Strategic Consultant (Gemini)** = Advisory opinions (verified independently per Architect Rule #7)
+- **Statistical Consultant (DeepSeek)** = Statistical review of thresholds, metrics, and validation protocols (verified independently per Architect Rule #7)
 
 ### Architecture — Dual Database
 - **SQLite (Prisma):** Pipeline state, task queue, debates, scoring, backtesting
@@ -205,6 +206,65 @@ Key findings:
 - **SUSHI is the softest winner** (0.471) — recovery narrative post-crisis less convincing blinded; closest to control range
 - **T+U Δ = 0.397 is robust** — nearly matching pilot, confirming T+U as the reliable discrimination metric even when TotalScore compresses due to CRV
 
+### Vault Run (Holdout Validation)
+
+| Case | Role | Median T+U | Correct? |
+|------|------|-----------|----------|
+| RNDR | Winner | 0.355 | ❌ MISS |
+| PENDLE | Winner | 0.408 | ❌ MISS |
+| INJ | Winner | 0.403 | ❌ MISS |
+| DYDX | Control | 0.192 | ✅ |
+| ENS | Control | 0.508 | ✅ |
+| SAFE | Control | 0.508 | ✅ |
+| ALGO | Control | 0.350 | ✅ |
+
+Result: 2/5 confirmation correct. T+U threshold 0.5667 missed all 3 bear-era winners. Triggered "major redesign" rule. Vault data FROZEN for threshold design — diagnosis only.
+
+### Regime Dependence Diagnosis
+
+Training winners (2020 DeFi Summer) T+U avg 0.692 vs confirmation winners (2021–2022 bear) T+U avg ~0.39. The pipeline discriminates directionally across eras, but absolute T+U levels are calibrated to the bull market. Controls correctly filtered in all eras.
+
+### v0.2 Tier System Specification (Director-Approved)
+
+- Single global tier system (no regime-conditional thresholds for v0.2)
+- T+U sub-score as primary metric (retained)
+- Tier boundaries derived from expanded training set ONLY (post Phase 2)
+- Current training-derived boundaries: Tier 1 ≥ 0.5667 (SVM midpoint), Tier 2 ≥ 0.52 (CRV ceiling), Trash < 0.52
+- Boundaries will be recomputed after Phase 2 training expansion
+- Tier 2 = Director's Dossier (venture sizing 0.25%), includes Skeptic's primary argument + regime tag
+- Regime labels: binary Bull/Bear via BTC 200DMA — diagnostic tag only, NOT used for threshold selection
+- CRV remains classified as Control (Gemini ruling — reclassifying would collapse Tier 2 floor to ~0.25)
+
+### v0.2 Holdout Set (LOCKED — Pre-Registered)
+
+| Alias | Token | Role | Snapshot Era | Regime |
+|-------|-------|------|-------------|--------|
+| Project_Alpha | KAS | Winner | Late 2022 | Bear |
+| Project_Beta | TAO | Winner | Early 2023 | Bear |
+| Project_Gamma | FTM | Winner | Mid 2021 | Bull |
+| Project_Delta | APE | Control | Early 2022 | Bear |
+| Project_Epsilon | GLMR | Control | Late 2021 | Bull |
+| Project_Zeta | HNT | Control | Late 2021 | Bull |
+
+Regime rule: BTC above 200DMA at snapshot = Bull; below = Bear.
+
+### v0.2 Evaluation Protocol (Pre-Registered)
+
+- Primary A: Winner recall (Winners in T1 or T2) ≥ 75%
+- Primary B: Control trash rate (Controls in Trash) ≥ 75%
+- Pass: Both A and B met
+- Fail: Either < 50%
+- Indeterminate: all other outcomes → diagnose, iterate once
+- Secondary: tier-weighted accuracy + per-regime breakdown (diagnostic only)
+
+### v0.2 Training Expansion Plan (Phase 2)
+
+- Vault re-incorporation: RNDR, PENDLE, INJ (W), DYDX, ENS (C) × 6 runs each = 30 runs
+- New cases: TIA (W), ARB (C), SEI (C) × 6 runs each = 18 runs
+- Total: 48 runs, est. ~$4.80
+- Sequencing: lock holdout cases + protocol BEFORE examining vault 6-run scores
+- Post-expansion: compute fresh global tier boundaries from 21 training cases combined
+
 ### Backtest Methodology
 - **18 cases:** 8 training winners + 2 holdout winners + 4 training controls + 2 holdout controls + 2 legacy controls — balanced 8W/6C design
 - **Training/holdout split:** Training cases used for prompt iteration; holdout cases (SAFE, ALGO) held out — reported separately, NEVER used to tune prompts/weights. AVAX and SUSHI promoted to training winners (marathon 2026-05-25).
@@ -247,7 +307,12 @@ Step 8: Remaining temporal references
 | 17B | Test B: Analyst token/protocol constraint — **Δ=0.094** ← best result | ✅ Complete (reverted additive) |
 | 18 | 8W/6C Balanced Redesign: drop YFI_CTRL, add ZRX/BAT/ALGO/CRV controls, isHoldout split, T+U sub-score metric, pilot 4 new cases blinded N=3 | ✅ Complete |
 | 19 | 8W/6C training marathon — 72 blinded runs (N=6), TotalScore Δ=0.165, T+U Δ=0.397 | ✅ Complete |
-| 20 | **Architect direction needed**: set production threshold, unlock holdout validation (SAFE/ALGO) | **Awaiting** |
+| 20 | Architect direction: production threshold + holdout unlock — resolved via vault run + v0.2 spec (Director-approved) | ✅ Complete |
+| 21 | Phase 2: onboard new training case data — TIA (W), ARB (C), SEI (C) + reincorporate vault cases (RNDR, PENDLE, INJ, DYDX, ENS) as training | High |
+| 22 | Phase 2: vault re-incorporation runs — 5 cases × 6 blinded runs = 30 runs (~$3.00) | High |
+| 23 | Phase 2: new-case runs — TIA/ARB/SEI × 6 blinded runs = 18 runs (~$1.80) | High |
+| 24 | Phase 2: recompute global tier boundaries from 21 combined training cases (training-only) | High |
+| 25 | Phase 4: v0.2 holdout validation (KAS/TAO/FTM/APE/GLMR/HNT) per pre-registered protocol — only after Tasks 21–24 | High |
 | Production N=3 | Quant fires 3× concurrently, uses median for alert | High |
 | Tiered alerts | Tier 1 (≥0.80), Tier 2 (0.65-0.79) — currently binary 0.70 | High |
 | Dashboard UI fixes (partial) | Debates tab: real timestamps, newest-first, Show More ✅. Skeptic thesis in red, ESCALATED badge in amber still pending. | Low |
