@@ -272,5 +272,41 @@
       "Makoto Inoue": "Dev_66",
       "Brantly Millegan": "Dev_67"
     }
+  },
+  "TIA": {
+    "alias": "Project_Omicron",
+    "tokenAlias": "$TOKEN_O",
+    "projectNames": ["Celestia Labs", "Celestia", "celestia", "TIA", "tia", "celestiaorg", "celestia-node", "celestia-core", "quantum-gravity-bridge"],
+    "domains": ["celestia.org", "blog.celestia.org", "celestia.explorers.io"],
+    "githubOrgs": ["celestiaorg"],
+    "actorAliases": {
+      "Mustafa Al-Bassam": "Dev_68",
+      "Ismail Khoffi": "Dev_69",
+      "Nick White": "Dev_70"
+    }
+  },
+  "ARB": {
+    "alias": "Project_Digamma",
+    "tokenAlias": "$TOKEN_Y",
+    "projectNames": ["Arbitrum", "arbitrum", "ARB", "Offchain Labs", "OffchainLabs", "arbitrum-nitro", "arbitrum-token-contracts", "Nitro", "Stylus", "AnyTrust", "AIP-1"],
+    "domains": ["arbitrum.io", "arbitrum.foundation", "portal.arbitrum.one"],
+    "githubOrgs": ["OffchainLabs"],
+    "actorAliases": {
+      "Steven Goldfeder": "Dev_71",
+      "Ed Felten": "Dev_72",
+      "Harry Kalodner": "Dev_73"
+    }
+  },
+  "SEI": {
+    "alias": "Project_Sampi",
+    "tokenAlias": "$TOKEN_Z",
+    "projectNames": ["Sei Labs", "Sei", "sei", "SEI", "sei-chain", "sei-app", "sei-protocol", "Twin-Turbo"],
+    "domains": ["sei.io", "seinetwork.io", "sei.explorers.io"],
+    "githubOrgs": ["sei-protocol"],
+    "actorAliases": {
+      "Jeff Feng": "Dev_74",
+      "Jayendra Jog": "Dev_75",
+      "Dan Edlebeck": "Dev_76"
+    }
   }
 }

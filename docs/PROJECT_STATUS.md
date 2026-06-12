@@ -1,5 +1,5 @@
 # Project Status — Node Zero (v0.5.0)
-**Last updated:** 2026-06-12 | **Phase:** v0.2 Phase 2 — executing: Step 0 complete (new Skeptic prompt LOCKED), 48-run training expansion next | **Budget:** ~€9/mo + ~$12 one-time v0.2 program
+**Last updated:** 2026-06-13 | **Phase:** v0.2 Phase 2 — Steps 0–3c complete (Skeptic prompt LOCKED, 47-run training expansion done, regime-conditional boundaries computed: Bull valid, Bear PROVISIONAL/degenerate); next: Step 4 holdout authoring + 36 runs | **Budget:** ~€9/mo + ~$12 one-time v0.2 program
 
 ### Vision
 AI agents that spot **paradigm-shifting profit opportunities before they go mainstream**. Target: 10x+ returns (Director decision 2026-06-11; calibrated into the engine — changing this bar invalidates Δ baselines and case labels). 100x–1000x aspirational. Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
@@ -308,6 +308,72 @@ Zero JSON parse errors across all 40 runs today (Step 0 + Batch A). Cost to date
 4. **Step 4 ready after Step 3:** alias scheme confirmed Project_HO1–HO6 / $TOKEN_HO1–HO6 / Dev_77+; KAS,TAO,FTM,APE,GLMR,HNT case JSONs must be researched + authored.
 
 Step 2 NOT committed yet (brief commits after both batches). Worker healthy (PID 38597, started 12:07, new prompt loaded).
+
+**Resolution (2026-06-13):** Open decisions 1–3 resolved by Architect brief "Batch B + Step 3c": (1) TIA/ARB/SEI case JSONs supplied by Architect (existed only on Architect's sandbox, never pushed); (2) regime-conditional boundaries with CRV excluded from Bull boundary computation; (3) mixed-prompt caveat label on all boundary values. Decision 4 (Step 4 holdout) remains pending. See sections below.
+
+### Phase 2 Step 2 — Batch B Results (2026-06-13)
+
+Training expansion: TIA/ARB/SEI ×6 blinded, new (locked) Skeptic prompt. Case JSONs supplied verbatim by Architect; Lead Engineer added required wiring: seed-backtest.ts metadata blocks, aliases.json entries (TIA=Project_Omicron/$TOKEN_O/Dev_68–70, ARB=Project_Digamma/$TOKEN_Y/Dev_71–73, SEI=Project_Sampi/$TOKEN_Z/Dev_74–76). ATH ground truth web-verified (CoinGecko/CMC): TIA $20.85 (2024-02-10) → 7.8x; ARB $2.40 (2024-01-12) → 2.0x; SEI $1.14 (2024-03-16) → 8.1x. Pre-run: 6 stale YFI_CTRL/Project_Omicron ClusterScores deleted (2026-05-24 era, deleted-case remnants); vault-5 isHoldout → false in seed (report.ts excludes isHoldout from tested W/C buckets); DB backup `backups/dev-pre-batchB-20260612.db`; worker hard-restarted (aliases.json is require-cached per process). Blinding leak-checked on first cluster: clean.
+
+17/18 runs; ARB r2 lost to debate timeout >300s (known DeepSeek pattern, clean skip — median from 5). DB-verified: formula recomputation matches all 17 stored scores, weights sum 1.0, sub-scores in range, σ within norms, no hard stops.
+
+| Case | Alias | Role | Median Total | Median T+U | σ | Runs |
+|------|-------|------|--------------|------------|---|------|
+| TIA | Project_Omicron | W | 0.5301 | 0.5667 | 0.012 | 6 |
+| ARB | Project_Digamma | C | 0.3848 | 0.3083 | 0.016 | 5 |
+| SEI | Project_Sampi | C | 0.3997 | 0.4083 | 0.013 | 6 |
+
+**Ground-truth flags (Architect-assigned labels kept):** TIA actual multiple 7.8x is below the 10x winner threshold (winner per Architect ruling); SEI at 8.1x is a high control (cf. SNX, winner at 9.8x). **Notable:** SEI (control) T+U median exactly equals RNDR (winner) at 0.4083 — drives the Bear boundary degeneracy below.
+
+### Phase 2 Step 3c — Regime-Conditional Boundaries (FINAL, 2026-06-13)
+
+20-case training set per Architect Step 3a BTC-verified regime assignments (AVAX→Bear, ENS→Bull, ARB→Bull, PENDLE→Bull borderline). Formulas pre-registered: T1 floor = (min_Winner_T+U + max_Control_T+U)/2; T2 floor = max_Control_T+U. CRV excluded from Bull boundary computation only (remains a Control for all other purposes). Tier assignment convention used: strict inequality (T+U must EXCEED the floor). All medians from blinded runs, live DB, computed 2026-06-13.
+
+> **Caveat (applies to every boundary value below):** Mixed-prompt derivation — new-prompt Δ shift documented as favorable (W↑ C↓) — boundaries are conservative relative to pure new-prompt derivation.
+
+**Bull cohort (15 cases):**
+
+| Case | W/C | T+U | Prompt | N | Tier | Correct? |
+|------|-----|------|--------|---|------|----------|
+| LINK | W | 0.7075 | old | 5 | Tier 1 | ✓ |
+| YFI | W | 0.6746 | old | 6 | Tier 1 | ✓ |
+| SNX | W | 0.6667 | old | 6 | Tier 1 | ✓ |
+| UNI | W | 0.6658 | mixed | 6 | Tier 1 | ✓ |
+| AAVE | W | 0.6425 | old | 5 | Tier 1 | ✓ |
+| MKR | W | 0.6075 | old | 5 | Tier 1 | ✓ |
+| SUSHI | W | 0.5667 | old | 6 | Tier 1 | ✓ |
+| TIA | W | 0.5667 | new | 6 | Tier 1 | ✓ |
+| CRV | C | 0.5563 | mixed | 6 | Tier 1 | ✗ (known hard control; excluded from boundary derivation per ruling) |
+| PENDLE | W | 0.4688 | new | 6 | Tier 1 | ✓ |
+| ENS | C | 0.4375 | new | 6 | Trash | ✓ (sits exactly at T2 floor; strict > sends it to Trash) |
+| ARB | C | 0.3083 | new | 5 | Trash | ✓ |
+| BAT | C | 0.2004 | old | 6 | Trash | ✓ |
+| COMP | C | 0.1917 | mixed | 6 | Trash | ✓ |
+| ZRX | C | 0.1917 | old | 6 | Trash | ✓ |
+
+- min_Winner_T+U = **0.4688** (PENDLE)
+- max_Control_T+U = **0.4375** (ENS; CRV excluded)
+- **T1 floor = 0.4531 · T2 floor = 0.4375** — T1 > T2 ✓ (no inversion)
+- T2 band width = 0.0156 (above the 0.01 usability trigger)
+- In-sample: 14/15 correct (sole miss: CRV)
+
+**Bear cohort (5 cases — PROVISIONAL):**
+
+| Case | W/C | T+U | Prompt | N | Tier | Correct? |
+|------|-----|------|--------|---|------|----------|
+| AVAX | W | 0.6075 | old | 6 | Tier 1 | ✓ |
+| INJ | W | 0.4325 | new | 6 | Tier 1 | ✓ |
+| RNDR | W | 0.4083 | new | 6 | Trash | ✗ (sits exactly at degenerate floor) |
+| SEI | C | 0.4083 | new | 6 | Trash | ✓ |
+| DYDX | C | 0.2092 | new | 5 | Trash | ✓ |
+
+- min_Winner_T+U = **0.4083** (RNDR)
+- max_Control_T+U = **0.4083** (SEI)
+- **T1 floor = T2 floor = 0.4083 — DEGENERATE** (min_Winner == max_Control exactly; band width 0.0000). Not an inversion, but the boundary cannot separate RNDR from SEI: any tie convention misclassifies exactly one of them (strict > ⇒ RNDR Trash; ≥ ⇒ SEI Tier 1).
+- In-sample: 4/5 correct under either convention
+- **PROVISIONAL flag:** derived from 5 cases only. Any holdout case within 0.05 of a Bear boundary (T+U 0.3583–0.4583) is low-confidence. The exact RNDR/SEI tie at 0.4083 makes the Bear floor effectively unusable at the margin — flagged for Architect before Step 5 evaluation relies on it.
+
+**Cost (Step 2 complete):** Batch B actuals $1.98 Anthropic (88 calls, 00:37–01:31) + ~$0.15 DeepSeek est. ≈ $2.13 (vs $1.80 projected). Phase 2 spend to date ≈ $5.88 of $9.20; ~$3.32 remains for Step 4 (36 holdout runs ≈ $3.60 projected — over budget by ~$0.28 at current per-run cost; flagged).
 
 ### Backtest Methodology
 - **18 cases:** 8 training winners + 2 holdout winners + 4 training controls + 2 holdout controls + 2 legacy controls — balanced 8W/6C design

@@ -247,7 +247,7 @@ const CASES = [
     actualMultiple: 14.8,   // ~14.8x to Jul-2023 ATH; AI/GPU narrative catalyst
     split:          'verification',
     isControl:      false,
-    isHoldout:      true,
+    isHoldout:      false,  // vault re-incorporated as training (Phase 2, 2026-06-13)
   },
   {
     ticker:         'PENDLE',
@@ -259,7 +259,7 @@ const CASES = [
     actualMultiple: 44.6,   // ~44.6x to May-2024 ATH; liquid staking yield boom
     split:          'verification',
     isControl:      false,
-    isHoldout:      true,
+    isHoldout:      false,  // vault re-incorporated as training (Phase 2, 2026-06-13)
   },
   {
     ticker:         'INJ',
@@ -271,7 +271,7 @@ const CASES = [
     actualMultiple: 35.3,   // ~35.3x to Mar-2024 ATH; Cosmos DeFi hub narrative
     split:          'verification',
     isControl:      false,
-    isHoldout:      true,
+    isHoldout:      false,  // vault re-incorporated as training (Phase 2, 2026-06-13)
   },
   {
     ticker:         'DYDX',
@@ -283,7 +283,7 @@ const CASES = [
     actualMultiple: 1.4,    // ~1.4x ATH Nov-2021; governance-only token, no fee yield
     split:          'verification',
     isControl:      true,
-    isHoldout:      true,
+    isHoldout:      false,  // vault re-incorporated as training (Phase 2, 2026-06-13)
   },
   {
     ticker:         'ENS',
@@ -295,7 +295,44 @@ const CASES = [
     actualMultiple: 1.3,    // ~1.3x ATH Nov-2021; DAO treasury with no distribution mechanism
     split:          'verification',
     isControl:      true,
-    isHoldout:      true,
+    isHoldout:      false,  // vault re-incorporated as training (Phase 2, 2026-06-13)
+  },
+  // ── Training expansion Batch B (2026-06-13) — 1 winner + 2 controls ───────
+  {
+    ticker:         'TIA',
+    projectAlias:   'Project_Omicron',
+    sector:         'Infrastructure',
+    signalDate:     new Date('2023-11-01'),
+    signalPrice:    2.68,
+    athPrice:       20.85,
+    actualMultiple: 7.8,    // ~7.8x to Feb-2024 ATH ($20.85); modular DA narrative — below 10x, winner per Architect ruling
+    split:          'verification',
+    isControl:      false,
+    isHoldout:      false,
+  },
+  {
+    ticker:         'ARB',
+    projectAlias:   'Project_Digamma',
+    sector:         'L2',
+    signalDate:     new Date('2023-04-01'),
+    signalPrice:    1.22,
+    athPrice:       2.40,
+    actualMultiple: 2.0,    // ~2.0x to Jan-2024 ATH ($2.40); governance-only token, no value accrual
+    split:          'verification',
+    isControl:      true,
+    isHoldout:      false,
+  },
+  {
+    ticker:         'SEI',
+    projectAlias:   'Project_Sampi',
+    sector:         'L1',
+    signalDate:     new Date('2023-09-01'),
+    signalPrice:    0.14,
+    athPrice:       1.14,
+    actualMultiple: 8.1,    // ~8.1x to Mar-2024 ATH ($1.14); below 10x — control per Architect ruling
+    split:          'verification',
+    isControl:      true,
+    isHoldout:      false,
   },
 ] as const;
 
