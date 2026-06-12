@@ -287,6 +287,28 @@ Same-case baseline comparison (decision basis):
 
 **Calibration correction (gate restated):** the original ≥0.397 LOCK gate was the full-set Δ and structurally unreachable on a 3-case slice containing CRV (same-case locked baseline = 0.335). Future prompt-validation gates use same-case baseline comparison, not full-set Δ.
 
+### Phase 2 Step 2 — Batch A Results (2026-06-12, INTERIM — Batch B pending)
+
+Vault re-incorporation, blinded N=6, new (locked) Skeptic prompt. 29/30 runs; DYDX r3 lost to debate timeout >300s (known DeepSeek latency pattern, clean skip — median from 5 runs). DB-verified: formula recomputation matches all 29 stored scores, weights sum 1.0, sub-scores in range, no hard stops. DB backups: `backups/dev-pre-step0-20260612.db`, `backups/dev-pre-step2-batchA-20260612.db` (both 149 ClusterScores, taken before each destructive re-run).
+
+| Case | Alias | Role | Median Total | Median T+U | σ | Runs | Vault T+U (N=3, old prompt) |
+|------|-------|------|--------------|------------|---|------|------------------------------|
+| RNDR | Project_Upsilon | W | 0.3836 | 0.4083 | 0.032 | 6 | 0.355 |
+| PENDLE | Project_Phi | W | 0.3929 | 0.4688 | 0.014 | 6 | 0.408 |
+| INJ | Project_Chi | W | 0.4257 | 0.4325 | 0.021 | 6 | 0.403 |
+| DYDX | Project_Psi | C | 0.3402 | 0.2092 | 0.007 | 5 | 0.192 |
+| ENS | Project_Omega | C | 0.4504 | 0.4375 | 0.021 | 6 | 0.508 |
+
+Zero JSON parse errors across all 40 runs today (Step 0 + Batch A). Cost to date ~$3.80 of ~$9.20 budget.
+
+**OPEN DECISIONS (Phase 2 blocked on Architect/Director — flagged 2026-06-12):**
+1. **Batch B blocked:** TIA/ARB/SEI case files + aliases do NOT exist (cases/ has 23 files; aliases.json has 23 keys, no Omicron/Digamma/Sampi — "Session 15" artifacts absent from repo). Awaiting: Lead Engineer drafts them for review, or Architect supplies them.
+2. **Step 3 degenerate boundaries:** on current data, min_Winner_T+U (RNDR 0.408) < max_Control_T+U (CRV ~0.546): pre-registered formulas yield Tier 2 floor (0.546) ABOVE Tier 1 floor ((0.408+0.546)/2 = 0.477) — inverted tiers, all 3 bear-era winners in Trash. ENS (control, 0.4375) outscores RNDR and INJ. Architect must rule on boundary handling before Step 3 is computed/documented.
+3. **Era mixing:** live DB has UNI/COMP/CRV r1–r3 as new-prompt (Step 0) scores alongside marathon old-prompt r4–r6; the 12 legacy training cases carry old-prompt medians vs new-prompt expansion cases. Marathon r1–r3 recoverable from pre-step0 backup. Architect aware, unruled.
+4. **Step 4 ready after Step 3:** alias scheme confirmed Project_HO1–HO6 / $TOKEN_HO1–HO6 / Dev_77+; KAS,TAO,FTM,APE,GLMR,HNT case JSONs must be researched + authored.
+
+Step 2 NOT committed yet (brief commits after both batches). Worker healthy (PID 38597, started 12:07, new prompt loaded).
+
 ### Backtest Methodology
 - **18 cases:** 8 training winners + 2 holdout winners + 4 training controls + 2 holdout controls + 2 legacy controls — balanced 8W/6C design
 - **Training/holdout split:** Training cases used for prompt iteration; holdout cases (SAFE, ALGO) held out — reported separately, NEVER used to tune prompts/weights. AVAX and SUSHI promoted to training winners (marathon 2026-05-25).

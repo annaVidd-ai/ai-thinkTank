@@ -1,6 +1,6 @@
 # Cost Tracking — ThinkTank AI Pipeline
 
-**Last updated:** 2026-05-25
+**Last updated:** 2026-06-12
 
 Token usage is logged automatically in `think-tank-ai/logs/worker.log` as `[LLM:cache]` lines for every Anthropic call. DeepSeek (Skeptic) is not logged — see separate section below.
 
@@ -88,3 +88,21 @@ To extract and review:
 ```bash
 grep "\[LLM:cache\]" logs/worker.log | grep "\[2026-05-25\]"
 ```
+
+---
+
+## Phase 2 Actuals — Step 0 + Batch A (2026-06-12)
+
+Measured from all `[LLM:cache]` lines dated 2026-06-12 in `logs/worker.log` (193 calls, 12:12–14:24). Covers Step 0 (Skeptic prompt validation, 9 runs: UNI/COMP/CRV ×3) + Batch A (vault expansion, 29 completed runs: RNDR/PENDLE/INJ/ENS ×6 + DYDX ×5; DYDX r3 lost to DeepSeek timeout).
+
+| Model | Calls | in | cache_write | cache_read | out | Cost |
+|-------|-------|-----|-------------|------------|-----|------|
+| claude-sonnet-4-6 | 155 | 5,694 | 462,633 | 30,692 | 109,625 | $3.41 |
+| claude-haiku-4-5-20251001 | 38 | 12,544 | 0 | 0 | 822 | $0.01 |
+| **Anthropic total** | 193 | | | | | **$3.42** |
+| deepseek-reasoner (est., not logged) | ~114 | ~6,000/run | — | — | ~2,400/run | ~$0.33 |
+| **Grand total (38 runs)** | | | | | | **~$3.75** |
+
+**Per-run average:** ~$0.099 (Anthropic $0.090 + DeepSeek ~$0.009) — slightly above the $0.091 May baseline; the new Skeptic prompt drives longer rebuttals/cache writes.
+
+**Budget:** $9.20 authorized for Phase 2 → ~$5.45 remaining for Batch B (18 runs, ~$1.80) + Step 4 holdout (36 runs, ~$3.60). Projection: on budget, no headroom for re-runs beyond ~1 case.
