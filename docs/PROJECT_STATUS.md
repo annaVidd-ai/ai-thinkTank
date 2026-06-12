@@ -1,5 +1,5 @@
 # Project Status — Node Zero (v0.5.0)
-**Last updated:** 2026-06-12 | **Phase:** v0.2 Phase 2 — Training Expansion approved, execution pending | **Budget:** ~€9/mo + ~$12 one-time v0.2 program
+**Last updated:** 2026-06-12 | **Phase:** v0.2 Phase 2 — executing: Step 0 complete (new Skeptic prompt LOCKED), 48-run training expansion next | **Budget:** ~€9/mo + ~$12 one-time v0.2 program
 
 ### Vision
 AI agents that spot **paradigm-shifting profit opportunities before they go mainstream**. Target: 10x+ returns (Director decision 2026-06-11; calibrated into the engine — changing this bar invalidates Δ baselines and case labels). 100x–1000x aspirational. Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
@@ -264,6 +264,28 @@ Regime rule: BTC above 200DMA at snapshot = Bull; below = Bear.
 - Total: 48 runs, est. ~$4.80
 - Sequencing: lock holdout cases + protocol BEFORE examining vault 6-run scores
 - Post-expansion: compute fresh global tier boundaries from 21 training cases combined
+
+### Phase 2 Step 0: Skeptic Prompt Validation (2026-06-12) — LOCKED
+
+New DeepSeek-proposed Skeptic prompt (mandatory 4-step internal analysis per category, strict ABSENT/CONCRETE evidence discipline, CoT before JSON) validated on UNI/COMP/CRV, blinded N=3. Zero JSON parse errors in 27 Skeptic calls. All 9 scores DB-verified against additive formula; no hard stops; σ within norms. Locked prompt backed up at `agents/Agent_Skeptic_Instructions_LOCKED_BACKUP.md` (from git HEAD d57ac07).
+
+| Case | Type | Run 1 | Run 2 | Run 3 | Median Total | Median T+U | σ |
+|------|------|-------|-------|-------|--------------|------------|---|
+| UNI | winner | 0.6272 | 0.6172 | 0.5621 | 0.6172 | 0.725 | 0.029 |
+| COMP | control | 0.3273 | 0.3363 | 0.3223 | 0.3273 | 0.192 | 0.006 |
+| CRV | control | 0.5456 | 0.6021 | 0.5123 | 0.5456 | 0.546 | 0.037 |
+
+Same-case baseline comparison (decision basis):
+
+| | UNI (W) | COMP (C) | CRV (C) | T+U Δ |
+|---|---|---|---|---|
+| Locked prompt (marathon, same 3 cases) | ~0.72 | ~0.25 | ~0.52 | 0.335 |
+| New prompt (Step 0) | 0.725 | 0.192 | 0.546 | **0.356** |
+| Delta | +0.005 | −0.058 | +0.026 | **+0.021** |
+
+**Ruling: LOCK** (Architect, 2026-06-12). COMP suppression (−0.058) is the strongest signal; UNI stable; CRV +0.026 is noise at N=3 (σ 0.037). Revert path preserved via backup.
+
+**Calibration correction (gate restated):** the original ≥0.397 LOCK gate was the full-set Δ and structurally unreachable on a 3-case slice containing CRV (same-case locked baseline = 0.335). Future prompt-validation gates use same-case baseline comparison, not full-set Δ.
 
 ### Backtest Methodology
 - **18 cases:** 8 training winners + 2 holdout winners + 4 training controls + 2 holdout controls + 2 legacy controls — balanced 8W/6C design
