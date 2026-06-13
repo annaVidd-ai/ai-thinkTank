@@ -357,21 +357,30 @@ Training expansion: TIA/ARB/SEI ×6 blinded, new (locked) Skeptic prompt. Case J
 - T2 band width = 0.0156 (above the 0.01 usability trigger)
 - In-sample: 14/15 correct (sole miss: CRV)
 
+**Tie convention (Architect ruling, 2026-06-13) — applied below and in Step 5:**
+- When min_Winner_T+U == max_Control_T+U: **T1 floor = min_Winner + 0.01** (minimum separation); T2 floor remains max_Control. Tier 2 band has fixed width 0.01.
+- Cases landing on the exact boundary (T+U == max_Control) classify as **Tier 2 — boundary-tie indeterminate**.
+- Step 5 evaluation: boundary-tie cases count as **0.5 credit** toward Primary A (winner recall) / Primary B (control trash rate).
+- Production: any case landing in the Tier 2 band triggers **human review** rather than auto-allocation.
+
 **Bear cohort (5 cases — PROVISIONAL):**
+
+- min_Winner_T+U = **0.4083** (RNDR)
+- max_Control_T+U = **0.4083** (SEI) — exact tie with min_Winner
+- **Tie convention applies:** T1 floor = 0.4083 + 0.01 = **0.4183**; T2 floor = **0.4083**
+- Tier 2 band = [0.4083, 0.4183) — width 0.01
 
 | Case | W/C | T+U | Prompt | N | Tier | Correct? |
 |------|-----|------|--------|---|------|----------|
 | AVAX | W | 0.6075 | old | 6 | Tier 1 | ✓ |
 | INJ | W | 0.4325 | new | 6 | Tier 1 | ✓ |
-| RNDR | W | 0.4083 | new | 6 | Trash | ✗ (sits exactly at degenerate floor) |
-| SEI | C | 0.4083 | new | 6 | Trash | ✓ |
+| RNDR | W | 0.4083 | new | 6 | Tier 2 (boundary-tie) | ⚠️ partial (Winner in T2 indeterminate band) |
+| SEI | C | 0.4083 | new | 6 | Tier 2 (boundary-tie) | ❌ misclassified (Control should be Trash) |
 | DYDX | C | 0.2092 | new | 5 | Trash | ✓ |
 
-- min_Winner_T+U = **0.4083** (RNDR)
-- max_Control_T+U = **0.4083** (SEI)
-- **T1 floor = T2 floor = 0.4083 — DEGENERATE** (min_Winner == max_Control exactly; band width 0.0000). Not an inversion, but the boundary cannot separate RNDR from SEI: any tie convention misclassifies exactly one of them (strict > ⇒ RNDR Trash; ≥ ⇒ SEI Tier 1).
-- In-sample: 4/5 correct under either convention
-- **PROVISIONAL flag:** derived from 5 cases only. Any holdout case within 0.05 of a Bear boundary (T+U 0.3583–0.4583) is low-confidence. The exact RNDR/SEI tie at 0.4083 makes the Bear floor effectively unusable at the margin — flagged for Architect before Step 5 evaluation relies on it.
+In-sample (0.5 credit on boundary-tie cases): Primary A 2.5/3 (AVAX, INJ, RNDR 0.5) = 83.3%; Primary B 1.5/2 (DYDX, SEI 0.5) = 75.0%.
+
+**Bear discrimination failure note:** SEI (Control) ties RNDR (Winner) at 0.4083 — the pipeline cannot distinguish them in the Bear regime. This is a genuine limitation, not a measurement artifact (σ 0.013 for SEI, 0.032 for RNDR; medians from N=6 each). Bear boundaries are PROVISIONAL: 5-case derivation with degenerate raw margin. **Priority for expansion in v0.3.** Any holdout case within ±0.05 of either Bear boundary (T+U ∈ [0.3583, 0.4683]) is low-confidence and should trigger human review per the tie convention.
 
 **Cost (Step 2 complete):** Batch B actuals $1.98 Anthropic (88 calls, 00:37–01:31) + ~$0.15 DeepSeek est. ≈ $2.13 (vs $1.80 projected). Phase 2 spend to date ≈ $5.88 of $9.20; ~$3.32 remains for Step 4 (36 holdout runs ≈ $3.60 projected — over budget by ~$0.28 at current per-run cost; flagged).
 

@@ -123,4 +123,4 @@ Measured from all `[LLM:cache]` lines dated 2026-06-13 in `logs/worker.log` (88 
 
 **Per-run average:** ~$0.125 — above the $0.099 Step 0/Batch A average; Batch B narratives are longer (~3.1k chars) and the new Skeptic prompt drives larger cache writes.
 
-**Budget:** Phase 2 spend ≈ $5.88 of $9.20 → **~$3.32 remaining**. Step 4 (36 holdout runs) projects to ~$3.60–4.50 at current per-run costs — **projected overrun of $0.3–1.2; Director decision needed before Step 4 launch** (options: accept overrun, reduce holdout N per case, or top up budget).
+**Budget:** Phase 2 spend ≈ $5.88 of $9.20 → ~$3.32 remaining. Step 4 (36 holdout runs) projects to ~$3.60–4.50 at current per-run costs — projected overrun $0.3–1.2. **Director ruling 2026-06-13: top-up authorized on Anthropic Console** (~95% of Phase 2 spend is claude-sonnet-4-6; DeepSeek ~$0.15/Batch B is minor; GLM/Haiku negligible).
