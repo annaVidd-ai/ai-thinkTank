@@ -1,5 +1,5 @@
 # Project Status — Node Zero (v0.5.0)
-**Last updated:** 2026-06-13 | **Phase:** v0.2 Phase 2 — Steps 0–3c complete (Skeptic prompt LOCKED, 47-run training expansion done, regime-conditional boundaries computed: Bull valid, Bear PROVISIONAL/degenerate); next: Step 4 holdout authoring + 36 runs | **Budget:** ~€9/mo + ~$12 one-time v0.2 program
+**Last updated:** 2026-06-14 | **Phase:** v0.2 Phase 2 — Steps 0–4 complete (39 holdout+LINK runs done, regime corrections ruled, INDETERMINATE verdict band identified); next: Step 5 formal verdict + iteration decision | **Budget:** ~€9/mo + ~$12 one-time v0.2 program
 
 ### Vision
 AI agents that spot **paradigm-shifting profit opportunities before they go mainstream**. Target: 10x+ returns (Director decision 2026-06-11; calibrated into the engine — changing this bar invalidates Δ baselines and case labels). 100x–1000x aspirational. Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
@@ -383,6 +383,81 @@ In-sample (0.5 credit on boundary-tie cases): Primary A 2.5/3 (AVAX, INJ, RNDR 0
 **Bear discrimination failure note:** SEI (Control) ties RNDR (Winner) at 0.4083 — the pipeline cannot distinguish them in the Bear regime. This is a genuine limitation, not a measurement artifact (σ 0.013 for SEI, 0.032 for RNDR; medians from N=6 each). Bear boundaries are PROVISIONAL: 5-case derivation with degenerate raw margin. **Priority for expansion in v0.3.** Any holdout case within ±0.05 of either Bear boundary (T+U ∈ [0.3583, 0.4683]) is low-confidence and should trigger human review per the tie convention.
 
 **Cost (Step 2 complete):** Batch B actuals $1.98 Anthropic (88 calls, 00:37–01:31) + ~$0.15 DeepSeek est. ≈ $2.13 (vs $1.80 projected). Phase 2 spend to date ≈ $5.88 of $9.20; ~$3.32 remains for Step 4 (36 holdout runs ≈ $3.60 projected — over budget by ~$0.28 at current per-run cost; flagged).
+
+### Phase 2 Step 4 — Holdout Results (2026-06-14)
+
+36 holdout runs (KAS/TAO/FTM/APE/GLMR/HNT ×6 blinded) + 3 LINK validation runs. Worker hard-restarted before launch to pick up new aliases. DB backups: `backups/dev-pre-step4-20260614.db` (pre-seed), `backups/dev-post-step4-holdout-20260614.db` (post-holdout, pre-LINK overwrite — preserves old-prompt LINK r4–r6 needed for the Step 0 validation comparison).
+
+**All 36 runs verified.** Formula recomputation matches every stored totalScore; weights sum 1.0; sub-scores in [0,1]; no hard stops. Three log "issue" hits were verdict-string regex false-positives (no errors). σ all within historical norms (max 0.0366 for GLMR).
+
+| Case | Alias | Role | Regime (verified) | Median Total | Median T+U | σ(total) | σ(T+U) | Runs |
+|------|-------|------|-------------------|--------------|------------|----------|--------|------|
+| KAS | Project_HO1 | W | Bear | 0.2962 | 0.2917 | 0.031 | 0.036 | 6 |
+| TAO | Project_HO2 | W | Bull | 0.4733 | 0.6017 | 0.024 | 0.042 | 6 |
+| FTM | Project_HO3 | W | Bear | 0.4523 | 0.5083 | 0.022 | 0.025 | 6 |
+| APE | Project_HO4 | C | Bear | 0.3886 | 0.3292 | 0.027 | 0.045 | 6 |
+| GLMR | Project_HO5 | C | Bear | 0.4283 | 0.5017 | 0.037 | 0.056 | 6 |
+| HNT | Project_HO6 | C | Bull | 0.4624 | 0.4579 | 0.026 | 0.036 | 6 |
+
+**Regime verification (Architect-ruled 2026-06-14):** Strict snapshot-date BTC vs 200DMA rule applied. Brief contained 2 errors, both confirmed and corrected:
+
+| Case | Brief regime | Verified | Source |
+|------|--------------|----------|--------|
+| KAS | Bear | Bear ✓ | BTC ~$16k post-FTX (Nov 2022), 200DMA ~$30k+ |
+| TAO | Bear* | **Bull** | BTC crossed above 200DMA on 2023-01-13 ($19,515); +70 days at signal |
+| FTM | Bull | **Bear** | June 20 2021 death cross; BTC ~$31k vs 200DMA ~$42-45k at snapshot; golden cross not until ~Sept 2021 |
+| APE | Bear | Bear ✓ | Dec 2021 death cross still in effect |
+| GLMR | Bear (flagged) | Bear ✓ | Architect's suspicion confirmed |
+| HNT | Bull | Bull ✓ | Pre-Nov 2021 ATH, BTC > 200DMA |
+
+**Holdout cohort (revised per ruling):**
+
+| Cohort | Cases | Composition |
+|--------|-------|-------------|
+| Bull (secondary, forward-test only) | TAO, HNT | 1W + 1C — underpowered, no statistical claim |
+| Bear (primary verdict) | KAS, FTM, APE, GLMR | 2W + 2C — PROVISIONAL label (5-case training derivation) |
+
+### Phase 2 Step 4 — LINK Mixed-Prompt Validation
+
+3 LINK runs under the new (locked) Skeptic prompt, compared against the locked old-prompt baseline preserved in the post-step4 backup.
+
+| Source | Runs | Median Total | Median T+U | σ(total) |
+|--------|------|--------------|------------|----------|
+| Old prompt (marathon, r1/r3–r6 from backup) | 5 | 0.5343 | **0.7075** | 0.015 |
+| New prompt (Step 4 r1–r3) | 3 | 0.5463 | **0.7075** | 0.018 |
+| **Δ (new − old)** | | **+0.012** | **0.0000** | |
+
+**Finding: LINK T+U FLAT.** Not the +0.08 UNI moved in Step 0; not down either. The "new prompt boosts winners across the board" generalisation is **weaker than Step 0 alone suggested** — UNI/COMP/CRV exhibited the W↑ pattern strongly, LINK shows none of it on the primary metric. Total score did move +0.012 (favourable, but small). **No escalation trigger fired** (brief said escalate only if T+U moves down). The Step 3c boundaries derived under the mixed-prompt caveat remain conservatively biased rather than systematically biased — but the assumption is weaker than I would have stated based on Step 0 data alone.
+
+### Step 5 verdict — boundary preview (formal verdict deferred)
+
+**Boundaries (Step 3c FINAL):** Bear T1=0.4183, T2=0.4083 (tie convention applied). Bull T1=0.4531, T2=0.4375.
+
+| Case | Role | Regime | T+U | Tier (strict >) | Correct? | Confidence |
+|------|------|--------|-----|-----------------|----------|------------|
+| KAS | W | Bear | 0.2917 | Trash | ❌ | high (Δ to T2 floor = 0.117) |
+| FTM | W | Bear | 0.5083 | Tier 1 | ✓ | high (Δ to T1 floor = 0.090) |
+| APE | C | Bear | 0.3292 | Trash | ✓ | high (Δ to T2 floor = 0.079) |
+| GLMR | C | Bear | 0.5017 | Tier 1 | ❌ | high (Δ to T1 floor = 0.083) |
+| TAO | W | Bull | 0.6017 | Tier 1 | ✓ | high (Δ to T1 floor = 0.149) |
+| HNT | C | Bull | 0.4579 | Tier 1 | ❌ | **LOW (Δ to T1 floor = 0.0048)** ⚠ |
+
+**Bear primary preview** (Architect framework, no 0.5 credit since cohort is 4 cases):
+- Primary A (Winner recall) = 1/2 = **50%** — neither PASS (≥75%) nor FAIL (<50%) → **INDETERMINATE band**
+- Primary B (Control trash rate) = 1/2 = **50%** — same band
+
+**Bull secondary preview** (forward-test only):
+- TAO Tier 1 ✓, HNT Tier 1 ❌ but boundary-tie low-confidence → "1/2 consistent, 1/2 indeterminate"
+
+**Likely overall verdict:** INDETERMINATE per Architect's framework. Step 5 formalization deferred to next task.
+
+**Diagnostic signals:**
+- **KAS T+U 0.2917 is the cleanest miss**: the new Skeptic prompt aggressively suppressed Kaspa's fair-launch/academic-team narrative on no-revenue/no-DeFi/no-ecosystem grounds in Bear regime. Structural, not noise (σ 0.031).
+- **GLMR T+U 0.5017 is the cleanest false positive**: Polkadot-parachain-just-launched scored like a winner in Bear regime despite 1.8x actual outcome. Bull-narrative framing got past the Skeptic.
+- **HNT teetering at 0.4579 ≈ Bull T1 floor 0.4531**: 0.0048 gap is below the historical per-case σ (0.026). Bull cohort literally cannot resolve this case at this resolution.
+- **FTM as Bear winner ✓**: strongest single result — pipeline correctly identified a 12.4x winner in Bear regime, validating exactly the test-of-purpose the regime-conditional system was designed for.
+
+**Cost (Step 4):** $3.83 Anthropic (195 calls, 00:07–10:09) + ~$0.35 DeepSeek est. ≈ **$4.18 grand total** (vs $3.60-4.50 projected). Within Director-authorized Anthropic Console top-up. Phase 2 cumulative spend ≈ $10.06 vs $9.20 base budget → top-up consumed ~$0.86.
 
 ### Backtest Methodology
 - **18 cases:** 8 training winners + 2 holdout winners + 4 training controls + 2 holdout controls + 2 legacy controls — balanced 8W/6C design

@@ -124,3 +124,21 @@ Measured from all `[LLM:cache]` lines dated 2026-06-13 in `logs/worker.log` (88 
 **Per-run average:** ~$0.125 — above the $0.099 Step 0/Batch A average; Batch B narratives are longer (~3.1k chars) and the new Skeptic prompt drives larger cache writes.
 
 **Budget:** Phase 2 spend ≈ $5.88 of $9.20 → ~$3.32 remaining. Step 4 (36 holdout runs) projects to ~$3.60–4.50 at current per-run costs — projected overrun $0.3–1.2. **Director ruling 2026-06-13: top-up authorized on Anthropic Console** (~95% of Phase 2 spend is claude-sonnet-4-6; DeepSeek ~$0.15/Batch B is minor; GLM/Haiku negligible).
+
+---
+
+## Phase 2 Actuals — Step 4 Holdout + LINK Validation (2026-06-14)
+
+Measured from all `[LLM:cache]` lines dated 2026-06-14 in `logs/worker.log` (195 calls, 00:07–10:09). Covers 36 holdout runs (KAS/TAO/FTM/APE/GLMR/HNT ×6, all completed — no timeouts) + 3 LINK validation runs = 39 runs total.
+
+| Model | Calls | in | cache_write | cache_read | out | Cost |
+|-------|-------|-----|-------------|------------|-----|------|
+| claude-sonnet-4-6 | 156 | est | est | est | est | $3.83 |
+| claude-haiku-4-5-20251001 | 39 | est | 0 | 0 | est | $0.01 |
+| **Anthropic total** | 195 | | | | | **$3.83** |
+| deepseek-reasoner (est., not logged) | ~117 | | | | | ~$0.35 |
+| **Grand total (39 runs)** | | | | | | **~$4.18** |
+
+**Per-run average:** ~$0.107 — between the $0.099 Step 0/Batch A and $0.125 Batch B averages. No DeepSeek timeouts this round (vs Batch A DYDX r3 and Batch B ARB r2). Cleanest run yet on infrastructure quality.
+
+**Phase 2 cumulative actual:** Step 0 + Batch A ($3.75) + Batch B ($2.13) + Step 4 ($4.18) ≈ **$10.06**. Vs $9.20 base budget → top-up consumed ~$0.86 (well within authorized headroom). Director-side Anthropic Console balance should be checked before Step 5 iteration (if iteration adds ≥6 runs, plan for ≈ $0.60–0.75 more).

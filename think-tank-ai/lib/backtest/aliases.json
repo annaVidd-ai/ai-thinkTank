@@ -308,5 +308,77 @@
       "Jayendra Jog": "Dev_75",
       "Dan Edlebeck": "Dev_76"
     }
+  },
+  "KAS": {
+    "alias": "Project_HO1",
+    "tokenAlias": "$TOKEN_HO1",
+    "projectNames": ["Kaspa", "kaspa", "KAS", "kas", "kaspanet", "GHOSTDAG"],
+    "domains": ["kaspa.org", "kaspa-faucet.com", "explorer.kaspa.org"],
+    "githubOrgs": ["kaspanet"],
+    "actorAliases": {
+      "Yonatan Sompolinsky": "Dev_77",
+      "Aviv Zohar": "Dev_78",
+      "Michael Sutton": "Dev_79"
+    }
+  },
+  "TAO": {
+    "alias": "Project_HO2",
+    "tokenAlias": "$TOKEN_HO2",
+    "projectNames": ["Bittensor", "bittensor", "TAO", "tao", "opentensor", "Bittensor Network"],
+    "domains": ["bittensor.com", "taostats.io", "opentensor.ai"],
+    "githubOrgs": ["opentensor"],
+    "actorAliases": {
+      "Jacob Steeves": "Dev_80",
+      "Ala Shaabana": "Dev_81",
+      "Stepan Shapovalov": "Dev_82"
+    }
+  },
+  "FTM": {
+    "alias": "Project_HO3",
+    "tokenAlias": "$TOKEN_HO3",
+    "projectNames": ["Fantom", "fantom", "FTM", "ftm", "Fantom Opera", "Lachesis"],
+    "domains": ["fantom.foundation", "ftmscan.com", "docs.fantom.foundation"],
+    "githubOrgs": ["Fantom-foundation"],
+    "actorAliases": {
+      "Andre Cronje": "Dev_83",
+      "Michael Kong": "Dev_84",
+      "Ahn Byung Ik": "Dev_85"
+    }
+  },
+  "APE": {
+    "alias": "Project_HO4",
+    "tokenAlias": "$TOKEN_HO4",
+    "projectNames": ["ApeCoin", "apecoin", "APE", "ape", "ApeCoin DAO", "Yuga Labs"],
+    "domains": ["apecoin.com", "apecoin.dev", "boredapeyachtclub.com"],
+    "githubOrgs": ["apecoin"],
+    "actorAliases": {
+      "Yuga Labs Team": "Dev_86",
+      "ApeCoin DAO Contributors": "Dev_87",
+      "Animoca Brands": "Dev_88"
+    }
+  },
+  "GLMR": {
+    "alias": "Project_HO5",
+    "tokenAlias": "$TOKEN_HO5",
+    "projectNames": ["Moonbeam", "moonbeam", "GLMR", "glmr", "PureStake", "Moonriver"],
+    "domains": ["moonbeam.network", "moonscan.io", "docs.moonbeam.network"],
+    "githubOrgs": ["PureStake"],
+    "actorAliases": {
+      "Derek Yoo": "Dev_89",
+      "Stefan Mehlhorn": "Dev_90",
+      "PureStake Engineering Team": "Dev_91"
+    }
+  },
+  "HNT": {
+    "alias": "Project_HO6",
+    "tokenAlias": "$TOKEN_HO6",
+    "projectNames": ["Helium", "helium", "HNT", "hnt", "Nova Labs", "Helium Network"],
+    "domains": ["helium.com", "explorer.helium.com", "docs.helium.com"],
+    "githubOrgs": ["helium"],
+    "actorAliases": {
+      "Amir Haleem": "Dev_92",
+      "Shawn Fanning": "Dev_93",
+      "Sean Carey": "Dev_94"
+    }
   }
 }
