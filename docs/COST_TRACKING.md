@@ -142,3 +142,23 @@ Measured from all `[LLM:cache]` lines dated 2026-06-14 in `logs/worker.log` (195
 **Per-run average:** ~$0.107 — between the $0.099 Step 0/Batch A and $0.125 Batch B averages. No DeepSeek timeouts this round (vs Batch A DYDX r3 and Batch B ARB r2). Cleanest run yet on infrastructure quality.
 
 **Phase 2 cumulative actual:** Step 0 + Batch A ($3.75) + Batch B ($2.13) + Step 4 ($4.18) ≈ **$10.06**. Vs $9.20 base budget → top-up consumed ~$0.86 (well within authorized headroom). Director-side Anthropic Console balance should be checked before Step 5 iteration (if iteration adds ≥6 runs, plan for ≈ $0.60–0.75 more).
+
+---
+
+## Phase 2 Closeout — Final Tally (2026-06-14)
+
+Step 5 is documentation/verdict only — no pipeline runs, no incremental cost. Final Phase 2 spend is therefore identical to the post-Step-4 cumulative.
+
+| Stage | Runs | Cost |
+|-------|------|------|
+| Step 0 (Skeptic prompt validation) | 9 | ~$0.81 |
+| Step 2 Batch A (vault re-incorporation) | 29 | ~$2.94 |
+| Step 2 Batch B (TIA/ARB/SEI training expansion) | 17 | ~$2.13 |
+| Step 3c (boundary computation) | 0 | $0 |
+| Step 4 (36 holdout + 3 LINK) | 39 | ~$4.18 |
+| Step 5 (verdict + documentation) | 0 | $0 |
+| **Phase 2 TOTAL** | **94** | **~$10.06** |
+
+**Budget vs actual:** $9.20 authorized base + Director top-up authorized 2026-06-13 → actual $10.06 → top-up consumed ~$0.86 (≈9% over base, well within authorized headroom).
+
+**Phase 2 status: CLOSED.** v0.2 program complete. v0.3 scoping and budget request pending Director direction.

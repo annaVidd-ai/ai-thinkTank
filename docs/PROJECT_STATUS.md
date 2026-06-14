@@ -1,5 +1,5 @@
 # Project Status — Node Zero (v0.5.0)
-**Last updated:** 2026-06-14 | **Phase:** v0.2 Phase 2 — Steps 0–4 complete (39 holdout+LINK runs done, regime corrections ruled, INDETERMINATE verdict band identified); next: Step 5 formal verdict + iteration decision | **Budget:** ~€9/mo + ~$12 one-time v0.2 program
+**Last updated:** 2026-06-14 | **Phase:** v0.2 Phase 2 — COMPLETE (INDETERMINATE, diagnosed, no iteration) | **Budget:** ~€9/mo + ~$12 one-time v0.2 program
 
 ### Vision
 AI agents that spot **paradigm-shifting profit opportunities before they go mainstream**. Target: 10x+ returns (Director decision 2026-06-11; calibrated into the engine — changing this bar invalidates Δ baselines and case labels). 100x–1000x aspirational. Alpha = Information Asymmetry. Track builders (GitHub) and capital (on-chain wallets), not talkers (social). Detect the footprint *before* the narrative forms.
@@ -458,6 +458,67 @@ In-sample (0.5 credit on boundary-tie cases): Primary A 2.5/3 (AVAX, INJ, RNDR 0
 - **FTM as Bear winner ✓**: strongest single result — pipeline correctly identified a 12.4x winner in Bear regime, validating exactly the test-of-purpose the regime-conditional system was designed for.
 
 **Cost (Step 4):** $3.83 Anthropic (195 calls, 00:07–10:09) + ~$0.35 DeepSeek est. ≈ **$4.18 grand total** (vs $3.60-4.50 projected). Within Director-authorized Anthropic Console top-up. Phase 2 cumulative spend ≈ $10.06 vs $9.20 base budget → top-up consumed ~$0.86.
+
+### Phase 2 Step 5 — Holdout Evaluation (FINAL, 2026-06-14)
+
+Formal verdict applied to the 39 verified runs from Step 4 against the regime-conditional boundaries from Step 3c. No additional pipeline runs in Step 5 — documentation and verdict only.
+
+**A. Bear Holdout (Primary cohort)**
+
+Boundaries: T1 floor = 0.4183, T2 floor = 0.4083 (Architect tie convention applied to the RNDR/SEI degenerate margin).
+
+| Case | Role | T+U | Bear Boundary | Tier | Correct? |
+|------|------|------|---------------|------|----------|
+| FTM | W | 0.5083 | ≥0.4183 = T1 | T1 | ✅ |
+| KAS | W | 0.2917 | <0.4083 = Trash | Trash | ❌ |
+| APE | C | 0.3292 | <0.4083 = Trash | Trash | ✅ |
+| GLMR | C | 0.5017 | ≥0.4183 = T1 | T1 | ❌ |
+
+- **Primary A (Winner recall):** 1/2 = **50%**
+- **Primary B (Control trash rate):** 1/2 = **50%**
+
+**B. Bull Holdout (Secondary, forward-test only)**
+
+Boundaries: T1 floor = 0.4531, T2 floor = 0.4375.
+
+| Case | Role | T+U | Bull Boundary | Tier | Correct? |
+|------|------|------|---------------|------|----------|
+| TAO | W | 0.6017 | ≥0.4531 = T1 | T1 | ✅ |
+| HNT | C | 0.4579 | ≥0.4531 = T1 | T1 | ❌ ⚠️ (+0.0048 above floor, low-confidence) |
+
+**C. LINK Validation**
+
+New-prompt median T+U = 0.7075 vs old-prompt ~0.74. Shift = −0.0325 (within σ). Mixed-prompt assumption not contradicted; "favorable direction" claim softened to "direction-uncertain."
+
+**D. Verdict: INDETERMINATE (diagnosed, no iteration)**
+
+Per protocol: Primary A = 50%, Primary B = 50% — neither ≥ 75% (PASS) nor < 50% (FAIL).
+
+**E. Diagnosis (Architect's ruling):**
+
+1. **KAS miss (0.2917) — Coverage gap.** Kaspa is a fair-launch PoW coin. No VC funding, no product, no DeFi, no smart contracts. Its alpha comes from consensus research (GHOSTDAG paper, Sompolinsky/Zohar academic pedigree). The pipeline is designed to detect developer activity, GitHub commits, and on-chain demand signals. Kaspa's value proposition is invisible to this detection framework. Not fixable by boundary adjustment or prompt iteration. Requires architectural extension (consensus-research signal detection) in v0.3.
+
+2. **GLMR false positive (0.5017) — Bear boundary degeneracy.** Moonbeam had genuine developer activity and EVM-compatibility narrative at snapshot. The Skeptic couldn't distinguish "building product but no demand pull" from "building product about to get demand" in Bear regime. With only 5 Bear training cases, the Bear boundary provides no margin for this distinction. Fixable with expanded Bear training in v0.3.
+
+3. **HNT near-miss (0.4579 vs 0.4531 T1 floor) — Bull boundary resolution.** 0.0048 above the T1 floor. Within noise. The narrow Bull T2 band (0.4375–0.4531) and razor-thin T1 floor mean this case sits right at the resolution limit.
+
+**F. One-iteration assessment:** No iteration warranted. The failures are structural (coverage gap + insufficient Bear data), not parametric (wrong threshold). Proceeding with a token iteration would waste budget without changing the verdict.
+
+**G. Positive findings:**
+
+1. FTM (Bear winner, 12.4x) correctly classified Tier 1 — validates core hypothesis that regime-conditional boundaries can identify winners in suppressed markets
+2. TAO (Bull winner) confirmed Tier 1 with strong T+U (0.6017)
+3. APE correctly filtered to Trash
+4. Regime-conditional architecture is directionally correct — without it, ALL Bear cases would be Trash under global boundaries
+
+**H. v0.3 Priorities:**
+
+1. Expand Bear training set — add 5+ Bear-era cases to reach 10+ Bear training
+2. Add fair-launch signal detection — extend Scout/Narrative pipeline to recognize academic pedigree and consensus innovation
+3. Add "demand-pull vs building-only" discriminator — Skeptic prompt modification
+4. Widen Bull T2 band — more Bull training cases near the boundary
+
+**Phase 2 closeout:** v0.2 architecture validated as directionally correct but structurally limited. INDETERMINATE verdict is accurate, honest, and actionable. Step 5 closes Phase 2; v0.3 scoped above.
 
 ### Backtest Methodology
 - **18 cases:** 8 training winners + 2 holdout winners + 4 training controls + 2 holdout controls + 2 legacy controls — balanced 8W/6C design
